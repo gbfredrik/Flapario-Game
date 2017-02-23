@@ -15,28 +15,29 @@ public class GameWindow {
 	}
 
 	private void createGame() {
+		// Create window
 		frame = new JFrame("Flapario");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.setSize(initialWidth, initialHeight);
 		frame.setResizable(true);
-		
-		RenderArea renderArea = new RenderArea(frame, 1366, 768, 160);
-		frame.add(renderArea);
-		
+
+		// Create renderArea
+		Scene1 scene1 = new Scene1(frame, 1280, 800, 160);
+		frame.add(scene1);
 		frame.pack();
 
+		// Add window resize listener
 		frame.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
-				renderArea.rescale();
+				scene1.rescale();
 			}
 		});
 
-		Scene1 gameLogic = new Scene1(renderArea);
-
 		frame.setVisible(true);
+		
+		scene1.start();
 	}
 
 	public static void main(String[] args) {
-		GameWindow paintProgram = new GameWindow();
+		new GameWindow();
 	}
 }

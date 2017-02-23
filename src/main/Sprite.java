@@ -44,8 +44,12 @@ public class Sprite {
 	}
 
 	public Sprite() {
+		
+	}
+	
+	public Sprite(String path) {
 		try {
-			image = ImageIO.read(new File("./src/assets/png/mainchar/mainchar1.png"));
+			image = ImageIO.read(new File(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
