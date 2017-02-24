@@ -1,12 +1,15 @@
-package main;
+package sceneAreas;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-public class Scene1 extends RenderArea {
+import main.Sprite;
 
+public class Scene1 extends RenderArea {
+	private static final long serialVersionUID = 1L;
+	
 	private Sprite mainCharacter;
 	private boolean run = true;
 	public boolean jumpPressed = false;
@@ -68,7 +71,7 @@ public class Scene1 extends RenderArea {
 		clear();
 	}
 
-	// TODO: Bättre loop
+	// TODO: Bï¿½ttre loop
 	private void run() {
 
 		final int fps = 60;
@@ -85,10 +88,10 @@ public class Scene1 extends RenderArea {
 
 		while (run) {
 			// System.out.println("running");
-			
+			int platformLevel = -50;
 			if (jumpPressed) {
 				mainCharacter.setY(mainCharacter.getY() + 5);
-			} else if (mainCharacter.getY() > -50) {
+			} else if (mainCharacter.getY() > platformLevel) {
 				mainCharacter.setY(mainCharacter.getY() - 2);
 			}
 			

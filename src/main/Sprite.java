@@ -1,12 +1,11 @@
 package main;
 
-import java.awt.Graphics;
+//import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 
 public class Sprite {
 
@@ -44,9 +43,9 @@ public class Sprite {
 	}
 
 	public Sprite() {
-		
+
 	}
-	
+
 	public Sprite(String path) {
 		try {
 			image = ImageIO.read(new File(path));
@@ -54,14 +53,14 @@ public class Sprite {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public BufferedImage getImage() {
 		return image;
 	}
 
 	/*
-	public void paint(Graphics g, float scaleFactor) {
-		g.drawImage(image, x, y, null);
-	}*/
+	 * public void paint(Graphics g, float scaleFactor) { g.drawImage(image, x,
+	 * y, null); }
+	 */
 
 }

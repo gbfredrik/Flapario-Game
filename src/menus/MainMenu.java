@@ -1,4 +1,4 @@
-package main;
+package menus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,22 +13,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class MainWindow extends Sprite {
+import sceneAreas.Scene1;
+import main.Sprite;
+
+public class MainMenu extends JPanel {
+	private static final long serialVersionUID = 1L;
+	
+	private BufferedImage imgSpriteSheet;
+	private final int spriteSize = 16;
 	private BufferedImage imgStartButton;
 	private BufferedImage imgHighscoreButton;
 	private BufferedImage imgExitButton;
-
-	public MainWindow() {
-		JPanel jPanel = new JPanel();
-		jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-
-		try {
-			imgStartButton = ImageIO.read(new File(""));
-			imgHighscoreButton = ImageIO.read(new File(""));
-			imgExitButton = ImageIO.read(new File(""));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private Scene1 scene1;
+	
+	public MainMenu(Scene1 scene1) {
+		this.scene1 = scene1;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		readImages();
 
 		JButton startButton = new JButton(new ImageIcon(imgStartButton));
 		startButton.setBorder(BorderFactory.createEmptyBorder());
@@ -38,7 +39,7 @@ public class MainWindow extends Sprite {
 				startButtonPressed();
 			}
 		});
-		jPanel.add(startButton);
+		add(startButton);
 
 		JButton highscoreButton = new JButton(new ImageIcon(imgHighscoreButton));
 		highscoreButton.setBorder(BorderFactory.createEmptyBorder());
@@ -48,7 +49,7 @@ public class MainWindow extends Sprite {
 				highscoreButtonPressed();
 			}
 		});
-		jPanel.add(highscoreButton);
+		add(highscoreButton);
 
 		JButton exitButton = new JButton(new ImageIcon(imgExitButton));
 		exitButton.setBorder(BorderFactory.createEmptyBorder());
@@ -58,22 +59,32 @@ public class MainWindow extends Sprite {
 				exitButtonPressed();
 			}
 		});
-		jPanel.add(exitButton);
+		add(exitButton);
+	}
 
+	private void readImages() {
+		//TODO: Flytta til legen Spritesheet-klass
+		try {
+			imgSpriteSheet = ImageIO.read(new File("./src/assets/png/gameTilesAndButtons/gameTilesAndButtons.png"));
+			imgStartButton = imgSpriteSheet.getSubimage(48, 0, 3*spriteSize, spriteSize);
+			imgHighscoreButton = imgSpriteSheet.getSubimage(96, 0, 3*spriteSize, spriteSize);
+			imgExitButton = imgSpriteSheet.getSubimage(192, 0, 3*spriteSize, spriteSize);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void startButtonPressed() {
-		// TODO Auto-generated method stub
-
+		//TODO: ?
+		scene1.start();
 	}
 
 	protected void highscoreButtonPressed() {
-		// TODO Auto-generated method stub
+		// TODO: Öppna highscoremeny och dölj nuvarande genom cardlayout
 
 	}
 
 	protected void exitButtonPressed() {
-		// TODO Auto-generated method stub
-
+		
 	}
 }

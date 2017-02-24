@@ -1,18 +1,18 @@
-package main;
+package sceneAreas;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class RenderArea extends JPanel {
+import main.Sprite;
 
-	JFrame frame;
+public class RenderArea extends JPanel {
+	private static final long serialVersionUID = 1L;
+
+	private JFrame frame;
 
 	private float scaleFactor;
 	private int gameHeight;
