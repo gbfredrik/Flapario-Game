@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import main.Sprite;
 
-public class RenderArea extends JPanel {
+public abstract class RenderArea extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
@@ -17,7 +17,9 @@ public class RenderArea extends JPanel {
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
-	
+
+	protected boolean run = true;
+
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public int getGameHeight() {
@@ -36,8 +38,8 @@ public class RenderArea extends JPanel {
 
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		//setBackground(Color.getHSBColor(175, 50, 75));
-		
+		// setBackground(Color.getHSBColor(175, 50, 75));
+
 		// Get focus for keyevents
 		setFocusable(true);
 		requestFocusInWindow();
@@ -60,10 +62,52 @@ public class RenderArea extends JPanel {
 		sprite.setY(y);
 		repaint();
 	}
-	
+
 	public void clear() {
 		sprites = new ArrayList<Sprite>();
 	}
+
+	public abstract void start();
+
+	public void stop() {
+		run = false;
+		clear();
+	}
+
+	protected void startLoop() {
+		run = true;
+
+		final int fps = 60;
+		final long optimalTime = 1000 / fps;
+
+		// Run loop in new thread so it doesn't block everything
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (run) {
+					try {
+						Thread.sleep(20);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					runrun(); // Ugly
+				}
+			}
+
+		});
+		thread.start();
+	}
+	
+	private void runrun() { // Ugly
+		run();
+	}
+
+	protected void stopLoop() {
+		run = false;
+	}
+
+	protected abstract void run();
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -72,7 +116,7 @@ public class RenderArea extends JPanel {
 		int x, y, spriteWidth, spriteHeigth;
 
 		for (Sprite sprite : sprites) {
-			// Get sprite dimensions and location 
+			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();
 			x = sprite.getX();
@@ -80,7 +124,7 @@ public class RenderArea extends JPanel {
 			// Change coordinate system
 			x = x + gameWidth / 2;
 			y = -y + gameHeight / 2;
-			
+
 			// Draw sprite
 			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
 					Math.round(y * scaleFactor - spriteHeigth * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
