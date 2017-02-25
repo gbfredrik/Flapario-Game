@@ -118,7 +118,7 @@ public class Scene1 extends RenderArea {
 					//jumpPressed = false;
 					//System.out.println("TRIGGERED");
 					break;
-				}
+				} 
 			} else {
 				onGround = false;
 			}

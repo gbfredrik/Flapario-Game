@@ -1,5 +1,6 @@
 package sceneAreas;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -159,6 +160,14 @@ public abstract class RenderArea extends JPanel {
 					* scaleFactor - spriteHeigth * scaleFactor / 2), Math
 					.round(spriteWidth * scaleFactor), Math.round(spriteHeigth
 					* scaleFactor), null);
+			
+			g.setColor(Color.GREEN);
+			
+			// Draw collisionbox
+			g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) * scaleFactor), 
+					Math.round((- sprite.collisionbox.y + gameHeight / 2) * scaleFactor), 
+					Math.round(sprite.collisionbox.width * scaleFactor), 
+					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
 	}
 }

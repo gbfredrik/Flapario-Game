@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 public class Sprite {
 
 	private BufferedImage image;
-	private Rectangle collisionbox;
+	public Rectangle collisionbox;
 
 	private int x, y = 0;
 	
@@ -63,7 +63,7 @@ public class Sprite {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		collisionbox = new Rectangle(getX(), getY(), image.getWidth(), image.getHeight());
+		collisionbox = new Rectangle(getX() - image.getWidth()/2, getY() + image.getHeight()/2, image.getWidth(), image.getHeight());
 	}
 	
 	public Sprite(String path, int id) {
@@ -72,7 +72,7 @@ public class Sprite {
 	}
 	
 	public void updateCollisionBox() {
-		collisionbox.setLocation(x, y);
+		collisionbox.setLocation(getX() - image.getWidth()/2, getY() + image.getHeight()/2);
 		System.out.println("Updated");
 	}
 
