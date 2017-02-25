@@ -20,7 +20,7 @@ public abstract class RenderArea extends JPanel {
 
 	protected boolean run = true;
 
-	protected ArrayList<Sprite> platforms = new ArrayList<Sprite>();
+	protected ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public int getGameHeight() {
 		return gameHeight;
@@ -55,19 +55,19 @@ public abstract class RenderArea extends JPanel {
 	}
 
 	public void addSprite(Sprite sprite) {
-		platforms.add(sprite);
+		sprites.add(sprite);
 		repaint();
 	}
 
 	public void addSprite(Sprite sprite, int x, int y) {
-		platforms.add(sprite);
+		sprites.add(sprite);
 		sprite.setX(x);
 		sprite.setY(y);
 		repaint();
 	}
 
 	public void clear() {
-		platforms = new ArrayList<Sprite>();
+		sprites = new ArrayList<Sprite>();
 	}
 
 	public abstract void start();
@@ -98,7 +98,6 @@ public abstract class RenderArea extends JPanel {
 						e.printStackTrace();
 					}
 					runrun(); // Ugly
-					// updateX(x);
 					if (x < 18999) {//Förhindrar 
 						x++;
 					}
@@ -111,20 +110,6 @@ public abstract class RenderArea extends JPanel {
 
 	private long sleepTime(int x) {
 		return (20 - (long) (0.001 * x + 1));
-	}
-
-	private void updateX(int x) {
-		Sprite removeSprite = null;
-		for (Sprite sp : platforms) {
-			sp.setX(sp.getX() - 1);
-			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
-				removeSprite = sp;
-			}
-		}
-		if (removeSprite != null) {
-			platforms.remove(removeSprite);
-			System.out.println("Removed platform @left");
-		}
 	}
 
 	private void runrun() { // Ugly
@@ -143,7 +128,7 @@ public abstract class RenderArea extends JPanel {
 
 		int x, y, spriteWidth, spriteHeigth;
 
-		for (Sprite sprite : platforms) {
+		for (Sprite sprite : sprites) {
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();

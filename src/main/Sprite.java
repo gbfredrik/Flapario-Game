@@ -9,13 +9,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Sprite {
-
 	private BufferedImage image;
 	private Rectangle collisionbox;
-
 	private int x, y = 0;
-	
 	private int id = 0;
+	
+	public Sprite(BufferedImage image, int id) {
+		this.image = image;
+		this.id = id;
+	}
 	
 	public int getId() {
 		return id;
@@ -73,7 +75,7 @@ public class Sprite {
 	
 	public void updateCollisionBox() {
 		collisionbox.setLocation(x, y);
-		System.out.println("Updated");
+		System.out.print("U ");
 	}
 
 	public BufferedImage getImage() {
