@@ -12,15 +12,16 @@ public class Sprite {
 	private BufferedImage image;
 	public Rectangle collisionbox;
 	private int x, y = 0;
-	private int id = 0;
-	
+//	private int width, height;
+	private int hexID = 0;
+
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
-		this.id = id;
+		this.hexID = id;
 	}
-	
+
 	public int getId() {
-		return id;
+		return hexID;
 	}
 
 	public Rectangle getCollisionbox() {
@@ -65,16 +66,18 @@ public class Sprite {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		collisionbox = new Rectangle(getX() - image.getWidth()/2, getY() + image.getHeight()/2, image.getWidth(), image.getHeight());
+		collisionbox = new Rectangle(getX() - image.getWidth() / 2, getY()
+				+ image.getHeight() / 2, image.getWidth(), image.getHeight());
 	}
-	
+
 	public Sprite(String path, int id) {
 		this(path);
-		this.id = id;
+		this.hexID = id;
 	}
-	
+
 	public void updateCollisionBox() {
-		collisionbox.setLocation(getX() - image.getWidth()/2, getY() + image.getHeight()/2);
+		collisionbox.setLocation(getX() - image.getWidth() / 2,
+				getY() + image.getHeight() / 2);
 		System.out.print("U ");
 	}
 

@@ -33,7 +33,6 @@ public class GameWindow {
 		frame.pack();
 
 		frame.setVisible(true);
-		
 		frame.setFocusable(true);
 		frame.addKeyListener(new KeyListener() {
 			@Override
@@ -57,7 +56,8 @@ public class GameWindow {
 	public void addScene1() {
 		frame.remove(menu);
 
-		final Scene1 scene1 = new Scene1(frame, frame.getContentPane().getWidth(), frame.getContentPane().getHeight(), 160);
+		final Scene1 scene1 = new Scene1(frame, frame.getContentPane()
+				.getWidth(), frame.getContentPane().getHeight(), 160);
 		frame.add(scene1);
 		frame.pack();
 
@@ -67,23 +67,24 @@ public class GameWindow {
 				scene1.rescale();
 			}
 		});
-		
+
 		scene1.start();
 	}
-	
-	// Fungerar inte så bra än... 
+
+	// Fungerar inte så bra än...
 	public void setFullscreen(boolean bool) {
 		frame.dispose();
-		//frame = new JFrame("Flapario");
+		// frame = new JFrame("Flapario");
 		if (bool) {
-			frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			frame.setUndecorated(bool);
 		} else {
 			frame.setExtendedState(JFrame.NORMAL);
 			frame.setUndecorated(bool);
 		}
-//		menu = new TestMenu(this, frame.getContentPane().getWidth(), frame.getContentPane().getHeight());
-//		frame.add(menu);
+		// menu = new TestMenu(this, frame.getContentPane().getWidth(),
+		// frame.getContentPane().getHeight());
+		// frame.add(menu);
 		frame.setVisible(true);
 	}
 

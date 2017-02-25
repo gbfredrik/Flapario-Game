@@ -11,20 +11,20 @@ public class Highscore {
 			highscores[i] = 0;
 		}
 	}
-	
+
 	public void addScore(int score) {
 		compareScores(score);
 	}
 
 	public int compareScores(int score) {
-		
+
 		return 0;
 	}
 
 	public void sortScores() {
 		Arrays.sort(highscores);
 	}
-	
+
 	public int getSize() {
 		return listSize;
 	}

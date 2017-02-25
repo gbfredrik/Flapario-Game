@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import main.GameWindow;
 import main.Sprite;
 
 public class Scene1 extends RenderArea {
@@ -33,7 +34,7 @@ public class Scene1 extends RenderArea {
 					System.out.println("\n\nFöre: jumpPressed value: "
 							+ jumpPressed);
 					System.out.println("Före: doubleJump value: " + doubleJump);
-					
+
 					if (!jumpPressed && !doubleJump) {
 						System.out.println("Jump pressed!");
 						jumpPressed = true;
@@ -45,9 +46,11 @@ public class Scene1 extends RenderArea {
 						System.out.println("Double jump!");
 						doubleJump = true;
 					}
-					
-					System.out.println("\nEfter: jumpPressed value: " + jumpPressed);
-					System.out.println("Efter: doubleJump value: " + doubleJump);
+
+					System.out.println("\nEfter: jumpPressed value: "
+							+ jumpPressed);
+					System.out
+							.println("Efter: doubleJump value: " + doubleJump);
 				}
 				if (key == KeyEvent.VK_ESCAPE) {
 					// setFullscreen(false);
@@ -67,9 +70,10 @@ public class Scene1 extends RenderArea {
 			}
 		});
 
-		playerCharacter = new Sprite("./src/assets/png/mainchar/mainchar1.png", 5);
+		playerCharacter = new Sprite("./src/assets/png/mainchar/mainchar1.png",
+				5);
 		addSprite(playerCharacter);
-		playerCharacter.setPosition(-getGameWidth() / 4, 0);
+		playerCharacter.setPosition(-getGameWidth() / 5, 0);
 
 		// Sprite mainCharacter2 = new Sprite(
 		// "./src/assets/png/mainchar/mainchar1.png");
@@ -99,16 +103,16 @@ public class Scene1 extends RenderArea {
 	}
 
 	private void checkCollision() {
-		for (Sprite sprite : sprites) {
+		for (Sprite sprite : livePlatforms) {
 			if (playerCharacter.getCollisionbox().intersects(
 					sprite.getCollisionbox())) {
-				if (sprite.getId() != playerCharacter.getId()) {//PROBLEEEEEEEEEEEEEM
+				if (sprite.getId() != playerCharacter.getId()) {// PROBLEEEEEEEEEEEEEM
 					onGround = true;
-					//doubleJump = false;
-					//jumpPressed = false;
-					//System.out.println("TRIGGERED");
+					// doubleJump = false;
+					// jumpPressed = false;
+					// System.out.println("TRIGGERED");
 					break;
-				} 
+				}
 			} else {
 				onGround = false;
 			}
@@ -161,18 +165,22 @@ public class Scene1 extends RenderArea {
 		heightFallen += factor;
 		return factor;
 	}
-	
+
 	private void updateX() {
 		Sprite removeSprite = null;
-		for (Sprite sp : sprites) {
+		for (Sprite sp : livePlatforms) {
 			sp.setX(sp.getX() - 1);
 			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
 				removeSprite = sp;
 			}
 		}
 		if (removeSprite != null) {
-			sprites.remove(removeSprite);
+			livePlatforms.remove(removeSprite);
 			System.out.println("Removed platform @left");
 		}
+	}
+
+	public boolean getAlive() {
+		return (playerCharacter.getY() < -getGameHeight() / 2);
 	}
 }

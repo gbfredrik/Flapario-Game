@@ -14,14 +14,14 @@ public abstract class RenderArea extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
-
+	private Scene1 scene1;
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
 
 	protected boolean run = true;
 
-	protected ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public int getGameHeight() {
 		return gameHeight;
@@ -39,8 +39,6 @@ public abstract class RenderArea extends JPanel {
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
 
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
-
-		// setBackground(Color.getHSBColor(175, 50, 75));
 
 		// Get focus for keyevents
 		setFocusable(true);
@@ -89,7 +87,7 @@ public abstract class RenderArea extends JPanel {
 			@Override
 			public void run() {
 				int x = 0;
-				while (run) {
+				while (scene1.getAlive()) {
 					try {
 						Thread.sleep(sleepTime(x));
 						// ^^^ Bör förmodligen göras om för att optimera fps
@@ -99,7 +97,7 @@ public abstract class RenderArea extends JPanel {
 						e.printStackTrace();
 					}
 					runrun(); // Ugly
-					if (x < 18999) {//Förhindrar 
+					if (x < 18999) {// Förhindrar
 						x++;
 					}
 				}
@@ -145,13 +143,16 @@ public abstract class RenderArea extends JPanel {
 					* scaleFactor - spriteHeigth * scaleFactor / 2), Math
 					.round(spriteWidth * scaleFactor), Math.round(spriteHeigth
 					* scaleFactor), null);
-			
+
 			g.setColor(Color.GREEN);
-			
+
 			// Draw collisionbox
-			g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) * scaleFactor), 
-					Math.round((- sprite.collisionbox.y + gameHeight / 2) * scaleFactor), 
-					Math.round(sprite.collisionbox.width * scaleFactor), 
+			g.drawRect(
+					Math.round((sprite.collisionbox.x + gameWidth / 2)
+							* scaleFactor),
+					Math.round((-sprite.collisionbox.y + gameHeight / 2)
+							* scaleFactor),
+					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
 	}
