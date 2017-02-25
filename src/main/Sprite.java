@@ -10,12 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Sprite {
 	private BufferedImage image;
-<<<<<<< HEAD
 	public Rectangle collisionbox;
-
-=======
-	private Rectangle collisionbox;
->>>>>>> e62a7fb7b4593c8b1facb485c41eaca9f4a93e7d
 	private int x, y = 0;
 	private int id = 0;
 	
