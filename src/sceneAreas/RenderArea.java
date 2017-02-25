@@ -20,7 +20,7 @@ public abstract class RenderArea extends JPanel {
 
 	protected boolean run = true;
 
-	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	protected ArrayList<Sprite> platforms = new ArrayList<Sprite>();
 
 	public int getGameHeight() {
 		return gameHeight;
@@ -30,7 +30,8 @@ public abstract class RenderArea extends JPanel {
 		return gameWidth;
 	}
 
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight) {
+	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
+			int simulatedHeight) {
 		this.frame = frame;
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
@@ -46,25 +47,27 @@ public abstract class RenderArea extends JPanel {
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height
+				/ gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width
+				/ scaleFactor);
 		repaint();
 	}
 
 	public void addSprite(Sprite sprite) {
-		sprites.add(sprite);
+		platforms.add(sprite);
 		repaint();
 	}
 
 	public void addSprite(Sprite sprite, int x, int y) {
-		sprites.add(sprite);
+		platforms.add(sprite);
 		sprite.setX(x);
 		sprite.setY(y);
 		repaint();
 	}
 
 	public void clear() {
-		sprites = new ArrayList<Sprite>();
+		platforms = new ArrayList<Sprite>();
 	}
 
 	public abstract void start();
@@ -84,21 +87,46 @@ public abstract class RenderArea extends JPanel {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				int x = 0;
 				while (run) {
 					try {
-						Thread.sleep(20);
+						Thread.sleep(sleepTime(x));
+						// ^^^ Bör förmodligen göras om för att optimera fps
+						// till 60.
+
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 					runrun(); // Ugly
+					// updateX(x);
+					if (x < 18999) {//Förhindrar 
+						x++;
+					}
 				}
 			}
 
 		});
 		thread.start();
 	}
-	
+
+	private long sleepTime(int x) {
+		return (20 - (long) (0.001 * x + 1));
+	}
+
+	private void updateX(int x) {
+		Sprite removeSprite = null;
+		for (Sprite sp : platforms) {
+			sp.setX(sp.getX() - 1);
+			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
+				removeSprite = sp;
+			}
+		}
+		if (removeSprite != null) {
+			platforms.remove(removeSprite);
+			System.out.println("Removed platform @left");
+		}
+	}
+
 	private void runrun() { // Ugly
 		run();
 	}
@@ -115,7 +143,7 @@ public abstract class RenderArea extends JPanel {
 
 		int x, y, spriteWidth, spriteHeigth;
 
-		for (Sprite sprite : sprites) {
+		for (Sprite sprite : platforms) {
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();
@@ -126,9 +154,11 @@ public abstract class RenderArea extends JPanel {
 			y = -y + gameHeight / 2;
 
 			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
-					Math.round(y * scaleFactor - spriteHeigth * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
-					Math.round(spriteHeigth * scaleFactor), null);
+			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
+					- spriteWidth * scaleFactor / 2), Math.round(y
+					* scaleFactor - spriteHeigth * scaleFactor / 2), Math
+					.round(spriteWidth * scaleFactor), Math.round(spriteHeigth
+					* scaleFactor), null);
 		}
 	}
 }

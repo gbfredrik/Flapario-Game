@@ -15,7 +15,7 @@ import main.Highscore;
 public class HighscoreMenu extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
-	private Highscore highscore;
+	private Highscore highscore = new Highscore();
 	
 	public HighscoreMenu() {
 		openHighscore();
@@ -48,15 +48,5 @@ public class HighscoreMenu extends JComponent {
 				e.printStackTrace();
 			}
 		}		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	} 
 }

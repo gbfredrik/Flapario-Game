@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import main.GameWindow;
 
 public class TestMenu extends JPanel {
+	private static final long serialVersionUID = 1L;
 	
 	GameWindow gameWindow;
 

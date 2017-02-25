@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 
 public class Sprite {
 
@@ -74,6 +73,7 @@ public class Sprite {
 	
 	public void updateCollisionBox() {
 		collisionbox.setLocation(x, y);
+		System.out.println("Updated");
 	}
 
 	public BufferedImage getImage() {

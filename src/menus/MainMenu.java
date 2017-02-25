@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import sceneAreas.Scene1;
-import main.Sprite;
 
 public class MainMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
