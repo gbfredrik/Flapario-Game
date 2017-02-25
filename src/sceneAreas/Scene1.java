@@ -11,7 +11,7 @@ import main.Sprite;
 public class Scene1 extends RenderArea {
 	private static final long serialVersionUID = 1L;
 
-	private Sprite mainCharacter;
+	private Sprite playerCharacter;
 	private boolean jumpPressed = false;
 	private boolean doubleJump = false;
 	private boolean onGround = true;
@@ -30,23 +30,12 @@ public class Scene1 extends RenderArea {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
-					System.out.println("\nFöre: jumpPressed value: "
+					System.out.println("\n\nFöre: jumpPressed value: "
 							+ jumpPressed);
 					System.out.println("Före: doubleJump value: " + doubleJump);
-//					if (!doubleJump) {
-//						if (jumpHeightRemaining < (jumpMaxHeight - 25)
-//								&& jumpPressed) {
-//							jumpHeightRemaining += jumpMaxHeight;
-//							System.out.println("Double jump!");
-//							doubleJump = true;
-//						}
-//						if (!jumpPressed) {
-//							System.out.println("Jump pressed!");
-//							jumpPressed = true;
-//							jumpHeightRemaining += jumpMaxHeight;
-//						}
-//					}
+					
 					if (!jumpPressed && !doubleJump) {
+						System.out.println("Jump pressed!");
 						jumpPressed = true;
 						jumpHeightRemaining += jumpMaxHeight;
 					}
@@ -56,8 +45,9 @@ public class Scene1 extends RenderArea {
 						System.out.println("Double jump!");
 						doubleJump = true;
 					}
-					//System.out.println("\n Efter: jumpPressed value: " + jumpPressed);
-					//System.out.println("Efter: doubleJump value: " + doubleJump);
+					
+					System.out.println("\nEfter: jumpPressed value: " + jumpPressed);
+					System.out.println("Efter: doubleJump value: " + doubleJump);
 				}
 				if (key == KeyEvent.VK_ESCAPE) {
 					// setFullscreen(false);
@@ -77,9 +67,9 @@ public class Scene1 extends RenderArea {
 			}
 		});
 
-		mainCharacter = new Sprite("./src/assets/png/mainchar/mainchar1.png", 5);
-		addSprite(mainCharacter);
-		mainCharacter.setPosition(-getGameWidth() / 4, 0);
+		playerCharacter = new Sprite("./src/assets/png/mainchar/mainchar1.png", 5);
+		addSprite(playerCharacter);
+		playerCharacter.setPosition(-getGameWidth() / 4, 0);
 
 		// Sprite mainCharacter2 = new Sprite(
 		// "./src/assets/png/mainchar/mainchar1.png");
@@ -109,10 +99,10 @@ public class Scene1 extends RenderArea {
 	}
 
 	private void checkCollision() {
-		for (Sprite sprite : platforms) {
-			if (mainCharacter.getCollisionbox().intersects(
+		for (Sprite sprite : sprites) {
+			if (playerCharacter.getCollisionbox().intersects(
 					sprite.getCollisionbox())) {
-				if (sprite.getId() != mainCharacter.getId()) {//PROBLEEEEEEEEEEEEEM
+				if (sprite.getId() != playerCharacter.getId()) {//PROBLEEEEEEEEEEEEEM
 					onGround = true;
 					//doubleJump = false;
 					//jumpPressed = false;
@@ -126,7 +116,7 @@ public class Scene1 extends RenderArea {
 		if (onGround) {
 			doubleJump = false;
 			jumpPressed = false;
-			System.out.println("TRIGGERED");
+			System.out.println("VARFÖR I HELVETE TRIGGAS DETTA");
 		}
 
 	}
@@ -146,13 +136,14 @@ public class Scene1 extends RenderArea {
 		// mainCharacter.setY(mainCharacter.getY() + 20);
 		// } else
 		if (jumpHeightRemaining > 0) {
-			mainCharacter.setY(mainCharacter.getY() + jumpSpeed());
+			playerCharacter.setY(playerCharacter.getY() + jumpSpeed());
 			if (jumpHeightRemaining == 0) {
 				heightFallen = 0;
 			}
 		} else if (!onGround) {
-			mainCharacter.setY(mainCharacter.getY() - fallSpeed());
+			playerCharacter.setY(playerCharacter.getY() - fallSpeed());
 		}
+		updateX();
 		checkCollision();
 		repaint();
 	}
@@ -169,5 +160,19 @@ public class Scene1 extends RenderArea {
 		factor = (int) Math.round((1.0 + (double) (heightFallen / 10)));
 		heightFallen += factor;
 		return factor;
+	}
+	
+	private void updateX() {
+		Sprite removeSprite = null;
+		for (Sprite sp : sprites) {
+			sp.setX(sp.getX() - 1);
+			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
+				removeSprite = sp;
+			}
+		}
+		if (removeSprite != null) {
+			sprites.remove(removeSprite);
+			System.out.println("Removed platform @left");
+		}
 	}
 }
