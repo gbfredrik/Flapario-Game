@@ -19,19 +19,24 @@ public class MenuHandler extends JPanel {
 
 	private JFrame frame;
 	private final JPanel cardMenu = new JPanel(new CardLayout());
-	protected final MainMenu mainMenu = new MainMenu(this);
-	protected final HighscoreMenu highscoreMenu = new HighscoreMenu(this);
+	protected final MainMenu mainMenu;
+	protected final HighscoreMenu highscoreMenu;
 	// protected final RenderArea renderArea = new RenderArea();
 	protected CardLayout cards;
 	private Spritesheet spritesheet;
-
+	
+	private int width, height;
 	private final String pathSpritesheet = "./src/assets/png/gameTilesAndButtons/gameTilesAndButtons.png";
 	private final String animationSpritesheet = "./src/assets/png/animations/animations.png";
 
 	public MenuHandler(Container pane, int width, int height, JFrame frame) {
+		this.width = width;
+		this.height = height;
 		this.frame = frame;
-		pane.setPreferredSize(new Dimension(width, height));
+		pane.setPreferredSize(new Dimension(this.width, this.height));
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
+		mainMenu = new MainMenu(this);
+		highscoreMenu = new HighscoreMenu(this);
 		cardMenu.add(mainMenu, "mainMenu");
 		cardMenu.add(highscoreMenu, "highscoreMenu");
 
@@ -47,6 +52,14 @@ public class MenuHandler extends JPanel {
 
 	public void changeCard(String cardID) {
 		cards.show(cardMenu, cardID);
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 
 	public BufferedImage darkenImage(BufferedImage img, int redShift,

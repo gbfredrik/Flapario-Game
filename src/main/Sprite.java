@@ -13,15 +13,15 @@ public class Sprite {
 	public Rectangle collisionbox;
 	private int x, y = 0;
 //	private int width, height;
-	private int hexID = 0;
+	private int id = 0;
 
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
-		this.hexID = id;
+		this.id = id;
 	}
 
 	public int getId() {
-		return hexID;
+		return id;
 	}
 
 	public Rectangle getCollisionbox() {
@@ -72,7 +72,7 @@ public class Sprite {
 
 	public Sprite(String path, int id) {
 		this(path);
-		this.hexID = id;
+		this.id = id;
 	}
 
 	public void updateCollisionBox() {

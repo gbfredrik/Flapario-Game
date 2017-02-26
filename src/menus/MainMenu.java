@@ -22,7 +22,6 @@ public class MainMenu extends JPanel {
 	private BufferedImage imgStartButton;
 	private BufferedImage imgHighscoreButton;
 	private BufferedImage imgExitButton;
-	
 
 	// private Scene1 scene1;
 
@@ -32,11 +31,14 @@ public class MainMenu extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
 
-		JButton startButton = new JButton(new ImageIcon(imgStartButton));
+		JButton startButton = new JButton();// (new ImageIcon(imgStartButton));
+		startButton.setIcon(new ImageIcon(imgStartButton)); // Kan vara bättre i.o.m. Rollover nedan
 		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		BufferedImage imgStartButtonRollover = menuHandler.darkenImage(imgStartButton, 10, 10, 10);
-		startButton.setRolloverEnabled(true);
-		startButton.setRolloverSelectedIcon(new ImageIcon(imgStartButtonRollover));
+		// BufferedImage imgStartButtonRollover =
+		// menuHandler.darkenImage(imgStartButton, 10, 10, 10);
+		// startButton.setRolloverEnabled(true);
+		// startButton.setRolloverSelectedIcon(new
+		// ImageIcon(imgStartButtonRollover));
 		startButton.setBorder(BorderFactory.createEmptyBorder());
 		startButton.setContentAreaFilled(false);
 		startButton.addActionListener(new ActionListener() {
@@ -48,10 +50,12 @@ public class MainMenu extends JPanel {
 		this.add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton highscoreButton = new JButton(new ImageIcon(imgHighscoreButton));
-		
-		BufferedImage imgHighscoreButtonRollover = menuHandler.darkenImage(imgHighscoreButton, 10, 10, 10);
-		highscoreButton.setRolloverEnabled(true);
-		highscoreButton.setRolloverSelectedIcon(new ImageIcon());
+
+		// BufferedImage imgHighscoreButtonRollover =
+		// menuHandler.darkenImage(imgHighscoreButton, 10, 10, 10);
+		// highscoreButton.setRolloverEnabled(true);
+		// highscoreButton.setRolloverSelectedIcon(new
+		// ImageIcon(imgHighscoreButtonRollover));
 		highscoreButton.setBorder(BorderFactory.createEmptyBorder());
 		highscoreButton.setContentAreaFilled(false);
 		highscoreButton.addActionListener(new ActionListener() {
@@ -63,10 +67,11 @@ public class MainMenu extends JPanel {
 		this.add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton exitButton = new JButton(new ImageIcon(imgExitButton));
-		
-		BufferedImage imgExitButtonRollover = menuHandler.darkenImage(imgExitButton, 10, 10, 10);
-		exitButton.setRolloverEnabled(true);
-		exitButton.setRolloverSelectedIcon(new ImageIcon(imgExitButtonRollover));
+		// BufferedImage imgExitButtonRollover =
+		// menuHandler.darkenImage(imgExitButton, 10, 10, 10);
+		// exitButton.setRolloverEnabled(true);
+		// exitButton.setRolloverSelectedIcon(new
+		// ImageIcon(imgExitButtonRollover));
 		exitButton.setBorder(BorderFactory.createEmptyBorder());
 		exitButton.setContentAreaFilled(false);
 		exitButton.addActionListener(new ActionListener() {
@@ -78,13 +83,9 @@ public class MainMenu extends JPanel {
 	}
 
 	private void getImages() {
-		System.out.println("fail1");
 		imgStartButton = menuHandler.getSprite(1).getImage();
-		System.out.println("fail2");
 		imgHighscoreButton = menuHandler.getSprite(2).getImage();
-		System.out.println("fail3");
 		imgExitButton = menuHandler.getSprite(4).getImage();
-		System.out.println("fail4");
 	}
 
 	protected void buttonPressed(String cardName) {

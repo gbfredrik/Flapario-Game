@@ -18,6 +18,7 @@ public class Spritesheet {
 	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>();
 
 	public Spritesheet(String pathSpritesheet, String pathAnimationSheet) {
+		System.out.println("Spritesheet constructor");
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
 			animationSheet = ImageIO.read(new File(pathAnimationSheet));
