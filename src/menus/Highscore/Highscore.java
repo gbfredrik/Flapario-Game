@@ -1,4 +1,4 @@
-package main;
+package menus.Highscore;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -30,5 +30,9 @@ public class Highscore implements Serializable {
 
 	public int getSize() {
 		return listSize;
+	}
+	
+	public void printHighscores() {
+		
 	}
 }

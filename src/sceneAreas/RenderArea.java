@@ -27,7 +27,6 @@ public abstract class RenderArea extends JPanel {
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
-
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
 		// Get focus for keyevents

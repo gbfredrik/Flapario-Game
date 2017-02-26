@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Spritesheet {
 	private static BufferedImage spritesheet;
-	// private static BufferedImage animationSheet;
+	private static BufferedImage animationSheet;
 	private final int spriteSize = 16;
 	private ArrayList<Sprite> buttonSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> textSprites = new ArrayList<Sprite>();
@@ -20,7 +20,7 @@ public class Spritesheet {
 	public Spritesheet(String pathSpritesheet, String pathAnimationSheet) {
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
-			// spritesheet = ImageIO.read(new File(pathAnimationSheet));
+			animationSheet = ImageIO.read(new File(pathAnimationSheet));
 			createAllSprites();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -60,7 +60,9 @@ public class Spritesheet {
 				spritesheet.getSubimage(320, 32, 5 * spriteSize, spriteSize),
 				203); // Size 5
 		// Player och NPC, 300-399
-
+		createSprite(
+				animationSheet.getSubimage(208, 32, 3 * spriteSize, spriteSize),
+				301);
 		// Bakgrunder, 400-499
 		createSprite(
 				spritesheet.getSubimage(0, 48, 9 * spriteSize, 7 * spriteSize),
@@ -75,12 +77,10 @@ public class Spritesheet {
 
 		if (0 < id && id < 99) {
 			buttonSprites.add(sprite);
-		} else if (0 < id && id < 99) {
-			textSprites.add(sprite);
 		} else if (100 < id && id < 199) {
-			platformSprites.add(sprite);
+			textSprites.add(sprite);
 		} else if (200 < id && id < 299) {
-			buttonSprites.add(sprite);
+			platformSprites.add(sprite);
 		} else if (300 < id && id < 399) {
 			npcSprites.add(sprite);
 		} else if (400 < id && id < 499) {
@@ -88,7 +88,7 @@ public class Spritesheet {
 		} else if (500 < id && id < 599) {
 			particleSprites.add(sprite);
 		} else {
-			System.err.println("No such sprite list.");
+			System.err.println("@adding: No such sprite list.");
 		}
 	}
 
@@ -108,7 +108,7 @@ public class Spritesheet {
 		} else if (500 < id && id < 599) {
 			return particleSprites;
 		} else {
-			System.err.println("No such sprite list.");
+			System.err.println("@getting: No such sprite list.");
 			return null;
 		}
 	}

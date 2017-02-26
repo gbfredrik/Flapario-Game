@@ -1,5 +1,6 @@
 package menus;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,7 +35,7 @@ public class MainMenu extends JPanel {
 
 		JButton startButton = new JButton(new ImageIcon(imgStartButton));
 		startButton.setRolloverEnabled(true);
-		//startButton.setRolloverSelectedIcon(new ImageIcon());
+		// startButton.setRolloverSelectedIcon(new ImageIcon());
 		startButton.setBorder(BorderFactory.createEmptyBorder());
 		startButton.setContentAreaFilled(false);
 		startButton.addActionListener(new ActionListener() {
@@ -42,10 +44,11 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(startButton);
+		this.add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton highscoreButton = new JButton(new ImageIcon(imgHighscoreButton));
 		highscoreButton.setRolloverEnabled(true);
-		//highscoreButton.setRolloverSelectedIcon(new ImageIcon());
+		// highscoreButton.setRolloverSelectedIcon(new ImageIcon());
 		highscoreButton.setBorder(BorderFactory.createEmptyBorder());
 		highscoreButton.setContentAreaFilled(false);
 		highscoreButton.addActionListener(new ActionListener() {
@@ -54,10 +57,11 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(highscoreButton);
+		this.add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton exitButton = new JButton(new ImageIcon(imgExitButton));
 		exitButton.setRolloverEnabled(true);
-		//exitButton.setRolloverSelectedIcon(new ImageIcon());
+		// exitButton.setRolloverSelectedIcon(new ImageIcon());
 		exitButton.setBorder(BorderFactory.createEmptyBorder());
 		exitButton.setContentAreaFilled(false);
 		exitButton.addActionListener(new ActionListener() {

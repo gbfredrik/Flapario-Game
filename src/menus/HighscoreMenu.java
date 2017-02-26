@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JPanel;
 
-import main.Highscore;
+import menus.Highscore.Highscore;
 
 public class HighscoreMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -18,10 +18,10 @@ public class HighscoreMenu extends JPanel {
 	private Highscore highscore = new Highscore();
 
 	public HighscoreMenu() {
-		readHighscore();
+		readFileHighscore();
 	}
 
-	private void readHighscore() {
+	private void readFileHighscore() {
 		File saveFile = new File("save.flapario");
 		if (saveFile.exists() && !saveFile.isDirectory()) {
 			try {
