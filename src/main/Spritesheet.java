@@ -21,7 +21,9 @@ public class Spritesheet {
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
 			animationSheet = ImageIO.read(new File(pathAnimationSheet));
+			System.out.println("Starting to add all sprites");
 			createAllSprites();
+			System.out.println("Added all sprites");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,26 +71,28 @@ public class Spritesheet {
 				400); //
 
 		// Partiklar, 500-599
-
+		
+		System.out.println("Added all sprites!");
 	}
 
 	private void createSprite(BufferedImage spriteImage, int id) {
 		Sprite sprite = new Sprite(spriteImage, id);
 
-		if (0 < id && id < 99) {
+		if (0 <= id && id <= 99) {
 			buttonSprites.add(sprite);
-		} else if (100 < id && id < 199) {
+		} else if (100 <= id && id <= 199) {
 			textSprites.add(sprite);
-		} else if (200 < id && id < 299) {
+		} else if (200 <= id && id <= 299) {
 			platformSprites.add(sprite);
-		} else if (300 < id && id < 399) {
+		} else if (300 <= id && id <= 399) {
 			npcSprites.add(sprite);
-		} else if (400 < id && id < 499) {
+		} else if (400 <= id && id <= 499) {
 			backgroundSprites.add(sprite);
-		} else if (500 < id && id < 599) {
+		} else if (500 <= id && id <= 599) {
 			particleSprites.add(sprite);
 		} else {
-			System.err.println("@adding: No such sprite list.");
+			System.err.println("@adding: No such sprite list. @ID: " + id);
+			System.err.flush();
 		}
 	}
 
@@ -108,8 +112,43 @@ public class Spritesheet {
 		} else if (500 < id && id < 599) {
 			return particleSprites;
 		} else {
-			System.err.println("@getting: No such sprite list.");
+			System.err.println("@getting: No such sprite list. @ID: " + id);
+			System.err.flush();
 			return null;
 		}
+	}
+
+	public Sprite getSprite(int id) {
+		System.out.println("Trying to get sprite from spritesheet");
+		ArrayList<Sprite> tempGetFromList;
+		if (0 < id && id < 99) {
+			tempGetFromList = buttonSprites;
+		} else if (0 < id && id < 99) {
+			tempGetFromList = textSprites;
+		} else if (100 < id && id < 199) {
+			tempGetFromList = platformSprites;
+		} else if (200 < id && id < 299) {
+			tempGetFromList = buttonSprites;
+		} else if (300 < id && id < 399) {
+			tempGetFromList = npcSprites;
+		} else if (400 < id && id < 499) {
+			tempGetFromList = backgroundSprites;
+		} else if (500 < id && id < 599) {
+			tempGetFromList = particleSprites;
+		} else {
+			System.err.println("@getting: No such sprite list. @ID: " + id);
+			System.err.flush();
+			return null;
+		}
+		System.out.println("loop");
+		for (Sprite sp : tempGetFromList) {
+			if (sp.getId() == id) {
+				System.out.println("getID = " + sp.getId() + ". id = " + id);
+				return sp;
+			}
+		}
+		System.err.println("@getting: No such sprite. @ID: " + id);
+		System.err.flush();
+		return null;
 	}
 }

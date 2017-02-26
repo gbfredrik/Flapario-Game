@@ -2,8 +2,9 @@ package main;
 
 //import java.awt.event.ComponentAdapter;
 //import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
+
 import javax.swing.*;
 
 //import sceneAreas.Scene1;
@@ -13,6 +14,7 @@ public class GameWindow {
 	private JFrame frame;
 	//TestMenu menu;
 	private MenuHandler menuHandler;
+	private final int width = 640, height = 400;
 	
 	
 	public GameWindow() {
@@ -24,11 +26,12 @@ public class GameWindow {
 		frame = new JFrame("Flapario");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
-
-		//menu = new TestMenu(this, 640, 400);
+		//frame.setPreferredSize(new Dimension(width, height));
+		//menu = new TestMenu(this, width, height);
 		
-//		frame.add(menuHandler);
-		MenuHandler menuHandler = new MenuHandler(frame.getContentPane(), 640, 400);
+		menuHandler = new MenuHandler(frame.getContentPane(), width, height, frame);
+		//frame.add(menuHandler);
+
 		frame.pack();
 
 		frame.setVisible(true);

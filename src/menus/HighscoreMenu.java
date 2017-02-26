@@ -17,7 +17,7 @@ public class HighscoreMenu extends JPanel {
 
 	private Highscore highscore = new Highscore();
 
-	public HighscoreMenu() {
+	public HighscoreMenu(MenuHandler menuHandler) {
 		readFileHighscore();
 	}
 
