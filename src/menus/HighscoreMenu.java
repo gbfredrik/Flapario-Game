@@ -1,5 +1,6 @@
 package menus;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -26,20 +28,20 @@ public class HighscoreMenu extends JPanel {
 	private Highscore highscore = new Highscore();
 	private MenuHandler menuHandler;
 	private BufferedImage imgBackButton;
+	private BufferedImage imgBackButtonRollover;
 
 	public HighscoreMenu(MenuHandler menuHandler) {
 		this.menuHandler = menuHandler;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
 		readFileHighscore();
 		getImages();
 		this.add(Box.createRigidArea(new Dimension(0, 300)));
 
 		JButton backButton = new JButton(new ImageIcon(imgBackButton));
-
-		// BufferedImage imgBackButtonRollover =
-		// menuHandler.darkenImage(imgBackButton, 10, 10, 10);
-		// backButton.setRolloverEnabled(true);
-		// backButton.setRolloverSelectedIcon(new
-		// ImageIcon(imgBackButtonRollover));
+		backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		backButton.setRolloverEnabled(true);
+		backButton.setRolloverSelectedIcon(new ImageIcon(imgBackButtonRollover));
 		backButton.setBorder(BorderFactory.createEmptyBorder());
 		backButton.setContentAreaFilled(false);
 		backButton.addActionListener(new ActionListener() {
@@ -84,6 +86,7 @@ public class HighscoreMenu extends JPanel {
 	}
 
 	private void getImages() {
-		imgBackButton = menuHandler.getSprite(3).getImage();
+		imgBackButton = menuHandler.getSprite(5).getImage();
+		imgBackButtonRollover = menuHandler.getSprite(6).getImage();
 	}
 }

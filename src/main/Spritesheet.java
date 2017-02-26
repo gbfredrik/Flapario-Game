@@ -18,13 +18,10 @@ public class Spritesheet {
 	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>();
 
 	public Spritesheet(String pathSpritesheet, String pathAnimationSheet) {
-		System.out.println("Spritesheet constructor");
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
 			animationSheet = ImageIO.read(new File(pathAnimationSheet));
-			System.out.println("Starting to add all sprites");
 			createAllSprites();
-			System.out.println("Added all sprites");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -42,11 +39,19 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(48, 0, 3 * spriteSize, spriteSize), 1); // playButton
 		createSprite(
-				spritesheet.getSubimage(96, 0, 3 * spriteSize, spriteSize), 2); // scoreButton
+				spritesheet.getSubimage(96, 0, 3 * spriteSize, spriteSize), 2); // -Rollover
 		createSprite(
-				spritesheet.getSubimage(144, 0, 3 * spriteSize, spriteSize), 3); // backButton
+				spritesheet.getSubimage(144, 0, 3 * spriteSize, spriteSize), 3); // scoreButton
 		createSprite(
-				spritesheet.getSubimage(192, 0, 3 * spriteSize, spriteSize), 4); // exitButton
+				spritesheet.getSubimage(192, 0, 3 * spriteSize, spriteSize), 4); // -Rollover
+		createSprite(
+				spritesheet.getSubimage(240, 0, 3 * spriteSize, spriteSize), 5); // backButton
+		createSprite(
+				spritesheet.getSubimage(288, 0, 3 * spriteSize, spriteSize), 6); // -Rollover
+		createSprite(
+				spritesheet.getSubimage(336, 0, 3 * spriteSize, spriteSize), 7); // exitButton
+		createSprite(
+				spritesheet.getSubimage(384, 0, 3 * spriteSize, spriteSize), 8); // -Rollover
 		// Bokstäver och text, 100-199
 
 		// Plattformar, 200-299
@@ -64,16 +69,20 @@ public class Spritesheet {
 				203); // Size 5
 		// Player och NPC, 300-399
 		createSprite(
-				animationSheet.getSubimage(208, 32, 3 * spriteSize, spriteSize),
+				animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
+				300);
+		createSprite(
+				animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
 				301);
 		// Bakgrunder, 400-499
 		createSprite(
 				spritesheet.getSubimage(0, 48, 9 * spriteSize, 7 * spriteSize),
-				400); //
+				400); // Default game background
+		createSprite(spritesheet.getSubimage(192, 48, 9 * spriteSize,
+				7 * spriteSize), 410); // Splashscreen
 
 		// Partiklar, 500-599
-		
-		System.out.println("Added all sprites!");
+
 	}
 
 	private void createSprite(BufferedImage spriteImage, int id) {
@@ -98,19 +107,19 @@ public class Spritesheet {
 	}
 
 	public ArrayList<Sprite> getSpriteList(int id) {
-		if (0 < id && id < 99) {
+		if (0 <= id && id <= 99) {
 			return buttonSprites;
-		} else if (0 < id && id < 99) {
+		} else if (0 <= id && id <= 99) {
 			return textSprites;
-		} else if (100 < id && id < 199) {
+		} else if (100 <= id && id <= 199) {
 			return platformSprites;
-		} else if (200 < id && id < 299) {
+		} else if (200 <= id && id <= 299) {
 			return buttonSprites;
-		} else if (300 < id && id < 399) {
+		} else if (300 <= id && id <= 399) {
 			return npcSprites;
-		} else if (400 < id && id < 499) {
+		} else if (400 <= id && id <= 499) {
 			return backgroundSprites;
-		} else if (500 < id && id < 599) {
+		} else if (500 <= id && id <= 599) {
 			return particleSprites;
 		} else {
 			System.err.println("@getting: No such sprite list. @ID: " + id);
@@ -122,26 +131,8 @@ public class Spritesheet {
 	public Sprite getSprite(int id) {
 		System.out.println("Trying to get sprite from spritesheet");
 		ArrayList<Sprite> tempGetFromList;
-		if (0 < id && id < 99) {
-			tempGetFromList = buttonSprites;
-		} else if (0 < id && id < 99) {
-			tempGetFromList = textSprites;
-		} else if (100 < id && id < 199) {
-			tempGetFromList = platformSprites;
-		} else if (200 < id && id < 299) {
-			tempGetFromList = buttonSprites;
-		} else if (300 < id && id < 399) {
-			tempGetFromList = npcSprites;
-		} else if (400 < id && id < 499) {
-			tempGetFromList = backgroundSprites;
-		} else if (500 < id && id < 599) {
-			tempGetFromList = particleSprites;
-		} else {
-			System.err.println("@getting: No such sprite list. @ID: " + id);
-			System.err.flush();
-			return null;
-		}
-		System.out.println("loop");
+		tempGetFromList = getSpriteList(id);
+
 		for (Sprite sp : tempGetFromList) {
 			if (sp.getId() == id) {
 				System.out.println("getID = " + sp.getId() + ". id = " + id);

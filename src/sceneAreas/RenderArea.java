@@ -8,30 +8,50 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import main.Player;
 import main.Sprite;
+import menus.MenuHandler;
 
-public abstract class RenderArea extends JPanel {
+public class RenderArea extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
-	private Scene1 scene1;
+	private MenuHandler menuHandler;
+	// private Scene1 scene1;
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
 	protected boolean run = true;
-	private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-
+	private Player player;
+	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
+	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
+	private Sprite platformTwo, platformThree, platformFour, platformFive;
+	
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight) {
+			int simulatedHeight, MenuHandler menuHandler) {
 		this.frame = frame;
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
+		this.menuHandler = menuHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
-
+		
+		System.out.println("1");
+		player = new Player();
+		System.out.println("2");
+		allSprites.add(player.getPlayerSprite());
+		System.out.println("3");
+		
+		getAndSetSprites();
+		rescale();
 		// Get focus for keyevents
 		setFocusable(true);
 		requestFocusInWindow();
+		startLoop();
+	}
+
+	private void getAndSetSprites() {
+		player.setPlayerSprite(menuHandler.getSprite(400));
 	}
 
 	public int getGameHeight() {
@@ -51,40 +71,45 @@ public abstract class RenderArea extends JPanel {
 	}
 
 	public void addSprite(Sprite sprite) {
-		sprites.add(sprite);
+		allSprites.add(sprite);
+		movingSprites.add(sprite);
 		repaint();
 	}
 
 	public void addSprite(Sprite sprite, int x, int y) {
-		sprites.add(sprite);
 		sprite.setX(x);
 		sprite.setY(y);
+		allSprites.add(sprite);
+		movingSprites.add(sprite);
 		repaint();
 	}
 
 	public void clear() {
-		sprites = new ArrayList<Sprite>();
+		allSprites.clear();
+		movingSprites.clear();
+		// liveScreenSprites = new ArrayList<Sprite>(); // Varför så? dafuq
 	}
 
-	public abstract void start();
+	// public abstract void start();
 
 	public void stop() {
 		run = false;
 		clear();
 	}
 
-	protected void startLoop() {
+	public void startLoop() {
 		run = true;
 
 		// final int fps = 60;
 		// final long optimalTime = 1000 / fps;
-
+		addPlatforms();
 		// Run loop in new thread so it doesn't block everything
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int x = 0;
-				while (scene1.getAlive()) {
+				// addPlatforms();
+				while (player.getIsAlive()) {
 					try {
 						Thread.sleep(sleepTime(x));
 						// ^^^ Bör förmodligen göras om för att optimera fps
@@ -93,8 +118,11 @@ public abstract class RenderArea extends JPanel {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					runrun(); // Ugly
-					if (x < 18999) {// Förhindrar
+					player.doJump();
+					updateX();
+					checkCollision();
+					repaint();
+					if (x < 18999) { // Förhindrar
 						x++;
 					}
 				}
@@ -104,19 +132,67 @@ public abstract class RenderArea extends JPanel {
 		thread.start();
 	}
 
+	protected void addPlatforms() {
+		Sprite box = new Sprite("./src/assets/png/Untitled.png");
+		addSprite(box);
+		box.setPosition(-getGameWidth() / 4, -getGameHeight() / 2 + 16);
+	}
+
+	private void checkCollision() {
+		int spriteID;
+		for (Sprite sprite : movingSprites) {
+			if (player.getPlayerSprite().getCollisionbox()
+					.intersects(sprite.getCollisionbox())) {
+				spriteID = sprite.getId();
+				if (400 <= spriteID && spriteID <= 499) {// PROBLEEEEEEEEEEEEEM
+					player.setOnGround(true);
+					player.resetJumpsOnGround();
+
+					System.out.println("TRIGGERED");
+					break;
+				}
+			} else {
+				player.setOnGround(false);
+			}
+		}
+	}
+
+	public void checkAlive() {
+		if (player.getPlayerSprite().getY() < -getGameHeight() / 2) {
+			player.setIsAlive(false);
+		} else {
+			player.setIsAlive(true);
+		}
+	}
+
+	private void updateX() {
+		Sprite removeSprite = null;
+		for (Sprite sp : movingSprites) {
+			sp.setX(sp.getX() - 1);
+			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
+				removeSprite = sp;
+			}
+		}
+		if (removeSprite != null) {
+			movingSprites.remove(removeSprite);
+			System.out.println("Removed platform @left. @id"
+					+ removeSprite.getId());
+		}
+	}
+
 	private long sleepTime(int x) {
 		return (20 - (long) (0.001 * x + 1));
 	}
 
 	private void runrun() { // Ugly
-		run();
+		// run();
 	}
 
 	protected void stopLoop() {
 		run = false;
 	}
 
-	protected abstract void run();
+	// protected abstract void run();
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -124,7 +200,7 @@ public abstract class RenderArea extends JPanel {
 
 		int x, y, spriteWidth, spriteHeigth;
 
-		for (Sprite sprite : sprites) {
+		for (Sprite sprite : allSprites) {
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();

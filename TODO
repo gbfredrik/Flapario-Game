@@ -1,5 +1,7 @@
 TODO: 
 
+	Streamlina Scene1, hanterar plattformarnas x, collision?. Byt namn också?
+	RenderArea döps till -> sessionEngine(?)
 
 Partiklar:
 	https://gamedevelopment.tutsplus.com/tutorials/make-your-game-pop-with-particle-effects-and-quadtrees--gamedev-2138

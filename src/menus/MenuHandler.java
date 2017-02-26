@@ -21,10 +21,10 @@ public class MenuHandler extends JPanel {
 	private final JPanel cardMenu = new JPanel(new CardLayout());
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
-	// protected final RenderArea renderArea = new RenderArea();
+	protected final RenderArea renderArea;
 	protected CardLayout cards;
 	private Spritesheet spritesheet;
-	
+
 	private int width, height;
 	private final String pathSpritesheet = "./src/assets/png/gameTilesAndButtons/gameTilesAndButtons.png";
 	private final String animationSpritesheet = "./src/assets/png/animations/animations.png";
@@ -33,16 +33,23 @@ public class MenuHandler extends JPanel {
 		this.width = width;
 		this.height = height;
 		this.frame = frame;
+
 		pane.setPreferredSize(new Dimension(this.width, this.height));
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
 		mainMenu = new MainMenu(this);
 		highscoreMenu = new HighscoreMenu(this);
+		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
+				frame.getContentPane().getHeight(), 160, this);
+
 		cardMenu.add(mainMenu, "mainMenu");
 		cardMenu.add(highscoreMenu, "highscoreMenu");
-
+		cardMenu.add(renderArea, "gameSession");
+		// cardMenu.add(deathMenu, "deathMenu");
 		pane.add(cardMenu, BorderLayout.CENTER);
+
 		cards = (CardLayout) (cardMenu.getLayout());
 		cards.show(cardMenu, mainMenu.getName());
+
 		this.setVisible(true);
 	}
 
@@ -50,14 +57,17 @@ public class MenuHandler extends JPanel {
 		changeCard(cardName);
 	}
 
-	public void changeCard(String cardID) {
-		cards.show(cardMenu, cardID);
+	public void changeCard(String cardName) {
+		cards.show(cardMenu, cardName);
+		if (cardName.equals("gameSession")) {
+			renderArea.startLoop();
+		}
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}
-	
+
 	public int getHeight() {
 		return height;
 	}
@@ -83,7 +93,6 @@ public class MenuHandler extends JPanel {
 	}
 
 	public Sprite getSprite(int id) {
-		System.out.println("MenuHandler.getSprite() - @id: " + id);
 		return spritesheet.getSprite(id);
 	}
 
