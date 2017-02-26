@@ -8,25 +8,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import main.Highscore;
 
-public class HighscoreMenu extends JComponent {
+public class HighscoreMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	private Highscore highscore = new Highscore();
-	
+
 	public HighscoreMenu() {
-		openHighscore();
+		readHighscore();
 	}
 
-	private void openHighscore() {
+	private void readHighscore() {
 		File saveFile = new File("save.flapario");
 		if (saveFile.exists() && !saveFile.isDirectory()) {
 			try {
-				ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-						saveFile));
+				ObjectInputStream in = new ObjectInputStream(
+						new FileInputStream(saveFile));
 				highscore = (Highscore) in.readObject();
 				in.close();
 			} catch (FileNotFoundException e) {
@@ -47,6 +47,6 @@ public class HighscoreMenu extends JComponent {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}		
-	} 
+		}
+	}
 }

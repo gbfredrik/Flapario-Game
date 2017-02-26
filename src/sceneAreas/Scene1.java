@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import main.GameWindow;
+//import main.GameWindow;
 import main.Sprite;
 
 public class Scene1 extends RenderArea {
@@ -31,26 +31,7 @@ public class Scene1 extends RenderArea {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
-					System.out.println("\n\nFöre: jumpPressed value: "
-							+ jumpPressed);
-					System.out.println("Före: doubleJump value: " + doubleJump);
-
-					if (!jumpPressed && !doubleJump) {
-						System.out.println("Jump pressed!");
-						jumpPressed = true;
-						jumpHeightRemaining += jumpMaxHeight;
-					}
-					if (jumpPressed && !doubleJump
-							&& jumpHeightRemaining < (jumpMaxHeight - 25)) {
-						jumpHeightRemaining += jumpMaxHeight;
-						System.out.println("Double jump!");
-						doubleJump = true;
-					}
-
-					System.out.println("\nEfter: jumpPressed value: "
-							+ jumpPressed);
-					System.out
-							.println("Efter: doubleJump value: " + doubleJump);
+					tryJump();
 				}
 				if (key == KeyEvent.VK_ESCAPE) {
 					// setFullscreen(false);
@@ -59,10 +40,6 @@ public class Scene1 extends RenderArea {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				/*
-				 * int key = e.getKeyCode(); if (key == KeyEvent.VK_SPACE) {
-				 * jumpPressed = false; }
-				 */
 			}
 
 			@Override
@@ -75,31 +52,23 @@ public class Scene1 extends RenderArea {
 		addSprite(playerCharacter);
 		playerCharacter.setPosition(-getGameWidth() / 5, 0);
 
-		// Sprite mainCharacter2 = new Sprite(
-		// "./src/assets/png/mainchar/mainchar1.png");
-		// addSprite(mainCharacter2);
-		// mainCharacter2.setPosition(-getGameWidth() / 2, getGameHeight() / 2);
-		//
-		// Sprite mainCharacter3 = new Sprite(
-		// "./src/assets/png/mainchar/mainchar1.png");
-		// addSprite(mainCharacter3);
-		// mainCharacter3.setPosition(-getGameWidth() / 2, -getGameHeight() /
-		// 2);
-		//
-		// Sprite mainCharacter4 = new Sprite(
-		// "./src/assets/png/mainchar/mainchar1.png");
-		// addSprite(mainCharacter4);
-		// mainCharacter4.setPosition(getGameWidth() / 2, getGameHeight() / 2);
-		//
-		// Sprite mainCharacter5 = new Sprite(
-		// "./src/assets/png/mainchar/mainchar1.png");
-		// addSprite(mainCharacter5);
-		// mainCharacter5.setPosition(getGameWidth() / 2, -getGameHeight() / 2);
-
 		Sprite box = new Sprite("./src/assets/png/Untitled.png");
 		addSprite(box);
 		box.setPosition(-getGameWidth() / 4, -getGameHeight() / 2 + 16);
-		// platform1 = new Sprite();
+	}
+
+	protected void tryJump() {
+		if (!jumpPressed && !doubleJump) {
+			System.out.println("Jump pressed!");
+			jumpPressed = true;
+			jumpHeightRemaining += jumpMaxHeight;
+		}
+		if (jumpPressed && !doubleJump
+				&& jumpHeightRemaining < (jumpMaxHeight - 25)) {
+			jumpHeightRemaining += jumpMaxHeight;
+			System.out.println("Double jump!");
+			doubleJump = true;
+		}
 	}
 
 	private void checkCollision() {
@@ -108,19 +77,14 @@ public class Scene1 extends RenderArea {
 					sprite.getCollisionbox())) {
 				if (sprite.getId() != playerCharacter.getId()) {// PROBLEEEEEEEEEEEEEM
 					onGround = true;
-					// doubleJump = false;
-					// jumpPressed = false;
-					// System.out.println("TRIGGERED");
+					 doubleJump = false;
+					 jumpPressed = false;
+					 System.out.println("TRIGGERED");
 					break;
 				}
 			} else {
 				onGround = false;
 			}
-		}
-		if (onGround) {
-			doubleJump = false;
-			jumpPressed = false;
-			System.out.println("VARFÖR I HELVETE TRIGGAS DETTA");
 		}
 
 	}

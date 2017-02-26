@@ -1,8 +1,11 @@
 package main;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Highscore {
+public class Highscore implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private final int listSize = 10;
 	private int[] highscores = new int[listSize];
 

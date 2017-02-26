@@ -18,18 +18,8 @@ public abstract class RenderArea extends JPanel {
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
-
 	protected boolean run = true;
-
 	private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-
-	public int getGameHeight() {
-		return gameHeight;
-	}
-
-	public int getGameWidth() {
-		return gameWidth;
-	}
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight) {
@@ -43,6 +33,14 @@ public abstract class RenderArea extends JPanel {
 		// Get focus for keyevents
 		setFocusable(true);
 		requestFocusInWindow();
+	}
+
+	public int getGameHeight() {
+		return gameHeight;
+	}
+
+	public int getGameWidth() {
+		return gameWidth;
 	}
 
 	public void rescale() {
@@ -79,8 +77,8 @@ public abstract class RenderArea extends JPanel {
 	protected void startLoop() {
 		run = true;
 
-		final int fps = 60;
-		final long optimalTime = 1000 / fps;
+		// final int fps = 60;
+		// final long optimalTime = 1000 / fps;
 
 		// Run loop in new thread so it doesn't block everything
 		Thread thread = new Thread(new Runnable() {

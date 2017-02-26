@@ -12,23 +12,23 @@ import main.GameWindow;
 
 public class TestMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	GameWindow gameWindow;
 
 	public TestMenu(final GameWindow gameWindow, int width, int height) {
-		
+
 		this.gameWindow = gameWindow;
-		
+
 		this.setPreferredSize(new Dimension(width, height));
-		
+
 		JButton button1 = new JButton("Play");
 		button1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gameWindow.addScene1();
+				//gameWindow.addScene1();
 			}
 		});
 		add(button1);
-		
+
 		JButton button2 = new JButton("Fullscreen");
 		button2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -36,9 +36,9 @@ public class TestMenu extends JPanel {
 			}
 		});
 		add(button2);
-		
+
 		JLabel label = new JLabel("Press ESC to exit fullscreen");
 		add(label);
-		
+
 	}
 }
