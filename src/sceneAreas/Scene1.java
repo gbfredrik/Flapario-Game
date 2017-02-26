@@ -1,4 +1,4 @@
-package sceneAreas;
+/*package sceneAreas;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,7 +20,7 @@ public class Scene1 extends RenderArea {
 
 	public Scene1(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight) {
-		super(frame, actualWidth, actualHeight, simulatedHeight);
+		//super(frame, actualWidth, actualHeight, simulatedHeight);
 
 		//playerCharacter = new Sprite("./src/assets/png/mainchar/mainchar1.png",5);
 		//addSprite(playerCharacter);
@@ -41,4 +41,4 @@ public class Scene1 extends RenderArea {
 //		requestFocusInWindow();
 //		startLoop();
 //	}
-}
+}*/

@@ -1,8 +1,20 @@
 TODO: 
-
-	Streamlina Scene1, hanterar plattformarnas x, collision?. Byt namn också?
+	Få RenderArea att fungera med standardhopp och det. Testa med den lilla boxen.
+	Spara in alla spelar-sprites i Player. 
+	Gör klart Hiscore så den kan lagra nya scores och sortera dem
+	Gör en deathMenu som dyker upp vid spelarens död. (knappar: play och back)
+	
 	RenderArea döps till -> sessionEngine(?)
-
+	Ta bort Scene1 och TestMenu-klasserna
+	
+	
+	
+	
+	
+	
+	
+	
+	
 Partiklar:
 	https://gamedevelopment.tutsplus.com/tutorials/make-your-game-pop-with-particle-effects-and-quadtrees--gamedev-2138
 	Skapa klass/system som sprider små gnistor över spelskärmen.
