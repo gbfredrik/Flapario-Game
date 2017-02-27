@@ -22,6 +22,8 @@ public class Player extends JPanel {
 
 	public Player() {
 		score = 0;
+		
+		playerSprite = new Sprite("./src/assets/png/mainchar/mainchar1.png", 5);
 
 		this.addKeyListener(new KeyListener() {
 			@Override

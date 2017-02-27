@@ -39,7 +39,9 @@ public class RenderArea extends JPanel {
 		System.out.println("1");
 		player = new Player();
 		System.out.println("2");
-		allSprites.add(player.getPlayerSprite());
+		//allSprites.add(player.getPlayerSprite());
+		addSprite(player.getPlayerSprite());
+		player.getPlayerSprite().setPosition(0, 0);
 		System.out.println("3");
 		
 		getAndSetSprites();
@@ -201,6 +203,12 @@ public class RenderArea extends JPanel {
 		int x, y, spriteWidth, spriteHeigth;
 
 		for (Sprite sprite : allSprites) {
+			
+			if (sprite == null) {
+				System.err.println("Sprite is null!");
+				continue;
+			}
+			
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();
