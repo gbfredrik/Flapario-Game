@@ -39,8 +39,8 @@ public class RenderArea extends JPanel {
 		System.out.println("1");
 		player = new Player();
 		System.out.println("2");
-		//allSprites.add(player.getPlayerSprite());
-		addSprite(player.getPlayerSprite());
+		allSprites.add(player.getPlayerSprite());
+		//addSprite(player.getPlayerSprite());
 		player.getPlayerSprite().setPosition(0, 0);
 		System.out.println("3");
 		
@@ -49,6 +49,9 @@ public class RenderArea extends JPanel {
 		// Get focus for keyevents
 		setFocusable(true);
 		requestFocusInWindow();
+		
+		//this.setBackground(Color.BLUE);
+		
 		startLoop();
 	}
 
