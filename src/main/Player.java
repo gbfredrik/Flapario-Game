@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -11,54 +12,24 @@ public class Player extends JPanel {
 
 	private Sprite playerSprite;
 
-	private int score;
+	private int score = 0;
 	private boolean onGround = true;
 	private boolean jumpPressed = false;
 	private boolean doubleJump = false;
 	private final int jumpMaxHeight = 35;
 	private int jumpHeightRemaining;
 	private int heightFallen;
-	private boolean isAlive;
+	private boolean isAlive = true;
 
-	public Player() {
-		score = 0;
-		
-		playerSprite = new Sprite("./src/assets/png/mainchar/mainchar1.png", 5);
+	public Player(BufferedImage playerImage, int id) {
+		playerSprite = new Sprite(playerImage, id);
 
-		this.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				if (key == KeyEvent.VK_SPACE) {
-					tryJump();
-				}
-				if (key == KeyEvent.VK_ESCAPE) {
-					// setFullscreen(false);
-				}
-			}
+		// playerSprite = new Sprite("./src/assets/png/mainchar/mainchar1.png",
+		// 5);
 
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-		});
 	}
 
-	public void doJump() {
-		if (jumpHeightRemaining > 0) {
-			playerSprite.setY(playerSprite.getY() + jumpSpeed());
-			if (jumpHeightRemaining == 0) {
-				heightFallen = 0;
-			}
-		} else if (!onGround) {
-			playerSprite.setY(playerSprite.getY() - fallSpeed());
-		}
-	}
-
-	private void tryJump() {
+	public void tryJump() {
 		if (!jumpPressed && !doubleJump) {
 			System.out.println("Jump pressed!");
 			jumpPressed = true;
@@ -69,6 +40,17 @@ public class Player extends JPanel {
 			jumpHeightRemaining += jumpMaxHeight;
 			System.out.println("Double jump!");
 			doubleJump = true;
+		}
+	}
+
+	public void doJump() {
+		if (jumpHeightRemaining > 0) {
+			playerSprite.setY(playerSprite.getY() + jumpSpeed());
+			if (jumpHeightRemaining == 0) {
+				heightFallen = 0;
+			}
+		} else if (!onGround) {
+			playerSprite.setY(playerSprite.getY() - fallSpeed());
 		}
 	}
 

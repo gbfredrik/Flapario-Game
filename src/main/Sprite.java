@@ -12,12 +12,13 @@ public class Sprite {
 	private BufferedImage image;
 	public Rectangle collisionbox;
 	private int x, y = 0;
-//	private int width, height;
+	// private int width, height;
 	private int id = 0;
 
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
 		this.id = id;
+		createCollisionbox();
 	}
 
 	public int getId() {
@@ -49,6 +50,8 @@ public class Sprite {
 	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
+		System.out.println("x = " + x);
+		System.out.println("y = " + y);
 		updateCollisionBox();
 	}
 
@@ -60,25 +63,19 @@ public class Sprite {
 		return image.getHeight();
 	}
 
-	public Sprite(String path) {
-		try {
-			image = ImageIO.read(new File(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void createCollisionbox() {
 		collisionbox = new Rectangle(getX() - image.getWidth() / 2, getY()
 				+ image.getHeight() / 2, image.getWidth(), image.getHeight());
 	}
 
-	public Sprite(String path, int id) {
-		this(path);
-		this.id = id;
-	}
+	/*
+	 * public Sprite(String path, int id) { this(path); this.id = id; }
+	 */
 
 	public void updateCollisionBox() {
 		collisionbox.setLocation(getX() - image.getWidth() / 2,
 				getY() + image.getHeight() / 2);
-		System.out.print("U ");
+		System.out.println("Updated collision box! ");
 	}
 
 	public BufferedImage getImage() {

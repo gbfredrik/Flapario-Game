@@ -58,6 +58,7 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(176, 32, 2 * spriteSize, spriteSize),
 				200); // Size 2
+		System.out.println("added");
 		createSprite(
 				spritesheet.getSubimage(208, 32, 3 * spriteSize, spriteSize),
 				201); // Size 3
@@ -67,12 +68,15 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(320, 32, 5 * spriteSize, spriteSize),
 				203); // Size 5
+		createSprite(
+				spritesheet.getSubimage(400, 32, 10 * spriteSize, spriteSize),
+				204); // Size 5
 		// Player och NPC, 300-399
 		createSprite(
 				animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
 				300);
 		createSprite(
-				animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
+				animationSheet.getSubimage(16, 0, spriteSize, spriteSize),
 				301);
 		// Bakgrunder, 400-499
 		createSprite(
@@ -109,12 +113,10 @@ public class Spritesheet {
 	public ArrayList<Sprite> getSpriteList(int id) {
 		if (0 <= id && id <= 99) {
 			return buttonSprites;
-		} else if (0 <= id && id <= 99) {
-			return textSprites;
 		} else if (100 <= id && id <= 199) {
-			return platformSprites;
+			return textSprites;
 		} else if (200 <= id && id <= 299) {
-			return buttonSprites;
+			return platformSprites;
 		} else if (300 <= id && id <= 399) {
 			return npcSprites;
 		} else if (400 <= id && id <= 499) {
@@ -122,7 +124,7 @@ public class Spritesheet {
 		} else if (500 <= id && id <= 599) {
 			return particleSprites;
 		} else {
-			System.err.println("@getting: No such sprite list. @ID: " + id);
+			System.err.println("@getting1: No such sprite list. @ID: " + id);
 			System.err.flush();
 			return null;
 		}
@@ -139,7 +141,7 @@ public class Spritesheet {
 				return sp;
 			}
 		}
-		System.err.println("@getting: No such sprite. @ID: " + id);
+		System.err.println("@getting2: No such sprite. @ID: " + id);
 		System.err.flush();
 		return null;
 	}

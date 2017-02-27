@@ -3,6 +3,8 @@ package sceneAreas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -17,7 +19,6 @@ public class RenderArea extends JPanel {
 
 	private JFrame frame;
 	private MenuHandler menuHandler;
-	// private Scene1 scene1;
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
@@ -25,8 +26,9 @@ public class RenderArea extends JPanel {
 	private Player player;
 	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
-	private Sprite platformTwo, platformThree, platformFour, platformFive;
-	
+	private Sprite platformTwo, platformThree, platformFour, platformFive,
+			platformTen;
+
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight, MenuHandler menuHandler) {
 		this.frame = frame;
@@ -35,44 +37,61 @@ public class RenderArea extends JPanel {
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
 		this.menuHandler = menuHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
-		
+
 		System.out.println("1");
-		player = new Player();
+		player = new Player(menuHandler.getSprite(300).getImage(), 300);
+
 		System.out.println("2");
-		//allSprites.add(player.getPlayerSprite());
-		addSprite(player.getPlayerSprite());
-		player.getPlayerSprite().setPosition(0, 0);
-		System.out.println("3");
-		
+		// allSprites.add(player.getPlayerSprite());
+		// addSprite(player.getPlayerSprite());
+		player.getPlayerSprite().setPosition(-getGameWidth() / 3,
+				getGameHeight() / 4);
 		getAndSetSprites();
-		rescale();
+
+		System.out.println("3");
+
 		// Get focus for keyevents
 		setFocusable(true);
 		requestFocusInWindow();
-		
-		//this.setBackground(Color.BLUE);
-		
-		startLoop();
+
+		this.addKeyListener(new KeyListener() { // Hopp fungerar ej!
+			@Override
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				if (key == KeyEvent.VK_SPACE) {
+					player.tryJump();
+				}
+				if (key == KeyEvent.VK_ESCAPE) {
+					// setFullscreen(false);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
+		// this.setBackground(Color.BLUE);
 	}
 
 	private void getAndSetSprites() {
-		player.setPlayerSprite(menuHandler.getSprite(400));
+		allSprites.add(player.getPlayerSprite());
+
+		platformTwo = new Sprite(menuHandler.getSprite(200).getImage(), 200);
+		platformThree = new Sprite(menuHandler.getSprite(201).getImage(), 201);
+		platformFour = new Sprite(menuHandler.getSprite(202).getImage(), 202);
+		platformFive = new Sprite(menuHandler.getSprite(203).getImage(), 203);
+		platformTen = new Sprite(menuHandler.getSprite(204).getImage(), 204);
+
 	}
 
-	public int getGameHeight() {
-		return gameHeight;
-	}
+	protected void addPlatforms() {
+		// TODO: Skriv algo för generering
+		addSprite(platformTen, getGameWidth() / 4, -getGameHeight() / 2 + 16);
 
-	public int getGameWidth() {
-		return gameWidth;
-	}
-
-	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height
-				/ gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width
-				/ scaleFactor);
-		repaint();
 	}
 
 	public void addSprite(Sprite sprite) {
@@ -89,79 +108,6 @@ public class RenderArea extends JPanel {
 		repaint();
 	}
 
-	public void clear() {
-		allSprites.clear();
-		movingSprites.clear();
-		// liveScreenSprites = new ArrayList<Sprite>(); // Varför så? dafuq
-	}
-
-	// public abstract void start();
-
-	public void stop() {
-		run = false;
-		clear();
-	}
-
-	public void startLoop() {
-		run = true;
-
-		// final int fps = 60;
-		// final long optimalTime = 1000 / fps;
-		addPlatforms();
-		// Run loop in new thread so it doesn't block everything
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				int x = 0;
-				// addPlatforms();
-				while (player.getIsAlive()) {
-					try {
-						Thread.sleep(sleepTime(x));
-						// ^^^ Bör förmodligen göras om för att optimera fps
-						// till 60.
-
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					player.doJump();
-					updateX();
-					checkCollision();
-					repaint();
-					if (x < 18999) { // Förhindrar
-						x++;
-					}
-				}
-			}
-
-		});
-		thread.start();
-	}
-
-	protected void addPlatforms() {
-		Sprite box = new Sprite("./src/assets/png/Untitled.png");
-		addSprite(box);
-		box.setPosition(-getGameWidth() / 4, -getGameHeight() / 2 + 16);
-	}
-
-	private void checkCollision() {
-		int spriteID;
-		for (Sprite sprite : movingSprites) {
-			if (player.getPlayerSprite().getCollisionbox()
-					.intersects(sprite.getCollisionbox())) {
-				spriteID = sprite.getId();
-				if (400 <= spriteID && spriteID <= 499) {// PROBLEEEEEEEEEEEEEM
-					player.setOnGround(true);
-					player.resetJumpsOnGround();
-
-					System.out.println("TRIGGERED");
-					break;
-				}
-			} else {
-				player.setOnGround(false);
-			}
-		}
-	}
-
 	public void checkAlive() {
 		if (player.getPlayerSprite().getY() < -getGameHeight() / 2) {
 			player.setIsAlive(false);
@@ -170,48 +116,52 @@ public class RenderArea extends JPanel {
 		}
 	}
 
-	private void updateX() {
-		Sprite removeSprite = null;
-		for (Sprite sp : movingSprites) {
-			sp.setX(sp.getX() - 1);
-			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
-				removeSprite = sp;
+	private void checkCollision() {
+		int spriteID;
+		if (movingSprites != null) {
+			for (Sprite sprite : movingSprites) {
+				if (player.getPlayerSprite().getCollisionbox()
+						.intersects(sprite.getCollisionbox())) {
+					spriteID = sprite.getId();
+					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
+						player.setOnGround(true);
+						player.resetJumpsOnGround();
+
+						System.out.println("TRIGGERED");
+						break;
+					}
+				} else {
+					player.setOnGround(false);
+				}
 			}
 		}
-		if (removeSprite != null) {
-			movingSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id"
-					+ removeSprite.getId());
-		}
 	}
 
-	private long sleepTime(int x) {
-		return (20 - (long) (0.001 * x + 1));
+	public void clear() {
+		allSprites.clear();
+		movingSprites.clear();
 	}
 
-	private void runrun() { // Ugly
-		// run();
+	public int getGameHeight() {
+		return gameHeight;
 	}
 
-	protected void stopLoop() {
-		run = false;
+	public int getGameWidth() {
+		return gameWidth;
 	}
-
-	// protected abstract void run();
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
+		System.out.println("PAINTING");
 		int x, y, spriteWidth, spriteHeigth;
 
 		for (Sprite sprite : allSprites) {
-			
 			if (sprite == null) {
 				System.err.println("Sprite is null!");
 				continue;
 			}
-			
+
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeigth = sprite.getHeight();
@@ -238,6 +188,72 @@ public class RenderArea extends JPanel {
 							* scaleFactor),
 					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
+		}
+	}
+
+	public void rescale() {
+		scaleFactor = (float) frame.getContentPane().getBounds().height
+				/ gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width
+				/ scaleFactor);
+		repaint();
+	}
+
+	private long sleepTime(int x) {
+		return (20 - (long) (0.001 * x + 1));
+	}
+
+	public void startLoop() {
+		run = true;
+
+		// final int fps = 60;
+		// final long optimalTime = 1000 / fps;
+		rescale();
+
+		addPlatforms();
+		// Run loop in new thread so it doesn't block everything
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				int x = 0;
+				// addPlatforms();
+				while (player.getIsAlive()) {
+					System.out.println("@loop: x = " + x);
+					checkAlive();
+					try {
+						Thread.sleep(sleepTime(x));
+						// ^^^ Bör förmodligen göras om för att optimera fps
+						// till 60.
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					player.doJump();
+					updateX();
+					checkCollision();
+					repaint();
+					if (x < 18000) { // Förhindrar negativ sleep. Max 19000?
+						x++;
+					}
+				}
+			}
+
+		});
+		thread.start();
+	}
+
+	private void updateX() {
+		Sprite removeSprite = null;
+		for (Sprite sp : movingSprites) {
+			sp.setX(sp.getX() - 1);
+			if ((sp.getX() + sp.getWidth()) <= -getGameWidth() / 2) {
+				removeSprite = sp;
+			}
+		}
+		if (removeSprite != null) {
+			movingSprites.remove(removeSprite);
+			System.out.println("Removed platform @left. @id"
+					+ removeSprite.getId());
 		}
 	}
 }
