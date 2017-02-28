@@ -111,6 +111,11 @@ public class RenderArea extends JPanel {
 		int spriteID;
 
 		Sprite mainchar = player.getPlayerSprite();
+		int x = mainchar.getX();
+		int y = mainchar.getY();
+		// Change coordinate system
+		x = x + gameWidth / 2;
+		y = -y + gameHeight / 2;
 
 		player.setOnGround(false);
 
@@ -119,8 +124,11 @@ public class RenderArea extends JPanel {
 
 				player.setOnGround(false);
 
-				Line2D.Float line = new Line2D.Float(mainchar.getX(), mainchar.getY(), mainchar.getX(),
-						mainchar.getY() - 100);
+				Line2D.Float line = new Line2D.Float(Math.round(x * scaleFactor), 
+						Math.round(y * scaleFactor), 
+						Math.round(x * scaleFactor), 
+						Math.round(y * scaleFactor + gameHeight * scaleFactor));
+				
 				// if (rect1.intersects(line)) {
 				// // linjen beskär rektangeln.
 				// }
@@ -190,14 +198,16 @@ public class RenderArea extends JPanel {
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
 
-		// TODO
 		Sprite mainchar = player.getPlayerSprite();
 		x = mainchar.getX();
 		y = mainchar.getY();
 		// Change coordinate system
 		x = x + gameWidth / 2;
 		y = -y + gameHeight / 2;
-		g.drawLine(mainchar.getX(), mainchar.getY(), mainchar.getX(), mainchar.getY() - 100);
+		g.drawLine(Math.round(x * scaleFactor), 
+				Math.round(y * scaleFactor), 
+				Math.round(x * scaleFactor), 
+				Math.round(y * scaleFactor + gameHeight * scaleFactor));
 	}
 
 	private void drawBackground(Graphics g) {
