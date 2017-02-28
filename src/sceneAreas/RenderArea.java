@@ -202,9 +202,6 @@ public class RenderArea extends JPanel {
 
 	private void drawBackground(Graphics g) {
 		// Draw sprite
-		// TODO: Uuh varför blir det såhär?
-		System.out.println("Hmm1: " + backgroundImage.getWidth());
-		System.out.println("Hmm2: " + gameWidth);
 		g.drawImage(backgroundImage.getImage(), 
 				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
 				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)), 
