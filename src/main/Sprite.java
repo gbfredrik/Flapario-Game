@@ -77,4 +77,8 @@ public class Sprite {
 		return image;
 	}
 
+	public void setImage(BufferedImage rescaledImage) {
+		this.image = rescaledImage;
+	}
+
 }

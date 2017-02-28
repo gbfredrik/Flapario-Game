@@ -1,9 +1,12 @@
 package main;
 
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 
 public class Spritesheet {
@@ -22,6 +25,7 @@ public class Spritesheet {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
 			animationSheet = ImageIO.read(new File(pathAnimationSheet));
 			createAllSprites();
+			scaleSpriteImages(buttonSprites);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -35,6 +39,7 @@ public class Spritesheet {
 		// 300-399 för player och framtida NPC:s
 		// 400-499 för bakgrunder
 		// 500-599 för partiklar
+
 		// Knappar, 1-99
 		createSprite(
 				spritesheet.getSubimage(48, 0, 3 * spriteSize, spriteSize), 1); // playButton
@@ -110,7 +115,7 @@ public class Spritesheet {
 				300);
 		createSprite(animationSheet.getSubimage(16, 0, spriteSize, spriteSize),
 				301);
-		
+
 		// Bakgrunder, 400-499
 		createSprite(
 				spritesheet.getSubimage(0, 144, 9 * spriteSize, 7 * spriteSize),
@@ -177,5 +182,23 @@ public class Spritesheet {
 		System.err.println("@getting2: No such sprite. @ID: " + id);
 		System.err.flush();
 		return null;
+	}
+
+	public void scaleSpriteImages(ArrayList<Sprite> rescaleList) {
+		int width, height = 0;
+		BufferedImage rescaledImage = null;
+		if (!rescaleList.isEmpty()) {
+			for (Sprite rescaleThis : rescaleList) {
+				width = 3 * rescaleThis.getWidth();
+				height = 3 * rescaleThis.getHeight();
+				rescaledImage = new BufferedImage(width, height,
+						BufferedImage.TYPE_INT_ARGB);
+				// _ARGB bibehåller transparens, _RGB gör ej.
+				Graphics2D g = rescaledImage.createGraphics();
+				AffineTransform at = AffineTransform.getScaleInstance(3, 3);
+				g.drawRenderedImage(rescaleThis.getImage(), at);
+				rescaleThis.setImage(rescaledImage);
+			}
+		}
 	}
 }
