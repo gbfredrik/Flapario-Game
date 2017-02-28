@@ -52,6 +52,7 @@ public class Spritesheet {
 				spritesheet.getSubimage(336, 0, 3 * spriteSize, spriteSize), 7); // exitButton
 		createSprite(
 				spritesheet.getSubimage(384, 0, 3 * spriteSize, spriteSize), 8); // -Rollover
+
 		// Bokstäver och text, 100-199
 
 		// Plattformar, 200-299
@@ -70,19 +71,51 @@ public class Spritesheet {
 				203); // Size 5
 		createSprite(
 				spritesheet.getSubimage(400, 32, 10 * spriteSize, spriteSize),
-				204); // Size 5
+				204); // Size 10
+		createSprite(
+				spritesheet.getSubimage(176, 48, 2 * spriteSize, spriteSize),
+				210); // Size 2
+		System.out.println("added");
+		createSprite(
+				spritesheet.getSubimage(208, 48, 3 * spriteSize, spriteSize),
+				211); // Size 3
+		createSprite(
+				spritesheet.getSubimage(256, 48, 4 * spriteSize, spriteSize),
+				212); // Size 4
+		createSprite(
+				spritesheet.getSubimage(320, 48, 5 * spriteSize, spriteSize),
+				213); // Size 5
+		createSprite(
+				spritesheet.getSubimage(400, 48, 10 * spriteSize, spriteSize),
+				214); // Size 10
+		createSprite(
+				spritesheet.getSubimage(176, 64, 2 * spriteSize, spriteSize),
+				220); // Size 2
+		System.out.println("added");
+		createSprite(
+				spritesheet.getSubimage(208, 64, 3 * spriteSize, spriteSize),
+				221); // Size 3
+		createSprite(
+				spritesheet.getSubimage(256, 64, 4 * spriteSize, spriteSize),
+				222); // Size 4
+		createSprite(
+				spritesheet.getSubimage(320, 64, 5 * spriteSize, spriteSize),
+				223); // Size 5
+		createSprite(
+				spritesheet.getSubimage(400, 64, 10 * spriteSize, spriteSize),
+				224); // Size 10
+
 		// Player och NPC, 300-399
-		createSprite(
-				animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
+		createSprite(animationSheet.getSubimage(0, 0, spriteSize, spriteSize),
 				300);
-		createSprite(
-				animationSheet.getSubimage(16, 0, spriteSize, spriteSize),
+		createSprite(animationSheet.getSubimage(16, 0, spriteSize, spriteSize),
 				301);
+		
 		// Bakgrunder, 400-499
 		createSprite(
-				spritesheet.getSubimage(0, 48, 9 * spriteSize, 7 * spriteSize),
+				spritesheet.getSubimage(0, 144, 9 * spriteSize, 7 * spriteSize),
 				400); // Default game background
-		createSprite(spritesheet.getSubimage(192, 48, 9 * spriteSize,
+		createSprite(spritesheet.getSubimage(160, 144, 9 * spriteSize,
 				7 * spriteSize), 410); // Splashscreen
 
 		// Partiklar, 500-599

@@ -28,6 +28,7 @@ public class RenderArea extends JPanel {
 	private Player player;
 	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
+	private Sprite backgroundImage;
 	private Sprite[] platforms = new Sprite[5];
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
@@ -80,20 +81,12 @@ public class RenderArea extends JPanel {
 		platforms[2] = new Sprite(menuHandler.getSprite(202).getImage(), 202);
 		platforms[3] = new Sprite(menuHandler.getSprite(203).getImage(), 203);
 		platforms[4] = new Sprite(menuHandler.getSprite(204).getImage(), 204);
+
+		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
+		allSprites.add(backgroundImage);
+
 	}
 
-	protected void addPlatforms() {
-		int spriteID, rightmostX = 0;
-		
-		//int distance = ThreadLocalRandom.current().nextInt(min, max + 1);
-		
-		for (Sprite sprite : movingSprites) {
-			spriteID = sprite.getId();
-			if (200 <= spriteID && spriteID <= 299) {
-				rightmostX = sprite.getX()+sprite.getImage().getWidth();
-			}
-		}
-	}
 
 	public void addSprite(Sprite sprite) {
 		allSprites.add(sprite);
@@ -121,12 +114,12 @@ public class RenderArea extends JPanel {
 		int spriteID;
 
 		Sprite mainchar = player.getPlayerSprite();
-		
+
 		player.setOnGround(false);
 
 		if (movingSprites != null) {
 			for (Sprite sprite : movingSprites) {
-				
+
 				player.setOnGround(false);
 
 				Line2D.Float line = new Line2D.Float(mainchar.getX(),
@@ -168,7 +161,7 @@ public class RenderArea extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		int x, y, spriteWidth, spriteHeigth;
+		int x, y, spriteWidth, spriteHeight;
 
 		for (Sprite sprite : allSprites) {
 			if (sprite == null) {
@@ -178,7 +171,7 @@ public class RenderArea extends JPanel {
 
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
-			spriteHeigth = sprite.getHeight();
+			spriteHeight = sprite.getHeight();
 			x = sprite.getX();
 			y = sprite.getY();
 			// Change coordinate system
@@ -188,8 +181,8 @@ public class RenderArea extends JPanel {
 			// Draw sprite
 			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
 					- spriteWidth * scaleFactor / 2), Math.round(y
-					* scaleFactor - spriteHeigth * scaleFactor / 2), Math
-					.round(spriteWidth * scaleFactor), Math.round(spriteHeigth
+					* scaleFactor - spriteHeight * scaleFactor / 2), Math
+					.round(spriteWidth * scaleFactor), Math.round(spriteHeight
 					* scaleFactor), null);
 
 			g.setColor(Color.GREEN);
@@ -203,7 +196,7 @@ public class RenderArea extends JPanel {
 					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
-		
+
 		// TODO
 		Sprite mainchar = player.getPlayerSprite();
 		x = mainchar.getX();
@@ -227,6 +220,19 @@ public class RenderArea extends JPanel {
 		return (20 - (long) (0.001 * x + 1));
 	}
 
+	protected void addPlatforms() {
+		int spriteID, rightmostX = 0;
+
+		// int distance = ThreadLocalRandom.current().nextInt(min, max + 1);
+
+		for (Sprite sprite : movingSprites) {
+			spriteID = sprite.getId();
+			if (200 <= spriteID && spriteID <= 299) {
+				rightmostX = sprite.getX() + sprite.getImage().getWidth();
+			}
+		}
+	}
+	
 	public void startLoop() {
 		run = true;
 		setFocusable(true);
@@ -234,13 +240,14 @@ public class RenderArea extends JPanel {
 		// final int fps = 60;
 		// final long optimalTime = 1000 / fps;
 		rescale();
-		
+
 		// Run loop in new thread so it doesn't block everything
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int x = 0;
-				addSprite(platforms[4], getGameWidth() / 4, -getGameHeight() / 2 + 16);
+				addSprite(platforms[4], getGameWidth() / 4,
+						-getGameHeight() / 2 + 32);
 
 				while (player.getIsAlive()) {
 					addPlatforms();
@@ -256,7 +263,7 @@ public class RenderArea extends JPanel {
 					updateX();
 					checkCollision();
 					repaint();
-					if (x < 18000) { // Förhindrar negativ sleep. Max 19000?
+					if (x <= 18000) { // Förhindrar negativ sleep. Max 19000?
 						x++;
 					}
 				}
