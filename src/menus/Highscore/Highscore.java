@@ -31,8 +31,8 @@ public class Highscore implements Serializable {
 	public int getSize() {
 		return listSize;
 	}
-	
+
 	public void printHighscores() {
-		
+
 	}
 }

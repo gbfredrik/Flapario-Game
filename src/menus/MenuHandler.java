@@ -25,7 +25,8 @@ public class MenuHandler extends JPanel {
 	private final JPanel cardMenu = new JPanel(new CardLayout());
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
-	protected final RenderArea renderArea;
+	protected RenderArea renderArea;
+	protected final DeathMenu deathMenu;
 	protected CardLayout cards;
 	private Spritesheet spritesheet;
 
@@ -44,10 +45,12 @@ public class MenuHandler extends JPanel {
 		highscoreMenu = new HighscoreMenu(this);
 		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
 				frame.getContentPane().getHeight(), 160, this);
+		deathMenu = new DeathMenu(this);
 
 		cardMenu.add(mainMenu, "mainMenu");
 		cardMenu.add(highscoreMenu, "highscoreMenu");
 		cardMenu.add(renderArea, "gameSession");
+		cardMenu.add(deathMenu, "deathMenu");
 		// cardMenu.add(deathMenu, "deathMenu");
 		pane.add(cardMenu, BorderLayout.CENTER);
 
@@ -56,12 +59,14 @@ public class MenuHandler extends JPanel {
 
 		this.setVisible(true);
 
-		//playMusic();
+		// playMusic();
 	}
 
 	private void playMusic() { // FUNGERAR EJ
 		try {
-			AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File("./src/assets/sounds/Chibi_Ninja.wav").getAbsoluteFile()); // Ska vara wav men ogiltigt filformat...
+			AudioInputStream audioStream = AudioSystem
+					.getAudioInputStream(new File(
+							"./src/assets/sounds/Chibi_Ninja.wav"));
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioStream);
 			clip.start();
@@ -77,6 +82,7 @@ public class MenuHandler extends JPanel {
 	public void changeCard(String cardName) {
 		cards.show(cardMenu, cardName);
 		if (cardName.equals("gameSession")) {
+			renderArea.reset();
 			renderArea.startLoop();
 		}
 	}

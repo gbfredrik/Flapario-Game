@@ -34,7 +34,7 @@ public class MainMenu extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
 		
-		this.add(Box.createRigidArea(new Dimension(0, 50)));
+		this.add(Box.createRigidArea(new Dimension(0, 100)));
 
 		JButton playButton = new JButton();// new JButton(new
 											// ImageIcon(imgStartButton));

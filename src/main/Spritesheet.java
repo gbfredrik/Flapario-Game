@@ -115,6 +115,22 @@ public class Spritesheet {
 				300);
 		createSprite(animationSheet.getSubimage(16, 0, spriteSize, spriteSize),
 				301);
+		createSprite(animationSheet.getSubimage(32, 0, spriteSize, spriteSize),
+				302);
+		createSprite(animationSheet.getSubimage(48, 0, spriteSize, spriteSize),
+				303);
+		createSprite(animationSheet.getSubimage(64, 0, spriteSize, spriteSize),
+				304);
+		createSprite(animationSheet.getSubimage(80, 0, spriteSize, spriteSize),
+				305);
+		createSprite(animationSheet.getSubimage(96, 0, spriteSize, spriteSize),
+				306);
+		createSprite(
+				animationSheet.getSubimage(112, 0, spriteSize, spriteSize), 307);
+		createSprite(
+				animationSheet.getSubimage(16, 16, spriteSize, spriteSize), 308);
+		createSprite(
+				animationSheet.getSubimage(32, 16, spriteSize, spriteSize), 309);
 
 		// Bakgrunder, 400-499
 		createSprite(

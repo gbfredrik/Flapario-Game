@@ -41,7 +41,8 @@ public class HighscoreMenu extends JPanel {
 		JButton backButton = new JButton(new ImageIcon(imgBackButton));
 		backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		backButton.setRolloverEnabled(true);
-		backButton.setRolloverSelectedIcon(new ImageIcon(imgBackButtonRollover));
+		backButton
+				.setRolloverSelectedIcon(new ImageIcon(imgBackButtonRollover));
 		backButton.setBorder(BorderFactory.createEmptyBorder());
 		backButton.setContentAreaFilled(false);
 		backButton.addActionListener(new ActionListener() {

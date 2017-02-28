@@ -8,7 +8,11 @@ public class Player extends JPanel {
 	// HANTERAR player-sprite, dess rörelser samt poäng
 	private static final long serialVersionUID = 1L;
 
-	private Sprite playerSprite;
+	private Sprite playerActiveSprite;
+	private BufferedImage[] playerRunning = new BufferedImage[8];
+	private BufferedImage playerJump, playerDoubleJump;
+	private int activeRunning = 0;
+	private int iterationsSinceStep = 0;
 
 	private int score = 0;
 	private boolean onGround = true;
@@ -20,11 +24,17 @@ public class Player extends JPanel {
 	private boolean isAlive = true;
 
 	public Player(BufferedImage playerImage, int id) {
-		playerSprite = new Sprite(playerImage, id);
+		playerActiveSprite = new Sprite(playerImage, id);
+	}
 
-		// playerSprite = new Sprite("./src/assets/png/mainchar/mainchar1.png",
-		// 5);
+	public void addRunningSprites(BufferedImage spriteImage, int x) {
+		playerRunning[x] = spriteImage;
+	}
 
+	public void addJumpingSprites(BufferedImage jumpSpriteImage,
+			BufferedImage doubleJumpSpriteImage) {
+		playerJump = jumpSpriteImage;
+		playerDoubleJump = doubleJumpSpriteImage;
 	}
 
 	public void tryJump() {
@@ -33,7 +43,7 @@ public class Player extends JPanel {
 			jumpPressed = true;
 			jumpHeightRemaining += jumpMaxHeight;
 		} else if (jumpPressed && !doubleJump
-				/*&& jumpHeightRemaining < (jumpMaxHeight - 25)*/) {
+		/* && jumpHeightRemaining < (jumpMaxHeight - 25) */) {
 			jumpHeightRemaining += jumpMaxHeight;
 			System.out.println("Double jump!");
 			doubleJump = true;
@@ -42,12 +52,12 @@ public class Player extends JPanel {
 
 	public void doJump() {
 		if (jumpHeightRemaining > 0) {
-			playerSprite.setY(playerSprite.getY() + jumpSpeed());
+			playerActiveSprite.setY(playerActiveSprite.getY() + jumpSpeed());
 			if (jumpHeightRemaining == 0) {
 				heightFallen = 0;
 			}
 		} else if (!onGround) {
-			playerSprite.setY(playerSprite.getY() - fallSpeed());
+			playerActiveSprite.setY(playerActiveSprite.getY() - fallSpeed());
 		}
 	}
 
@@ -84,11 +94,11 @@ public class Player extends JPanel {
 	}
 
 	public void setPlayerSprite(Sprite newPlayerSprite) {
-		this.playerSprite = newPlayerSprite;
+		this.playerActiveSprite = newPlayerSprite;
 	}
 
 	public Sprite getPlayerSprite() {
-		return playerSprite;
+		return playerActiveSprite;
 	}
 
 	public void setIsAlive(boolean isAlive) {
@@ -99,4 +109,26 @@ public class Player extends JPanel {
 		return isAlive;
 	}
 
+	public void updateSprites() {
+		if (doubleJump) {
+			playerActiveSprite.setImage(playerDoubleJump);
+			activeRunning = 0;
+		} else if (!onGround) {
+			playerActiveSprite.setImage(playerJump);
+			activeRunning = 0;
+		} else {
+			if (iterationsSinceStep == 3) {
+				if (activeRunning == playerRunning.length - 1) {
+					activeRunning = 0;
+					playerActiveSprite.setImage(playerRunning[0]);
+				} else {
+					activeRunning++;
+					playerActiveSprite.setImage(playerRunning[activeRunning]);
+				}
+				iterationsSinceStep = 0;
+			} else {
+				iterationsSinceStep++;
+			}
+		}
+	}
 }
