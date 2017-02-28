@@ -1,12 +1,7 @@
 package main;
 
 import java.awt.Rectangle;
-//import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class Sprite {
 	private BufferedImage image;
@@ -75,7 +70,7 @@ public class Sprite {
 	public void updateCollisionBox() {
 		collisionbox.setLocation(getX() - image.getWidth() / 2,
 				getY() + image.getHeight() / 2);
-		System.out.println("Updated collision box! ");
+		// System.out.println("Updated collision box! ");
 	}
 
 	public BufferedImage getImage() {

@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -30,13 +28,12 @@ public class Player extends JPanel {
 	}
 
 	public void tryJump() {
-		if (!jumpPressed && !doubleJump) {
+		if (!jumpPressed && onGround) {
 			System.out.println("Jump pressed!");
 			jumpPressed = true;
 			jumpHeightRemaining += jumpMaxHeight;
-		}
-		if (jumpPressed && !doubleJump
-				&& jumpHeightRemaining < (jumpMaxHeight - 25)) {
+		} else if (jumpPressed && !doubleJump
+				/*&& jumpHeightRemaining < (jumpMaxHeight - 25)*/) {
 			jumpHeightRemaining += jumpMaxHeight;
 			System.out.println("Double jump!");
 			doubleJump = true;
@@ -79,6 +76,7 @@ public class Player extends JPanel {
 	public void resetJumpsOnGround() {
 		jumpPressed = false;
 		doubleJump = false;
+		heightFallen = 0;
 	}
 
 	public void setOnGround(boolean onGround) {

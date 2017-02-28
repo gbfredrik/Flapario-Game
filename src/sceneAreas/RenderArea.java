@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,8 +28,7 @@ public class RenderArea extends JPanel {
 	private Player player;
 	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
-	private Sprite platformTwo, platformThree, platformFour, platformFive,
-			platformTen;
+	private Sprite[] platforms = new Sprite[5];
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight, MenuHandler menuHandler) {
@@ -38,21 +39,15 @@ public class RenderArea extends JPanel {
 		this.menuHandler = menuHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		System.out.println("1");
 		player = new Player(menuHandler.getSprite(300).getImage(), 300);
-
-		System.out.println("2");
 		// allSprites.add(player.getPlayerSprite());
 		// addSprite(player.getPlayerSprite());
 		player.getPlayerSprite().setPosition(-getGameWidth() / 3,
 				getGameHeight() / 4);
 		getAndSetSprites();
-
-		System.out.println("3");
-
 		// Get focus for keyevents
-		setFocusable(true);
-		requestFocusInWindow();
+		// setFocusable(true);
+		// requestFocusInWindow();
 
 		this.addKeyListener(new KeyListener() { // Hopp fungerar ej!
 			@Override
@@ -80,18 +75,24 @@ public class RenderArea extends JPanel {
 	private void getAndSetSprites() {
 		allSprites.add(player.getPlayerSprite());
 
-		platformTwo = new Sprite(menuHandler.getSprite(200).getImage(), 200);
-		platformThree = new Sprite(menuHandler.getSprite(201).getImage(), 201);
-		platformFour = new Sprite(menuHandler.getSprite(202).getImage(), 202);
-		platformFive = new Sprite(menuHandler.getSprite(203).getImage(), 203);
-		platformTen = new Sprite(menuHandler.getSprite(204).getImage(), 204);
-
+		platforms[0] = new Sprite(menuHandler.getSprite(200).getImage(), 200);
+		platforms[1] = new Sprite(menuHandler.getSprite(201).getImage(), 201);
+		platforms[2] = new Sprite(menuHandler.getSprite(202).getImage(), 202);
+		platforms[3] = new Sprite(menuHandler.getSprite(203).getImage(), 203);
+		platforms[4] = new Sprite(menuHandler.getSprite(204).getImage(), 204);
 	}
 
 	protected void addPlatforms() {
-		// TODO: Skriv algo för generering
-		addSprite(platformTen, getGameWidth() / 4, -getGameHeight() / 2 + 16);
-
+		int spriteID, rightmostX = 0;
+		
+		//int distance = ThreadLocalRandom.current().nextInt(min, max + 1);
+		
+		for (Sprite sprite : movingSprites) {
+			spriteID = sprite.getId();
+			if (200 <= spriteID && spriteID <= 299) {
+				rightmostX = sprite.getX()+sprite.getImage().getWidth();
+			}
+		}
 	}
 
 	public void addSprite(Sprite sprite) {
@@ -118,8 +119,22 @@ public class RenderArea extends JPanel {
 
 	private void checkCollision() {
 		int spriteID;
+
+		Sprite mainchar = player.getPlayerSprite();
+		
+		player.setOnGround(false);
+
 		if (movingSprites != null) {
 			for (Sprite sprite : movingSprites) {
+				
+				player.setOnGround(false);
+
+				Line2D.Float line = new Line2D.Float(mainchar.getX(),
+						mainchar.getY(), mainchar.getX(), mainchar.getY() - 100);
+				// if (rect1.intersects(line)) {
+				// // linjen beskär rektangeln.
+				// }
+
 				if (player.getPlayerSprite().getCollisionbox()
 						.intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
@@ -153,7 +168,6 @@ public class RenderArea extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		System.out.println("PAINTING");
 		int x, y, spriteWidth, spriteHeigth;
 
 		for (Sprite sprite : allSprites) {
@@ -189,6 +203,16 @@ public class RenderArea extends JPanel {
 					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
+		
+		// TODO
+		Sprite mainchar = player.getPlayerSprite();
+		x = mainchar.getX();
+		y = mainchar.getY();
+		// Change coordinate system
+		x = x + gameWidth / 2;
+		y = -y + gameHeight / 2;
+		g.drawLine(mainchar.getX(), mainchar.getY(), mainchar.getX(),
+				mainchar.getY() - 100);
 	}
 
 	public void rescale() {
@@ -205,25 +229,25 @@ public class RenderArea extends JPanel {
 
 	public void startLoop() {
 		run = true;
-
+		setFocusable(true);
+		requestFocusInWindow();
 		// final int fps = 60;
 		// final long optimalTime = 1000 / fps;
 		rescale();
-
-		addPlatforms();
+		
 		// Run loop in new thread so it doesn't block everything
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int x = 0;
-				// addPlatforms();
+				addSprite(platforms[4], getGameWidth() / 4, -getGameHeight() / 2 + 16);
+
 				while (player.getIsAlive()) {
-					System.out.println("@loop: x = " + x);
+					addPlatforms();
+
 					checkAlive();
 					try {
 						Thread.sleep(sleepTime(x));
-						// ^^^ Bör förmodligen göras om för att optimera fps
-						// till 60.
 
 					} catch (Exception e) {
 						e.printStackTrace();
