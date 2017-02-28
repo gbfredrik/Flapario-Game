@@ -31,8 +31,7 @@ public class RenderArea extends JPanel {
 	private Sprite backgroundImage;
 	private Sprite[] platforms = new Sprite[5];
 
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight, MenuHandler menuHandler) {
+	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler) {
 		this.frame = frame;
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
@@ -43,8 +42,7 @@ public class RenderArea extends JPanel {
 		player = new Player(menuHandler.getSprite(300).getImage(), 300);
 		// allSprites.add(player.getPlayerSprite());
 		// addSprite(player.getPlayerSprite());
-		player.getPlayerSprite().setPosition(-getGameWidth() / 3,
-				getGameHeight() / 4);
+		player.getPlayerSprite().setPosition(-getGameWidth() / 3, getGameHeight() / 4);
 		getAndSetSprites();
 		// Get focus for keyevents
 		// setFocusable(true);
@@ -83,10 +81,9 @@ public class RenderArea extends JPanel {
 		platforms[4] = new Sprite(menuHandler.getSprite(204).getImage(), 204);
 
 		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
-		allSprites.add(backgroundImage);
+		// allSprites.add(backgroundImage);
 
 	}
-
 
 	public void addSprite(Sprite sprite) {
 		allSprites.add(sprite);
@@ -122,14 +119,13 @@ public class RenderArea extends JPanel {
 
 				player.setOnGround(false);
 
-				Line2D.Float line = new Line2D.Float(mainchar.getX(),
-						mainchar.getY(), mainchar.getX(), mainchar.getY() - 100);
+				Line2D.Float line = new Line2D.Float(mainchar.getX(), mainchar.getY(), mainchar.getX(),
+						mainchar.getY() - 100);
 				// if (rect1.intersects(line)) {
 				// // linjen beskär rektangeln.
 				// }
 
-				if (player.getPlayerSprite().getCollisionbox()
-						.intersects(sprite.getCollisionbox())) {
+				if (player.getPlayerSprite().getCollisionbox().intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
 					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
 						player.setOnGround(true);
@@ -162,6 +158,8 @@ public class RenderArea extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		int x, y, spriteWidth, spriteHeight;
+		
+		drawBackground(g);
 
 		for (Sprite sprite : allSprites) {
 			if (sprite == null) {
@@ -179,20 +177,15 @@ public class RenderArea extends JPanel {
 			y = -y + gameHeight / 2;
 
 			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
-					- spriteWidth * scaleFactor / 2), Math.round(y
-					* scaleFactor - spriteHeight * scaleFactor / 2), Math
-					.round(spriteWidth * scaleFactor), Math.round(spriteHeight
-					* scaleFactor), null);
+			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
+					Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
+					Math.round(spriteHeight * scaleFactor), null);
 
 			g.setColor(Color.GREEN);
 
 			// Draw collisionbox
-			g.drawRect(
-					Math.round((sprite.collisionbox.x + gameWidth / 2)
-							* scaleFactor),
-					Math.round((-sprite.collisionbox.y + gameHeight / 2)
-							* scaleFactor),
+			g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) * scaleFactor),
+					Math.round((-sprite.collisionbox.y + gameHeight / 2) * scaleFactor),
 					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
@@ -204,15 +197,24 @@ public class RenderArea extends JPanel {
 		// Change coordinate system
 		x = x + gameWidth / 2;
 		y = -y + gameHeight / 2;
-		g.drawLine(mainchar.getX(), mainchar.getY(), mainchar.getX(),
-				mainchar.getY() - 100);
+		g.drawLine(mainchar.getX(), mainchar.getY(), mainchar.getX(), mainchar.getY() - 100);
+	}
+
+	private void drawBackground(Graphics g) {
+		// Draw sprite
+		// TODO: Uuh varför blir det såhär?
+		System.out.println("Hmm1: " + backgroundImage.getWidth());
+		System.out.println("Hmm2: " + gameWidth);
+		g.drawImage(backgroundImage.getImage(), 
+				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
+				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)), 
+				Math.round(backgroundImage.getWidth() * scaleFactor),
+				Math.round(backgroundImage.getHeight() * scaleFactor), null);
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height
-				/ gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width
-				/ scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
 		repaint();
 	}
 
@@ -232,7 +234,7 @@ public class RenderArea extends JPanel {
 			}
 		}
 	}
-	
+
 	public void startLoop() {
 		run = true;
 		setFocusable(true);
@@ -246,8 +248,7 @@ public class RenderArea extends JPanel {
 			@Override
 			public void run() {
 				int x = 0;
-				addSprite(platforms[4], getGameWidth() / 4,
-						-getGameHeight() / 2 + 32);
+				addSprite(platforms[4], getGameWidth() / 4, -getGameHeight() / 2 + 32);
 
 				while (player.getIsAlive()) {
 					addPlatforms();
@@ -283,8 +284,7 @@ public class RenderArea extends JPanel {
 		}
 		if (removeSprite != null) {
 			movingSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id"
-					+ removeSprite.getId());
+			System.out.println("Removed platform @left. @id" + removeSprite.getId());
 		}
 	}
 }
