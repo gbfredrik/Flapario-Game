@@ -1,31 +1,30 @@
 package menus.Highscore;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Highscore implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private final int listSize = 10;
-	private int[] highscores = new int[listSize];
+	private ArrayList<Integer> highscores = new ArrayList<Integer>();
 
 	public Highscore() {
 		for (int i = 0; i < listSize; i++) {
-			highscores[i] = 0;
+			highscores.add(0);
 		}
 	}
 
 	public void addScore(int score) {
-		compareScores(score);
-	}
-
-	public int compareScores(int score) {
-
-		return 0;
+		highscores.add(score);
+		sortScores();
+		highscores.remove(listSize - 1);
 	}
 
 	public void sortScores() {
-		Arrays.sort(highscores);
+		Collections.sort(highscores);
+		Collections.reverse(highscores);
 	}
 
 	public int getSize() {
@@ -33,6 +32,8 @@ public class Highscore implements Serializable {
 	}
 
 	public void printHighscores() {
-
+		for (int i = 0; i < listSize; i++) {
+			System.out.println(highscores.get(i));
+		}
 	}
 }

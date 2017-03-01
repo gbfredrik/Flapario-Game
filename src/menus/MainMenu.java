@@ -35,7 +35,7 @@ public class MainMenu extends JPanel {
 		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
-		
+
 		this.add(Box.createRigidArea(new Dimension(0, 100)));
 
 		JButton playButton = new JButton();// new JButton(new
@@ -49,7 +49,7 @@ public class MainMenu extends JPanel {
 		playButton.setContentAreaFilled(false);
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				buttonPressed("gameSession");
+				buttonPressed("gameSession", true);
 			}
 		});
 		add(playButton);
@@ -64,7 +64,7 @@ public class MainMenu extends JPanel {
 		highscoreButton.setContentAreaFilled(false);
 		highscoreButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				buttonPressed("highscoreMenu");
+				buttonPressed("highscoreMenu", true);
 			}
 		});
 		add(highscoreButton);
@@ -79,7 +79,7 @@ public class MainMenu extends JPanel {
 		exitButton.setContentAreaFilled(false);
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				exitButtonPressed();
+				exitButtonPressed(true);
 			}
 		});
 		add(exitButton);
@@ -95,13 +95,13 @@ public class MainMenu extends JPanel {
 		imgSplashBackground = menuHandler.getSprite(400).getImage();
 	}
 
-	protected void buttonPressed(String cardName) {
+	protected void buttonPressed(String cardName, boolean clickSound) {
 		System.out.println("Setting menu: " + cardName);
-		menuHandler.onPressShow(cardName);
+		menuHandler.onPressShow(cardName, clickSound);
 		System.out.println("Set menu: " + cardName);
 	}
 
-	protected void exitButtonPressed() {
-		menuHandler.executeExit();
+	protected void exitButtonPressed(boolean clickSound) {
+		menuHandler.executeExit(clickSound);
 	}
 }

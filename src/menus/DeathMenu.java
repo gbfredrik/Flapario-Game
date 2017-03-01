@@ -43,7 +43,7 @@ public class DeathMenu extends JPanel {
 		playButton.setContentAreaFilled(false);
 		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				buttonPressed("gameSession");
+				buttonPressed("gameSession", true);
 			}
 		});
 		add(playButton);
@@ -58,14 +58,14 @@ public class DeathMenu extends JPanel {
 		backButton.setContentAreaFilled(false);
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				buttonPressed("mainMenu");
+				buttonPressed("mainMenu", true);
 			}
 		});
 		add(backButton);
 	}
 
-	protected void buttonPressed(String cardName) {
-		menuHandler.onPressShow(cardName);
+	protected void buttonPressed(String cardName, boolean clickSound) {
+		menuHandler.onPressShow(cardName, clickSound);
 	}
 
 	private void getImages() {

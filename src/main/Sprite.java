@@ -3,7 +3,7 @@ package main;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Sprite {
+public class Sprite implements Cloneable {
 	private BufferedImage image;
 	public Rectangle collisionbox;
 	private int x, y = 0;
@@ -14,6 +14,10 @@ public class Sprite {
 		this.image = image;
 		this.id = id;
 		createCollisionbox();
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public int getId() {

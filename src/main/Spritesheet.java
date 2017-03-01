@@ -80,7 +80,6 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(176, 48, 2 * spriteSize, spriteSize),
 				210); // Size 2
-		System.out.println("added");
 		createSprite(
 				spritesheet.getSubimage(208, 48, 3 * spriteSize, spriteSize),
 				211); // Size 3
@@ -96,7 +95,6 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(176, 64, 2 * spriteSize, spriteSize),
 				220); // Size 2
-		System.out.println("added");
 		createSprite(
 				spritesheet.getSubimage(208, 64, 3 * spriteSize, spriteSize),
 				221); // Size 3
@@ -145,7 +143,6 @@ public class Spritesheet {
 
 	private void createSprite(BufferedImage spriteImage, int id) {
 		Sprite sprite = new Sprite(spriteImage, id);
-
 		if (0 <= id && id <= 99) {
 			buttonSprites.add(sprite);
 		} else if (100 <= id && id <= 199) {
@@ -185,13 +182,12 @@ public class Spritesheet {
 	}
 
 	public Sprite getSprite(int id) {
-		System.out.println("Trying to get sprite from spritesheet");
 		ArrayList<Sprite> tempGetFromList;
 		tempGetFromList = getSpriteList(id);
 
 		for (Sprite sp : tempGetFromList) {
 			if (sp.getId() == id) {
-				System.out.println("getID = " + sp.getId() + ". id = " + id);
+				// System.out.println("getID = " + sp.getId() + ". id = " + id);
 				return sp;
 			}
 		}
@@ -212,7 +208,8 @@ public class Spritesheet {
 						BufferedImage.TYPE_INT_ARGB);
 				// _ARGB bibehåller transparens, _RGB gör ej.
 				Graphics2D g = rescaledImage.createGraphics();
-				AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
+				AffineTransform at = AffineTransform.getScaleInstance(
+						scaleFactor, scaleFactor);
 				g.drawRenderedImage(rescaleThis.getImage(), at);
 				rescaleThis.setImage(rescaledImage);
 			}

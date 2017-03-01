@@ -48,14 +48,14 @@ public class HighscoreMenu extends JPanel {
 		backButton.setContentAreaFilled(false);
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				buttonPressed("mainMenu");
+				buttonPressed("mainMenu", true);
 			}
 		});
 		add(backButton);
 	}
 
-	protected void buttonPressed(String cardName) {
-		menuHandler.onPressShow(cardName);
+	protected void buttonPressed(String cardName, boolean clickSound) {
+		menuHandler.onPressShow(cardName, clickSound);
 	}
 
 	private void readFileHighscore() {

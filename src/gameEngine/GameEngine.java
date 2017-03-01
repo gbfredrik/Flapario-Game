@@ -1,4 +1,4 @@
-package sceneAreas;
+package gameEngine;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,7 +19,7 @@ import main.Player;
 import main.Sprite;
 import menus.MenuHandler;
 
-public class RenderArea extends JPanel {
+public class GameEngine extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
@@ -33,14 +33,14 @@ public class RenderArea extends JPanel {
 	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
 	private Sprite backgroundImage;
-	private Sprite[] platforms = new Sprite[5];
+	private Sprite[][] platforms = new Sprite[3][5];
 
-<<<<<<< HEAD
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight, MenuHandler menuHandler, MusicHandler musicHandler) {
-=======
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler) {
->>>>>>> 3a74279e9401a1e07f85b677b128b9023d305ad6
+	private boolean genNew;
+	private int nextPlatform = 0;
+
+	public GameEngine(JFrame frame, int actualWidth, int actualHeight,
+			int simulatedHeight, MenuHandler menuHandler,
+			MusicHandler musicHandler) {
 		this.frame = frame;
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
@@ -49,7 +49,8 @@ public class RenderArea extends JPanel {
 		this.musicHandler = musicHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		player = new Player(menuHandler.getSprite(300).getImage(), 300);
+		player = new Player(menuHandler.getSprite(300).getImage(), 300,
+				musicHandler);
 		// player.getPlayerSprite().setPosition(-getGameWidth() / 3,
 		// getGameHeight() / 4);
 		reset();
@@ -75,7 +76,7 @@ public class RenderArea extends JPanel {
 			public void keyTyped(KeyEvent e) {
 			}
 		});
-		
+
 		// Add window resize listener
 		frame.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
@@ -85,23 +86,31 @@ public class RenderArea extends JPanel {
 	}
 
 	public void reset() {
-		player.getPlayerSprite().setPosition(/*-getGameWidth() / 3*/ 0, /*getGameHeight() / 4*/ 0);
+		player.getPlayerSprite().setPosition(-getGameWidth() / 3,
+				getGameHeight() / 4);
 	}
 
 	private void getAndSetSprites() {
 		allSprites.add(player.getPlayerSprite());
 		for (int x = 0; x < 8; x++) {
-			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(), x);
+			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(),
+					x);
 			System.out.println("Added: x = " + x);
 		}
-		player.addJumpingSprites(menuHandler.getSprite(308).getImage(), menuHandler.getSprite(309).getImage());
-
-		platforms[0] = new Sprite(menuHandler.getSprite(200).getImage(), 200);
-		platforms[1] = new Sprite(menuHandler.getSprite(201).getImage(), 201);
-		platforms[2] = new Sprite(menuHandler.getSprite(202).getImage(), 202);
-		platforms[3] = new Sprite(menuHandler.getSprite(203).getImage(), 203);
-		platforms[4] = new Sprite(menuHandler.getSprite(204).getImage(), 204);
-
+		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
+				menuHandler.getSprite(309).getImage());
+		for (int x = 0; x < platforms.length; x++) {
+			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x)
+					.getImage(), 200 + 10 * x);
+			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x)
+					.getImage(), 201 + 10 * x);
+			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x)
+					.getImage(), 202 + 10 * x);
+			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x)
+					.getImage(), 203 + 10 * x);
+			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x)
+					.getImage(), 204 + 10 * x);
+		}
 		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
 		// allSprites.add(backgroundImage);
 
@@ -146,20 +155,22 @@ public class RenderArea extends JPanel {
 
 				player.setOnGround(false);
 
-				Line2D.Float line = new Line2D.Float(Math.round(x * scaleFactor), Math.round(y * scaleFactor),
-						Math.round(x * scaleFactor), Math.round(y * scaleFactor + gameHeight * scaleFactor));
+				Line2D.Float line = new Line2D.Float(
+						Math.round(x * scaleFactor),
+						Math.round(y * scaleFactor),
+						Math.round(x * scaleFactor), Math.round(y * scaleFactor
+								+ gameHeight * scaleFactor));
 
 				// if (rect1.intersects(line)) {
 				// // linjen beskär rektangeln.
 				// }
 
-				if (player.getPlayerSprite().getCollisionbox().intersects(sprite.getCollisionbox())) {
+				if (player.getPlayerSprite().getCollisionbox()
+						.intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
 					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
 						player.setOnGround(true);
 						player.resetJumpsOnGround();
-
-						System.out.println("TRIGGERED");
 						break;
 					}
 				} else {
@@ -205,15 +216,20 @@ public class RenderArea extends JPanel {
 			y = -y + gameHeight / 2;
 
 			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
-					Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
-					Math.round(spriteHeight * scaleFactor), null);
+			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
+					- spriteWidth * scaleFactor / 2), Math.round(y
+					* scaleFactor - spriteHeight * scaleFactor / 2), Math
+					.round(spriteWidth * scaleFactor), Math.round(spriteHeight
+					* scaleFactor), null);
 
 			g.setColor(Color.GREEN);
 
 			// Draw collisionbox
-			g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) * scaleFactor),
-					Math.round((-sprite.collisionbox.y + gameHeight / 2) * scaleFactor),
+			g.drawRect(
+					Math.round((sprite.collisionbox.x + gameWidth / 2)
+							* scaleFactor),
+					Math.round((-sprite.collisionbox.y + gameHeight / 2)
+							* scaleFactor),
 					Math.round(sprite.collisionbox.width * scaleFactor),
 					Math.round(sprite.collisionbox.height * scaleFactor));
 		}
@@ -224,22 +240,28 @@ public class RenderArea extends JPanel {
 		// Change coordinate system
 		x = x + gameWidth / 2;
 		y = -y + gameHeight / 2;
-		g.drawLine(Math.round(x * scaleFactor), Math.round(y * scaleFactor), Math.round(x * scaleFactor),
+		g.drawLine(Math.round(x * scaleFactor), Math.round(y * scaleFactor),
+				Math.round(x * scaleFactor),
 				Math.round(y * scaleFactor + gameHeight * scaleFactor));
 	}
 
 	private void drawBackground(Graphics g) {
 		// Draw sprite
-		g.drawImage(backgroundImage.getImage(),
-				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
-				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
+		g.drawImage(
+				backgroundImage.getImage(),
+				Math.round((gameWidth / 2) * scaleFactor
+						- (backgroundImage.getWidth() * scaleFactor / 2)),
+				Math.round((gameHeight / 2) * scaleFactor
+						- (backgroundImage.getHeight() * scaleFactor / 2)),
 				Math.round(backgroundImage.getWidth() * scaleFactor),
 				Math.round(backgroundImage.getHeight() * scaleFactor), null);
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height
+				/ gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width
+				/ scaleFactor);
 		repaint();
 	}
 
@@ -247,17 +269,67 @@ public class RenderArea extends JPanel {
 		return (20 - (long) (0.001 * x + 1));
 	}
 
-	protected void addPlatforms() {
-		int spriteID, rightmostX = 0;
+	private int randomizePlatformColor() {
+		return ThreadLocalRandom.current().nextInt(0, platforms.length);
+	}
 
-		// int distance = ThreadLocalRandom.current().nextInt(min, max + 1);
+	private int randomizePlatformLength() {
+		return ThreadLocalRandom.current().nextInt(0, platforms[0].length);
+	}
 
+	private int randomizePlatformY() {
+		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5,
+				2 * getGameHeight() / 5);
+	}
+
+	private void addBasePlatform() {
+		try {
+			int x = randomizePlatformColor();
+			addSprite((Sprite) platforms[x][4].clone(), 0,
+					-getGameHeight() / 2 + 32);
+
+			x = randomizePlatformColor();
+			addSprite((Sprite) platforms[x][4].clone(), getRightmostX() + 32,
+					-getGameHeight() / 2 + 32);
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private int getRightmostX() {
+		int spriteID, rightmostX = 0, tempX = 0;
 		for (Sprite sprite : movingSprites) {
 			spriteID = sprite.getId();
 			if (200 <= spriteID && spriteID <= 299) {
-				rightmostX = sprite.getX() + sprite.getImage().getWidth();
+				tempX = sprite.getX() + sprite.getImage().getWidth();
+				if (tempX > rightmostX) {
+					rightmostX = tempX;
+				}
 			}
 		}
+		return rightmostX;
+	}
+
+	private void addPlatforms() {
+		if (genNew) {
+			nextPlatform = ThreadLocalRandom.current().nextInt(
+					getGameWidth() / 8, 2 * getGameWidth() / 7);
+			System.out.println(nextPlatform);
+			genNew = false;
+		}
+		if ((getGameWidth() - getRightmostX()) > nextPlatform) {
+			try {
+				addSprite(
+						(Sprite) platforms[randomizePlatformColor()][randomizePlatformLength()]
+								.clone(), getGameWidth(), randomizePlatformY());
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			genNew = true;
+		}
+
 	}
 
 	public void startLoop() {
@@ -273,17 +345,13 @@ public class RenderArea extends JPanel {
 			@Override
 			public void run() {
 				int x = 0;
-				// player.setIsAlive(true);
-				// player.resetJumpsOnGround();
-				addSprite(platforms[4], getGameWidth() / 4, -getGameHeight() / 2 + 32);
+				addBasePlatform();
 
 				setFocusable(true);
-				requestFocusInWindow();
-				
 				while (player.getIsAlive()) {
-//					setFocusable(true);
-//					requestFocusInWindow();
-					
+					rescale();
+					requestFocusInWindow();
+
 					addPlatforms();
 					player.updateSprites();
 					checkAlive();
@@ -302,13 +370,16 @@ public class RenderArea extends JPanel {
 					}
 				}
 				if (!player.getIsAlive()) {
+					musicHandler.stopAll();
+					musicHandler.playClipFX("GameOver");
 					try {
-						Thread.sleep(1500);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					menuHandler.onPressShow("deathMenu");
+					musicHandler.playSongClip("ChibiNinja");
+					menuHandler.onPressShow("deathMenu", false);
 				}
 			}
 
@@ -326,7 +397,8 @@ public class RenderArea extends JPanel {
 		}
 		if (removeSprite != null) {
 			movingSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id" + removeSprite.getId());
+			System.out.println("Removed platform @left. @id"
+					+ removeSprite.getId());
 		}
 	}
 }

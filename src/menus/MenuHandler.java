@@ -1,5 +1,7 @@
 package menus;
 
+import gameEngine.GameEngine;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -13,7 +15,6 @@ import javax.swing.JPanel;
 import main.MusicHandler;
 import main.Sprite;
 import main.Spritesheet;
-import sceneAreas.RenderArea;
 
 public class MenuHandler extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +24,7 @@ public class MenuHandler extends JPanel {
 	private final JPanel cardMenu = new JPanel(new CardLayout());
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
-	protected RenderArea renderArea;
+	protected GameEngine renderArea;
 	protected final DeathMenu deathMenu;
 	protected CardLayout cards;
 	private Spritesheet spritesheet;
@@ -37,13 +38,13 @@ public class MenuHandler extends JPanel {
 		this.height = height;
 		this.frame = frame;
 		pane.setPreferredSize(new Dimension(this.width, this.height));
-		
+
 		musicHandler = new MusicHandler();
-		
+
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
 		mainMenu = new MainMenu(this, musicHandler);
 		highscoreMenu = new HighscoreMenu(this, musicHandler);
-		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
+		renderArea = new GameEngine(frame, frame.getContentPane().getWidth(),
 				frame.getContentPane().getHeight(), 160, this, musicHandler);
 		deathMenu = new DeathMenu(this, musicHandler);
 
@@ -51,7 +52,6 @@ public class MenuHandler extends JPanel {
 		cardMenu.add(highscoreMenu, "highscoreMenu");
 		cardMenu.add(renderArea, "gameSession");
 		cardMenu.add(deathMenu, "deathMenu");
-		// cardMenu.add(deathMenu, "deathMenu");
 		pane.add(cardMenu, BorderLayout.CENTER);
 
 		cards = (CardLayout) (cardMenu.getLayout());
@@ -63,19 +63,20 @@ public class MenuHandler extends JPanel {
 	}
 
 	private void playMusic() { // FUNGERAR EJ
-		musicHandler.
+		musicHandler.playSongClip("ChibiNinja"); // Constant loop
 	}
 
-	public void onPressShow(String cardName) {
+	public void onPressShow(String cardName, boolean clickSound) {
+		doClickSound(clickSound);
 		changeCard(cardName);
 	}
 
 	public void changeCard(String cardName) {
-		
 		if (cardName.equals("gameSession")) {
 			cardMenu.remove(renderArea);
-			renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
-					frame.getContentPane().getHeight(), 160, this);
+			renderArea = new GameEngine(frame, frame.getContentPane()
+					.getWidth(), frame.getContentPane().getHeight(), 160, this,
+					musicHandler);
 			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
 		}
@@ -114,8 +115,16 @@ public class MenuHandler extends JPanel {
 		return spritesheet.getSprite(id);
 	}
 
-	public void executeExit() {
+	public void executeExit(boolean clickSound) {
+		doClickSound(clickSound);
+		musicHandler.closeAll();
 		frame.dispose();
+	}
+
+	public void doClickSound(boolean clickSound) {
+		if (clickSound) {
+			musicHandler.playClipFX("ButtonClick");
+		}
 	}
 
 } // SKALL KORRIGERAS. Bygger om RenderArea före detta.

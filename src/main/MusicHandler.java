@@ -16,7 +16,9 @@ public class MusicHandler {
 	private String pathButtonClick = "./src/assets/sounds/FX/Button_Click.wav";
 	private String pathJump = "./src/assets/sounds/FX/Jump.wav";
 
-	//private Clip chibiNinja, pickCoin, powerUp, gameOver, buttonClick;
+	private String mainSong = "ChibiNinja";
+
+	// private Clip chibiNinja, pickCoin, powerUp, gameOver, buttonClick;
 
 	private class Audio {
 		Clip clip;
@@ -31,7 +33,7 @@ public class MusicHandler {
 		loadAudio(pathPowerUp, "PowerUp");
 		loadAudio(pathGameOver, "GameOver");
 		loadAudio(pathButtonClick, "ButtonClick");
-		loadAudio(pathJump, "ButtonClick");
+		loadAudio(pathJump, "Jump");
 	}
 
 	private void loadAudio(String filePath, String ID) {
@@ -62,9 +64,51 @@ public class MusicHandler {
 		System.err.println("Audio ID not found!");
 		return null;
 	}
-	
+
 	public void playClip(String ID) {
+
 		getClip(ID).start();
+	}
+
+	public void playClipFX(String ID) {
+		Clip clip;
+		clip = getClip(ID);
+		clip.setFramePosition(0);
+		clip.loop(0);
+		clip.start();
+	}
+
+	public void stopClip(String ID) {
+		getClip(ID).stop();
+	}
+
+	public void stopAll() {
+		for (Audio audio : AudioList) {
+			audio.clip.stop();
+		}
+	}
+
+	public void closeAll() {
+		for (Audio audio : AudioList) {
+			audio.clip.close();
+		}
+	}
+
+	public void resetFX() {
+		for (Audio audio : AudioList) {
+			if (!mainSong.equals(audio.ID)) {
+				audio.clip.setFramePosition(0);
+				System.out.println("set frames");
+			}
+		}
+	}
+
+	public void playSongClip(String ID) {
+		Clip clip;
+		clip = getClip(ID);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		clip.start();
+		// clip.;
 	}
 
 }
