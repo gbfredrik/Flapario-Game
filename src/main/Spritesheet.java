@@ -202,16 +202,17 @@ public class Spritesheet {
 
 	public void scaleSpriteImages(ArrayList<Sprite> rescaleList) {
 		int width, height = 0;
+		final int scaleFactor = 3;
 		BufferedImage rescaledImage = null;
 		if (!rescaleList.isEmpty()) {
 			for (Sprite rescaleThis : rescaleList) {
-				width = 3 * rescaleThis.getWidth();
-				height = 3 * rescaleThis.getHeight();
+				width = scaleFactor * rescaleThis.getWidth();
+				height = scaleFactor * rescaleThis.getHeight();
 				rescaledImage = new BufferedImage(width, height,
 						BufferedImage.TYPE_INT_ARGB);
 				// _ARGB bibehåller transparens, _RGB gör ej.
 				Graphics2D g = rescaledImage.createGraphics();
-				AffineTransform at = AffineTransform.getScaleInstance(3, 3);
+				AffineTransform at = AffineTransform.getScaleInstance(scaleFactor, scaleFactor);
 				g.drawRenderedImage(rescaleThis.getImage(), at);
 				rescaleThis.setImage(rescaledImage);
 			}

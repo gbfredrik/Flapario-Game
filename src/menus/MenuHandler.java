@@ -71,11 +71,15 @@ public class MenuHandler extends JPanel {
 	}
 
 	public void changeCard(String cardName) {
-		cards.show(cardMenu, cardName);
+		
 		if (cardName.equals("gameSession")) {
-			renderArea.reset();
+			cardMenu.remove(renderArea);
+			renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
+					frame.getContentPane().getHeight(), 160, this);
+			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
 		}
+		cards.show(cardMenu, cardName);
 	}
 
 	public int getWidth() {
