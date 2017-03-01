@@ -11,6 +11,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -59,20 +60,11 @@ public class MenuHandler extends JPanel {
 
 		this.setVisible(true);
 
-		// playMusic();
+		playMusic();
 	}
 
 	private void playMusic() { // FUNGERAR EJ
-		try {
-			AudioInputStream audioStream = AudioSystem
-					.getAudioInputStream(new File(
-							"./src/assets/sounds/Chibi_Ninja.wav"));
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioStream);
-			clip.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 
 	public void onPressShow(String cardName) {
