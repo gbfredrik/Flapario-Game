@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import main.MusicHandler;
+
 public class DeathMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +25,7 @@ public class DeathMenu extends JPanel {
 	private BufferedImage imgPlayButtonRollover;
 	private BufferedImage imgSplashBackground;
 
-	public DeathMenu(MenuHandler menuHandler) {
+	public DeathMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

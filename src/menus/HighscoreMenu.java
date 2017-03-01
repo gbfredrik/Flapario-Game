@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import main.MusicHandler;
 import menus.Highscore.Highscore;
 
 public class HighscoreMenu extends JPanel {
@@ -30,7 +31,7 @@ public class HighscoreMenu extends JPanel {
 	private BufferedImage imgBackButton;
 	private BufferedImage imgBackButtonRollover;
 
-	public HighscoreMenu(MenuHandler menuHandler) {
+	public HighscoreMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

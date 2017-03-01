@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import main.MusicHandler;
+
 //import sceneAreas.Scene1;
 
 public class MainMenu extends JPanel {
@@ -28,7 +30,7 @@ public class MainMenu extends JPanel {
 
 	// private Scene1 scene1;
 
-	public MainMenu(MenuHandler menuHandler) {
+	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
 		this.menuHandler = menuHandler;
 		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

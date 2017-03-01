@@ -6,15 +6,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import main.MusicHandler;
 import main.Sprite;
 import main.Spritesheet;
 import sceneAreas.RenderArea;
@@ -23,6 +19,7 @@ public class MenuHandler extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
+	private MusicHandler musicHandler;
 	private final JPanel cardMenu = new JPanel(new CardLayout());
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
@@ -39,14 +36,16 @@ public class MenuHandler extends JPanel {
 		this.width = width;
 		this.height = height;
 		this.frame = frame;
-
 		pane.setPreferredSize(new Dimension(this.width, this.height));
+		
+		musicHandler = new MusicHandler();
+		
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
-		mainMenu = new MainMenu(this);
-		highscoreMenu = new HighscoreMenu(this);
+		mainMenu = new MainMenu(this, musicHandler);
+		highscoreMenu = new HighscoreMenu(this, musicHandler);
 		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
-				frame.getContentPane().getHeight(), 160, this);
-		deathMenu = new DeathMenu(this);
+				frame.getContentPane().getHeight(), 160, this, musicHandler);
+		deathMenu = new DeathMenu(this, musicHandler);
 
 		cardMenu.add(mainMenu, "mainMenu");
 		cardMenu.add(highscoreMenu, "highscoreMenu");
@@ -64,7 +63,7 @@ public class MenuHandler extends JPanel {
 	}
 
 	private void playMusic() { // FUNGERAR EJ
-
+		musicHandler.
 	}
 
 	public void onPressShow(String cardName) {

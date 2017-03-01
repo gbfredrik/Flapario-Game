@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import main.MusicHandler;
 import main.Player;
 import main.Sprite;
 import menus.MenuHandler;
@@ -21,6 +22,7 @@ public class RenderArea extends JPanel {
 
 	private JFrame frame;
 	private MenuHandler menuHandler;
+	private MusicHandler musicHandler;
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
@@ -32,12 +34,13 @@ public class RenderArea extends JPanel {
 	private Sprite[] platforms = new Sprite[5];
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight, MenuHandler menuHandler) {
+			int simulatedHeight, MenuHandler menuHandler, MusicHandler musicHandler) {
 		this.frame = frame;
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
 		this.menuHandler = menuHandler;
+		this.musicHandler = musicHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
 		player = new Player(menuHandler.getSprite(300).getImage(), 300);
