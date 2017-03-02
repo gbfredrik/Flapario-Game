@@ -105,13 +105,13 @@ public class RenderArea extends JPanel {
 		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
 	}
 
-	public void addSprite(Sprite sprite) {
+	public void addMovingSprite(Sprite sprite) {
 		allSprites.add(sprite);
 		movingSprites.add(sprite);
 		repaint();
 	}
 
-	public void addSprite(Sprite sprite, int x, int y) {
+	public void addMovingSprite(Sprite sprite, int x, int y) {
 		sprite.setX(x);
 		sprite.setY(y);
 		allSprites.add(sprite);
@@ -129,15 +129,12 @@ public class RenderArea extends JPanel {
 
 	private void checkCollision() {
 		
-		System.out.println("Checking collision...");
-		System.out.println((player.getCollisionbox()));
+//		System.out.println("Checking collision...");
+//		System.out.println((player.getCollisionbox()));
 		
 		int spriteID;
 
-		int x = player.getX();
-		int y = player.getY();
-
-		if (movingSprites != null) {
+//		if (movingSprites != null) {
 			
 			boolean intersected = false;
 			boolean wasPlatform = false;
@@ -146,26 +143,29 @@ public class RenderArea extends JPanel {
 
 				if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
-					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
-						System.out.println("Intersects!");
+//					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
+//						System.out.println("Intersects! " + spriteID);
 						player.setOnGround(true);
 						player.resetJumpsOnGround();
 						intersected = true;
 						wasPlatform = true;
 						break;
-					} else {
-						System.out.println("Was not platform.");
-						wasPlatform = false;
-					}
+//					} else {
+//						System.out.println("Was not platform.");
+//						wasPlatform = false;
+//					}
 				}
 			}
 			if (!intersected) {
-				System.out.println("Did not intersect.");
+//				System.out.println("Did not intersect.");
+//				System.out.println(player.getX());
+//				System.out.println(player.getY());
+				
 				player.setOnGround(false);
 			} else {
-				System.out.println("Intersected!");
+//				System.out.println("Intersected!");
 			}
-		}
+//		}
 	}
 
 	public void clear() {
@@ -223,10 +223,11 @@ public class RenderArea extends JPanel {
 		// Math.round(sprite.collisionbox.height * scaleFactor));
 
 		Graphics2D g2 = (Graphics2D) g;
-		Sprite tempSprite = sprite;
-		tempSprite.collisionbox.setLocation((int) Math.round(sprite.collisionbox.getX() + gameWidth / 2),
-				(int) Math.round((-sprite.collisionbox.getY()) + gameHeight / 2));
-		g2.draw(tempSprite.collisionbox);
+		Sprite tempSprite = (Sprite) sprite.clone();
+		// OBS: Detta klonar inte trots att jag skrivit clone();
+//		tempSprite.getCollisionbox().setLocation((int) Math.round(tempSprite.getCollisionbox().getX() + gameWidth / 2),
+//				(int) Math.round((-tempSprite.getCollisionbox().getY()) + gameHeight / 2));
+		g2.draw(tempSprite.getCollisionbox());
 	}
 
 	private void drawBackground(Graphics g) {
@@ -262,9 +263,9 @@ public class RenderArea extends JPanel {
 
 	private void addBasePlatforms() {
 		int x = randomizePlatformColor();
-		addSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), 0, -getGameHeight() / 2 + 32);
+		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), 0, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-		addSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), getRightmostX() + 32,
+		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), getRightmostX() + 32,
 				-getGameHeight() / 2 + 32);
 	}
 
@@ -292,7 +293,7 @@ public class RenderArea extends JPanel {
 		if ((getGameWidth() - getRightmostX()) > nextPlatform) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
-			addSprite(new Sprite(platforms[color][length].getImage(), platforms[color][length].getId()), getGameWidth(),
+			addMovingSprite(new Sprite(platforms[color][length].getImage(), platforms[color][length].getId()), getGameWidth(),
 					randomizePlatformY());
 			genNew = true;
 		}
@@ -318,22 +319,30 @@ public class RenderArea extends JPanel {
 
 				setFocusable(true);
 				while (player.getIsAlive()) {
-					rescale();
-					requestFocusInWindow();
-
-					addPlatforms();
-					player.updateSprites();
-					checkAlive();
+					
 					try {
 						Thread.sleep(sleepTime(x));
 
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					
+					requestFocusInWindow();
+
+					checkAlive();
+					
+					addPlatforms();
+					
+					player.updateSprites();
+					
 					player.doJump();
+					
 					updateX();
+					
 					checkCollision();
+					
 					repaint();
+					
 					if (x <= 18000) { // Förhindrar negativ sleep. Max 19000?
 						x++;
 					}

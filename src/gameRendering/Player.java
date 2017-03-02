@@ -2,13 +2,10 @@ package gameRendering;
 
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
-
 import main.MusicHandler;
 
 public class Player extends Sprite {
 	// HANTERAR player-sprite, dess rörelser samt poäng
-	private static final long serialVersionUID = 1L;
 
 	// private Sprite playerActiveSprite;
 	private BufferedImage[] playerRunning = new BufferedImage[8];
@@ -116,13 +113,18 @@ public class Player extends Sprite {
 	}
 
 	public void updateSprites() {
+//		System.out.println("Changing sprite image");
+		
 		if (doubleJump) {
+//			System.out.println("Doublejump");
 			setImage(playerDoubleJump);
 			activeRunning = 0;
 		} else if (!onGround && !doubleJump) {
+//			System.out.println("Jump");
 			setImage(playerJump);
 			activeRunning = 0;
 		} else {
+//			System.out.println("Running");
 			if (iterationsSinceStep == 3) {
 				if (activeRunning == playerRunning.length - 1) {
 					activeRunning = 0;

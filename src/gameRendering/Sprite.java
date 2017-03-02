@@ -3,14 +3,24 @@ package gameRendering;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Sprite {
+public class Sprite implements Cloneable {
 	private BufferedImage image;
-	public Rectangle collisionbox;
+	private Rectangle collisionbox;
 	private int x, y = 0;
 	// private int width, height;
 	private int id = 0;
 	
 	private SpriteType spriteType;
+	
+	@Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+        	throw new Error("Uhh...");
+        }
+    }
 
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
@@ -77,6 +87,9 @@ public class Sprite {
 	public void updateCollisionBox() {
 		collisionbox.setLocation(getX() - image.getWidth() / 2,
 				getY() + image.getHeight() / 2);
+//		System.out.println("Updating collisionbox. " + id);
+//		System.out.println(getX());
+//		System.out.println(getY());
 	}
 
 	public BufferedImage getImage() {
@@ -85,6 +98,7 @@ public class Sprite {
 
 	public void setImage(BufferedImage rescaledImage) {
 		this.image = rescaledImage;
+//		updateCollisionBox();
 	}
 
 }

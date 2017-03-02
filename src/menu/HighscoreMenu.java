@@ -34,7 +34,7 @@ public class HighscoreMenu extends JPanel {
 	public HighscoreMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+		
 		readFileHighscore();
 		getImages();
 		this.add(Box.createRigidArea(new Dimension(0, 300)));
