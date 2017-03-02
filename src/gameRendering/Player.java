@@ -38,17 +38,17 @@ public class Player extends Sprite {
 	}
 
 	public void tryJump() {
-		System.out.println("----------");
-		System.out.println("onGround: " + onGround);
-		System.out.println("jumpPressed: " + jumpPressed);
-		System.out.println("doubleJump: " + doubleJump);
+//		System.out.println("----------");
+//		System.out.println("onGround: " + onGround);
+//		System.out.println("jumpPressed: " + jumpPressed);
+//		System.out.println("doubleJump: " + doubleJump);
 		if (!jumpPressed && onGround) {
 			System.out.println("Jump!");
 			musicHandler.playClipFX("Jump");
 			jumpPressed = true;
 			doubleJump = false;
 			jumpHeightRemaining += jumpMaxHeight;
-		} else if (jumpPressed && !doubleJump) {
+		} else if (!onGround && !doubleJump) {
 			/* && jumpHeightRemaining < (jumpMaxHeight - 25) */
 			// Villkor eller ej?
 			System.out.println("Double jump!\n");
@@ -58,7 +58,7 @@ public class Player extends Sprite {
 		} else {
 			System.out.println("Not jumping.");
 		}
-		System.out.println("----------");
+//		System.out.println("----------");
 	}
 
 	public void doJump() {

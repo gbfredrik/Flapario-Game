@@ -21,8 +21,7 @@ public class GameWindow {
 		frame.setResizable(true);
 		
 		// Add menuhandler
-		menuHandler = new MenuHandler(width, height, frame);
-		frame.add(menuHandler);
+		menuHandler = new MenuHandler(frame.getContentPane(), width, height, frame);
 		
 		frame.pack();
 		frame.setVisible(true);

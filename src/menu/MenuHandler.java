@@ -32,11 +32,11 @@ public class MenuHandler extends JPanel {
 	private final String pathSpritesheet = "./src/assets/png/gameTilesAndButtons/gameTilesAndButtons.png";
 	private final String animationSpritesheet = "./src/assets/png/animations/animations.png";
 
-	public MenuHandler(int width, int height, JFrame frame) {
+	public MenuHandler(Container pane, int width, int height, JFrame frame) {
 		this.width = width;
 		this.height = height;
 		this.frame = frame;
-		setPreferredSize(new Dimension(this.width, this.height));
+		pane.setPreferredSize(new Dimension(this.width, this.height));
 
 		musicHandler = new MusicHandler();
 
@@ -53,7 +53,7 @@ public class MenuHandler extends JPanel {
 		cardMenu.add(highscoreMenu, "highscoreMenu");
 		cardMenu.add(renderArea, "gameSession");
 		cardMenu.add(deathMenu, "deathMenu");
-		add(cardMenu, BorderLayout.CENTER);
+		pane.add(cardMenu, BorderLayout.CENTER);
 
 		cards = (CardLayout) (cardMenu.getLayout());
 		cards.show(cardMenu, mainMenu.getName());
