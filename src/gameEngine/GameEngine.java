@@ -282,19 +282,15 @@ public class GameEngine extends JPanel {
 				2 * getGameHeight() / 5);
 	}
 
-	private void addBasePlatform() {
-		try {
-			int x = randomizePlatformColor();
-			addSprite((Sprite) platforms[x][4].clone(), 0,
-					-getGameHeight() / 2 + 32);
-
-			x = randomizePlatformColor();
-			addSprite((Sprite) platforms[x][4].clone(), getRightmostX() + 32,
-					-getGameHeight() / 2 + 32);
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private void addBasePlatforms() {
+		int x = randomizePlatformColor();
+		addSprite(
+				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+				0, -getGameHeight() / 2 + 32);
+		x = randomizePlatformColor();
+		addSprite(
+				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+				getRightmostX() + 32, -getGameHeight() / 2 + 32);
 	}
 
 	private int getRightmostX() {
@@ -312,21 +308,19 @@ public class GameEngine extends JPanel {
 	}
 
 	private void addPlatforms() {
-		if (genNew) {
+		if (genNew) { // Borde nog ändra ramdomgenereringen
 			nextPlatform = ThreadLocalRandom.current().nextInt(
-					getGameWidth() / 8, 2 * getGameWidth() / 7);
-			System.out.println(nextPlatform);
+					getGameWidth() / 9, getGameWidth() / 6);
+			System.out.println("Width: " + getGameWidth());
+			System.out.println("Next: " + nextPlatform);
 			genNew = false;
 		}
 		if ((getGameWidth() - getRightmostX()) > nextPlatform) {
-			try {
-				addSprite(
-						(Sprite) platforms[randomizePlatformColor()][randomizePlatformLength()]
-								.clone(), getGameWidth(), randomizePlatformY());
-			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			int color = randomizePlatformColor();
+			int length = randomizePlatformLength();
+			addSprite(new Sprite(platforms[color][length].getImage(),
+					platforms[color][length].getId()), getGameWidth(),
+					randomizePlatformY());
 			genNew = true;
 		}
 
@@ -345,7 +339,7 @@ public class GameEngine extends JPanel {
 			@Override
 			public void run() {
 				int x = 0;
-				addBasePlatform();
+				addBasePlatforms();
 
 				setFocusable(true);
 				while (player.getIsAlive()) {

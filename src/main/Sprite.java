@@ -16,6 +16,10 @@ public class Sprite implements Cloneable {
 		createCollisionbox();
 	}
 	
+	public Sprite() {
+		createCollisionbox();
+	}
+	
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
