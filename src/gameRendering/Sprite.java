@@ -1,4 +1,4 @@
-package main;
+package gameRendering;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -9,17 +9,23 @@ public class Sprite {
 	private int x, y = 0;
 	// private int width, height;
 	private int id = 0;
+	
+	private SpriteType spriteType;
 
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
 		this.id = id;
+		this.spriteType = SpriteType.DEFAULT;
 		createCollisionbox();
 	}
-
-	/*
-	 * public Object clone() throws CloneNotSupportedException { return
-	 * super.clone(); }
-	 */
+	
+	public void setSpriteType(SpriteType spriteType) {
+		this.spriteType = spriteType;
+	}
+	
+	public SpriteType getSpriteType() {
+		return this.spriteType;
+	}
 
 	public int getId() {
 		return id;
@@ -68,14 +74,9 @@ public class Sprite {
 				+ image.getHeight() / 2, image.getWidth(), image.getHeight());
 	}
 
-	/*
-	 * public Sprite(String path, int id) { this(path); this.id = id; }
-	 */
-
 	public void updateCollisionBox() {
 		collisionbox.setLocation(getX() - image.getWidth() / 2,
 				getY() + image.getHeight() / 2);
-		// System.out.println("Updated collision box! ");
 	}
 
 	public BufferedImage getImage() {

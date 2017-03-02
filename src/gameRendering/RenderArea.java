@@ -1,8 +1,10 @@
-package gameEngine;
+package gameRendering;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -15,11 +17,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import main.MusicHandler;
-import main.Player;
-import main.Sprite;
-import menus.MenuHandler;
+import menu.MenuHandler;
 
-public class GameEngine extends JPanel {
+public class RenderArea extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
@@ -30,41 +30,44 @@ public class GameEngine extends JPanel {
 	private int gameWidth;
 	protected boolean run = true;
 	private Player player;
-	private ArrayList<Sprite> allSprites = new ArrayList<Sprite>();
-	private ArrayList<Sprite> movingSprites = new ArrayList<Sprite>();
+	private ArrayList<Sprite> allSprites;
+	private ArrayList<Sprite> movingSprites;
 	private Sprite backgroundImage;
-	private Sprite[][] platforms = new Sprite[3][5];
+	private Sprite[][] platforms;
 
 	private boolean genNew;
 	private int nextPlatform = 0;
 
-	public GameEngine(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight, MenuHandler menuHandler,
+	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler,
 			MusicHandler musicHandler) {
+
+		// Initialize variables
+		platforms = new Sprite[3][5];
+		allSprites = new ArrayList<Sprite>();
+		movingSprites = new ArrayList<Sprite>();
+
 		this.frame = frame;
+		this.menuHandler = menuHandler;
+		this.musicHandler = musicHandler;
+
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
-		this.menuHandler = menuHandler;
-		this.musicHandler = musicHandler;
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		player = new Player(menuHandler.getSprite(300).getImage(), 300,
-				musicHandler);
-		// player.getPlayerSprite().setPosition(-getGameWidth() / 3,
-		// getGameHeight() / 4);
-		reset();
-		getAndSetSprites();
+		player = new Player(menuHandler.getSprite(300).getImage(), 300, musicHandler);
+		player.setPosition(-getGameWidth() / 3, getGameHeight() / 4);
 
+		initSprites();
+
+		// Add keylistener
 		this.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
+					System.out.println("Jump pressed!");
 					player.tryJump();
-				}
-				if (key == KeyEvent.VK_ESCAPE) {
-					// setFullscreen(false);
 				}
 			}
 
@@ -85,35 +88,21 @@ public class GameEngine extends JPanel {
 		});
 	}
 
-	public void reset() {
-		player.getPlayerSprite().setPosition(-getGameWidth() / 3,
-				getGameHeight() / 4);
-	}
-
-	private void getAndSetSprites() {
-		allSprites.add(player.getPlayerSprite());
+	private void initSprites() {
+		allSprites.add(player);
 		for (int x = 0; x < 8; x++) {
-			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(),
-					x);
+			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(), x);
 			System.out.println("Added: x = " + x);
 		}
-		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
-				menuHandler.getSprite(309).getImage());
+		player.addJumpingSprites(menuHandler.getSprite(308).getImage(), menuHandler.getSprite(309).getImage());
 		for (int x = 0; x < platforms.length; x++) {
-			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x)
-					.getImage(), 200 + 10 * x);
-			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x)
-					.getImage(), 201 + 10 * x);
-			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x)
-					.getImage(), 202 + 10 * x);
-			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x)
-					.getImage(), 203 + 10 * x);
-			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x)
-					.getImage(), 204 + 10 * x);
+			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x).getImage(), 200 + 10 * x);
+			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x).getImage(), 201 + 10 * x);
+			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x).getImage(), 202 + 10 * x);
+			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x).getImage(), 203 + 10 * x);
+			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x).getImage(), 204 + 10 * x);
 		}
 		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
-		// allSprites.add(backgroundImage);
-
 	}
 
 	public void addSprite(Sprite sprite) {
@@ -131,7 +120,7 @@ public class GameEngine extends JPanel {
 	}
 
 	public void checkAlive() {
-		if (player.getPlayerSprite().getY() < -getGameHeight() / 2) {
+		if (player.getY() < -getGameHeight() / 2) {
 			player.setIsAlive(false);
 		} else {
 			player.setIsAlive(true);
@@ -139,43 +128,42 @@ public class GameEngine extends JPanel {
 	}
 
 	private void checkCollision() {
+		
+		System.out.println("Checking collision...");
+		System.out.println((player.getCollisionbox()));
+		
 		int spriteID;
 
-		Sprite mainchar = player.getPlayerSprite();
-		int x = mainchar.getX();
-		int y = mainchar.getY();
-		// Change coordinate system
-		x = x + gameWidth / 2;
-		y = -y + gameHeight / 2;
-
-		player.setOnGround(false);
+		int x = player.getX();
+		int y = player.getY();
 
 		if (movingSprites != null) {
+			
+			boolean intersected = false;
+			boolean wasPlatform = false;
+			
 			for (Sprite sprite : movingSprites) {
 
-				player.setOnGround(false);
-
-				Line2D.Float line = new Line2D.Float(
-						Math.round(x * scaleFactor),
-						Math.round(y * scaleFactor),
-						Math.round(x * scaleFactor), Math.round(y * scaleFactor
-								+ gameHeight * scaleFactor));
-
-				// if (rect1.intersects(line)) {
-				// // linjen beskär rektangeln.
-				// }
-
-				if (player.getPlayerSprite().getCollisionbox()
-						.intersects(sprite.getCollisionbox())) {
+				if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
 					if (200 <= spriteID && spriteID <= 299) {// PROBLEEEEEEEEEEEEEM
+						System.out.println("Intersects!");
 						player.setOnGround(true);
 						player.resetJumpsOnGround();
+						intersected = true;
+						wasPlatform = true;
 						break;
+					} else {
+						System.out.println("Was not platform.");
+						wasPlatform = false;
 					}
-				} else {
-					player.setOnGround(false);
 				}
+			}
+			if (!intersected) {
+				System.out.println("Did not intersect.");
+				player.setOnGround(false);
+			} else {
+				System.out.println("Intersected!");
 			}
 		}
 	}
@@ -216,52 +204,43 @@ public class GameEngine extends JPanel {
 			y = -y + gameHeight / 2;
 
 			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
-					- spriteWidth * scaleFactor / 2), Math.round(y
-					* scaleFactor - spriteHeight * scaleFactor / 2), Math
-					.round(spriteWidth * scaleFactor), Math.round(spriteHeight
-					* scaleFactor), null);
+			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
+					Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
+					Math.round(spriteHeight * scaleFactor), null);
 
-			g.setColor(Color.GREEN);
-
-			// Draw collisionbox
-			g.drawRect(
-					Math.round((sprite.collisionbox.x + gameWidth / 2)
-							* scaleFactor),
-					Math.round((-sprite.collisionbox.y + gameHeight / 2)
-							* scaleFactor),
-					Math.round(sprite.collisionbox.width * scaleFactor),
-					Math.round(sprite.collisionbox.height * scaleFactor));
+			drawCollision(g, sprite);
 		}
+	}
 
-		Sprite mainchar = player.getPlayerSprite();
-		x = mainchar.getX();
-		y = mainchar.getY();
-		// Change coordinate system
-		x = x + gameWidth / 2;
-		y = -y + gameHeight / 2;
-		g.drawLine(Math.round(x * scaleFactor), Math.round(y * scaleFactor),
-				Math.round(x * scaleFactor),
-				Math.round(y * scaleFactor + gameHeight * scaleFactor));
+	private void drawCollision(Graphics g, Sprite sprite) {
+		g.setColor(Color.GREEN);
+
+		// Draw collisionbox
+		// g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) *
+		// scaleFactor),
+		// Math.round((-sprite.collisionbox.y + gameHeight / 2) * scaleFactor),
+		// Math.round(sprite.collisionbox.width * scaleFactor),
+		// Math.round(sprite.collisionbox.height * scaleFactor));
+
+		Graphics2D g2 = (Graphics2D) g;
+		Sprite tempSprite = sprite;
+		tempSprite.collisionbox.setLocation((int) Math.round(sprite.collisionbox.getX() + gameWidth / 2),
+				(int) Math.round((-sprite.collisionbox.getY()) + gameHeight / 2));
+		g2.draw(tempSprite.collisionbox);
 	}
 
 	private void drawBackground(Graphics g) {
 		// Draw sprite
-		g.drawImage(
-				backgroundImage.getImage(),
-				Math.round((gameWidth / 2) * scaleFactor
-						- (backgroundImage.getWidth() * scaleFactor / 2)),
-				Math.round((gameHeight / 2) * scaleFactor
-						- (backgroundImage.getHeight() * scaleFactor / 2)),
+		g.drawImage(backgroundImage.getImage(),
+				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
+				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
 				Math.round(backgroundImage.getWidth() * scaleFactor),
 				Math.round(backgroundImage.getHeight() * scaleFactor), null);
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height
-				/ gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width
-				/ scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
 		repaint();
 	}
 
@@ -278,19 +257,15 @@ public class GameEngine extends JPanel {
 	}
 
 	private int randomizePlatformY() {
-		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5,
-				2 * getGameHeight() / 5);
+		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5, 2 * getGameHeight() / 5);
 	}
 
 	private void addBasePlatforms() {
 		int x = randomizePlatformColor();
-		addSprite(
-				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				0, -getGameHeight() / 2 + 32);
+		addSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), 0, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-		addSprite(
-				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				getRightmostX() + 32, -getGameHeight() / 2 + 32);
+		addSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), getRightmostX() + 32,
+				-getGameHeight() / 2 + 32);
 	}
 
 	private int getRightmostX() {
@@ -309,8 +284,7 @@ public class GameEngine extends JPanel {
 
 	private void addPlatforms() {
 		if (genNew) { // Borde nog ändra ramdomgenereringen
-			nextPlatform = ThreadLocalRandom.current().nextInt(
-					getGameWidth() / 9, getGameWidth() / 6);
+			nextPlatform = ThreadLocalRandom.current().nextInt(getGameWidth() / 9, getGameWidth() / 6);
 			System.out.println("Width: " + getGameWidth());
 			System.out.println("Next: " + nextPlatform);
 			genNew = false;
@@ -318,8 +292,7 @@ public class GameEngine extends JPanel {
 		if ((getGameWidth() - getRightmostX()) > nextPlatform) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
-			addSprite(new Sprite(platforms[color][length].getImage(),
-					platforms[color][length].getId()), getGameWidth(),
+			addSprite(new Sprite(platforms[color][length].getImage(), platforms[color][length].getId()), getGameWidth(),
 					randomizePlatformY());
 			genNew = true;
 		}
@@ -334,6 +307,8 @@ public class GameEngine extends JPanel {
 		// final long optimalTime = 1000 / fps;
 		rescale();
 
+		System.out.println("Startar loop!");
+		
 		// Run loop in new thread so it doesn't block everything
 		Thread thread = new Thread(new Runnable() {
 			@Override
@@ -391,8 +366,7 @@ public class GameEngine extends JPanel {
 		}
 		if (removeSprite != null) {
 			movingSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id"
-					+ removeSprite.getId());
+			System.out.println("Removed platform @left. @id" + removeSprite.getId());
 		}
 	}
 }

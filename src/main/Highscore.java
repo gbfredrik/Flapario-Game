@@ -1,4 +1,4 @@
-package menus.Highscore;
+package main;
 
 import java.io.Serializable;
 import java.util.ArrayList;

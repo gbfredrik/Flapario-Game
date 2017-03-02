@@ -1,14 +1,16 @@
-package main;
+package gameRendering;
 
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class Player extends JPanel {
+import main.MusicHandler;
+
+public class Player extends Sprite {
 	// HANTERAR player-sprite, dess rörelser samt poäng
 	private static final long serialVersionUID = 1L;
 
-	private Sprite playerActiveSprite;
+	// private Sprite playerActiveSprite;
 	private BufferedImage[] playerRunning = new BufferedImage[8];
 	private BufferedImage playerJump, playerDoubleJump;
 	private int activeRunning = 0;
@@ -24,8 +26,8 @@ public class Player extends JPanel {
 	private boolean isAlive = true;
 	private MusicHandler musicHandler;
 
-	public Player(BufferedImage playerImage, int id, MusicHandler musicHandler) {
-		playerActiveSprite = new Sprite(playerImage, id);
+	public Player(BufferedImage image, int id, MusicHandler musicHandler) {
+		super(image, id);
 		this.musicHandler = musicHandler;
 	}
 
@@ -33,15 +35,18 @@ public class Player extends JPanel {
 		playerRunning[x] = spriteImage;
 	}
 
-	public void addJumpingSprites(BufferedImage jumpSpriteImage,
-			BufferedImage doubleJumpSpriteImage) {
+	public void addJumpingSprites(BufferedImage jumpSpriteImage, BufferedImage doubleJumpSpriteImage) {
 		playerJump = jumpSpriteImage;
 		playerDoubleJump = doubleJumpSpriteImage;
 	}
 
 	public void tryJump() {
+		System.out.println("----------");
+		System.out.println("onGround: " + onGround);
+		System.out.println("jumpPressed: " + jumpPressed);
+		System.out.println("doubleJump: " + doubleJump);
 		if (!jumpPressed && onGround) {
-			System.out.println("Jump pressed!");
+			System.out.println("Jump!");
 			musicHandler.playClipFX("Jump");
 			jumpPressed = true;
 			doubleJump = false;
@@ -53,17 +58,20 @@ public class Player extends JPanel {
 			doubleJump = true;
 			musicHandler.playClipFX("Jump");
 			jumpHeightRemaining += jumpMaxHeight;
+		} else {
+			System.out.println("Not jumping.");
 		}
+		System.out.println("----------");
 	}
 
 	public void doJump() {
 		if (jumpHeightRemaining > 0) {
-			playerActiveSprite.setY(playerActiveSprite.getY() + jumpSpeed());
+			setY(getY() + jumpSpeed());
 			if (jumpHeightRemaining == 0) {
 				heightFallen = 0;
 			}
 		} else if (!onGround) {
-			playerActiveSprite.setY(playerActiveSprite.getY() - fallSpeed());
+			setY(getY() - fallSpeed());
 		}
 	}
 
@@ -99,14 +107,6 @@ public class Player extends JPanel {
 		this.onGround = onGround;
 	}
 
-	public void setPlayerSprite(Sprite newPlayerSprite) {
-		this.playerActiveSprite = newPlayerSprite;
-	}
-
-	public Sprite getPlayerSprite() {
-		return playerActiveSprite;
-	}
-
 	public void setIsAlive(boolean isAlive) {
 		this.isAlive = isAlive;
 	}
@@ -117,19 +117,19 @@ public class Player extends JPanel {
 
 	public void updateSprites() {
 		if (doubleJump) {
-			playerActiveSprite.setImage(playerDoubleJump);
+			setImage(playerDoubleJump);
 			activeRunning = 0;
 		} else if (!onGround && !doubleJump) {
-			playerActiveSprite.setImage(playerJump);
+			setImage(playerJump);
 			activeRunning = 0;
 		} else {
 			if (iterationsSinceStep == 3) {
 				if (activeRunning == playerRunning.length - 1) {
 					activeRunning = 0;
-					playerActiveSprite.setImage(playerRunning[0]);
+					setImage(playerRunning[0]);
 				} else {
 					activeRunning++;
-					playerActiveSprite.setImage(playerRunning[activeRunning]);
+					setImage(playerRunning[activeRunning]);
 				}
 				iterationsSinceStep = 0;
 			} else {

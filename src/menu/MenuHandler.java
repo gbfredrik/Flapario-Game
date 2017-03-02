@@ -1,6 +1,4 @@
-package menus;
-
-import gameEngine.GameEngine;
+package menu;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -12,19 +10,20 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import gameRendering.RenderArea;
+import gameRendering.Sprite;
+import gameRendering.Spritesheet;
 import main.MusicHandler;
-import main.Sprite;
-import main.Spritesheet;
 
 public class MenuHandler extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
 	private MusicHandler musicHandler;
-	private final JPanel cardMenu = new JPanel(new CardLayout());
+	private final JPanel cardMenu;
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
-	protected GameEngine renderArea;
+	protected RenderArea renderArea;
 	protected final DeathMenu deathMenu;
 	protected CardLayout cards;
 	private Spritesheet spritesheet;
@@ -33,33 +32,35 @@ public class MenuHandler extends JPanel {
 	private final String pathSpritesheet = "./src/assets/png/gameTilesAndButtons/gameTilesAndButtons.png";
 	private final String animationSpritesheet = "./src/assets/png/animations/animations.png";
 
-	public MenuHandler(Container pane, int width, int height, JFrame frame) {
+	public MenuHandler(int width, int height, JFrame frame) {
 		this.width = width;
 		this.height = height;
 		this.frame = frame;
-		pane.setPreferredSize(new Dimension(this.width, this.height));
+		setPreferredSize(new Dimension(this.width, this.height));
 
 		musicHandler = new MusicHandler();
 
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
+		
 		mainMenu = new MainMenu(this, musicHandler);
 		highscoreMenu = new HighscoreMenu(this, musicHandler);
-		renderArea = new GameEngine(frame, frame.getContentPane().getWidth(),
+		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
 				frame.getContentPane().getHeight(), 160, this, musicHandler);
 		deathMenu = new DeathMenu(this, musicHandler);
 
+		cardMenu = new JPanel(new CardLayout());
 		cardMenu.add(mainMenu, "mainMenu");
 		cardMenu.add(highscoreMenu, "highscoreMenu");
 		cardMenu.add(renderArea, "gameSession");
 		cardMenu.add(deathMenu, "deathMenu");
-		pane.add(cardMenu, BorderLayout.CENTER);
+		add(cardMenu, BorderLayout.CENTER);
 
 		cards = (CardLayout) (cardMenu.getLayout());
 		cards.show(cardMenu, mainMenu.getName());
 
-		this.setVisible(true);
-
 		playMusic();
+		
+		this.setVisible(true);
 	}
 
 	private void playMusic() { // FUNGERAR EJ
@@ -74,11 +75,12 @@ public class MenuHandler extends JPanel {
 	public void changeCard(String cardName) {
 		if (cardName.equals("gameSession")) {
 			cardMenu.remove(renderArea);
-			renderArea = new GameEngine(frame, frame.getContentPane()
+			renderArea = new RenderArea(frame, frame.getContentPane()
 					.getWidth(), frame.getContentPane().getHeight(), 160, this,
 					musicHandler);
 			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
+//			System.out.println("Startar loop!");
 		}
 		cards.show(cardMenu, cardName);
 	}
@@ -111,6 +113,7 @@ public class MenuHandler extends JPanel {
 		return img;
 	}
 
+	// TODO: Flytta
 	public Sprite getSprite(int id) {
 		return spritesheet.getSprite(id);
 	}

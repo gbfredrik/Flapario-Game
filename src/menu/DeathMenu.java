@@ -1,4 +1,4 @@
-package menus;
+package menu;
 
 import java.awt.Component;
 import java.awt.Dimension;
