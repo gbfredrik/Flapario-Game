@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import gameRendering.RenderArea;
 import gameRendering.Sprite;
 import gameRendering.Spritesheet;
+import main.FontHandler;
 import main.MusicHandler;
 
 public class MenuHandler extends JPanel {
@@ -20,6 +22,8 @@ public class MenuHandler extends JPanel {
 
 	private JFrame frame;
 	private MusicHandler musicHandler;
+	private FontHandler fontHandler;
+	private Font boxyBoldFont;
 	private final JPanel cardMenu;
 	protected final MainMenu mainMenu;
 	protected final HighscoreMenu highscoreMenu;
@@ -39,14 +43,16 @@ public class MenuHandler extends JPanel {
 		pane.setPreferredSize(new Dimension(this.width, this.height));
 
 		musicHandler = new MusicHandler();
-
+		fontHandler = new FontHandler();
+		boxyBoldFont = new Font("Boxy Bold", Font.BOLD, 32);
 		spritesheet = new Spritesheet(pathSpritesheet, animationSpritesheet);
-		
-		mainMenu = new MainMenu(this, musicHandler);
-		highscoreMenu = new HighscoreMenu(this, musicHandler);
+
+		mainMenu = new MainMenu(this, musicHandler, boxyBoldFont);
+		highscoreMenu = new HighscoreMenu(this, musicHandler, boxyBoldFont);
 		renderArea = new RenderArea(frame, frame.getContentPane().getWidth(),
-				frame.getContentPane().getHeight(), 160, this, musicHandler);
-		deathMenu = new DeathMenu(this, musicHandler);
+				frame.getContentPane().getHeight(), 160, this, musicHandler,
+				boxyBoldFont);
+		deathMenu = new DeathMenu(this, musicHandler, boxyBoldFont, renderArea);
 
 		cardMenu = new JPanel(new CardLayout());
 		cardMenu.add(mainMenu, "mainMenu");
@@ -59,7 +65,7 @@ public class MenuHandler extends JPanel {
 		cards.show(cardMenu, mainMenu.getName());
 
 		playMusic();
-		
+
 		this.setVisible(true);
 	}
 
@@ -77,10 +83,10 @@ public class MenuHandler extends JPanel {
 			cardMenu.remove(renderArea);
 			renderArea = new RenderArea(frame, frame.getContentPane()
 					.getWidth(), frame.getContentPane().getHeight(), 160, this,
-					musicHandler);
+					musicHandler, boxyBoldFont);
 			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
-//			System.out.println("Startar loop!");
+			// System.out.println("Startar loop!");
 		}
 		cards.show(cardMenu, cardName);
 	}

@@ -1,6 +1,8 @@
 package menu;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -10,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.MusicHandler;
@@ -30,13 +33,20 @@ public class MainMenu extends JPanel {
 
 	// private Scene1 scene1;
 
-	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
+	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler, Font font) {
 		this.menuHandler = menuHandler;
 		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
 
-		this.add(Box.createRigidArea(new Dimension(0, 100)));
+		this.add(Box.createRigidArea(new Dimension(0, 25)));
+
+		JLabel titleText = new JLabel("WELCOME TO FLAPARIO!", JLabel.CENTER);
+		titleText.setFont(font);
+		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.add(titleText);
+		
+		this.add(Box.createRigidArea(new Dimension(0, 50)));
 
 		JButton playButton = new JButton();// new JButton(new
 											// ImageIcon(imgStartButton));

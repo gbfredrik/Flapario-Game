@@ -2,6 +2,8 @@ package menu;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -18,7 +20,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import main.Highscore;
 import main.MusicHandler;
@@ -31,13 +35,42 @@ public class HighscoreMenu extends JPanel {
 	private BufferedImage imgBackButton;
 	private BufferedImage imgBackButtonRollover;
 
-	public HighscoreMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
+	public HighscoreMenu(MenuHandler menuHandler, MusicHandler musicHandler,
+			Font font) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+
 		readFileHighscore();
 		getImages();
-		this.add(Box.createRigidArea(new Dimension(0, 300)));
+
+		this.add(Box.createRigidArea(new Dimension(0, 25)));
+
+		JLabel titleText = new JLabel("HIGHSCORES", JLabel.CENTER);
+		titleText.setFont(font);
+		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.add(titleText);
+
+		this.add(Box.createRigidArea(new Dimension(0, 0)));
+
+		JPanel scoreTablePanel = new JPanel(new GridBagLayout());
+
+		JTextArea scoreTable = new JTextArea();
+		for (int i = 1; i <= highscore.getSize(); i++) {
+			if (i == highscore.getSize()) {
+				scoreTable.append(i + ":    " + highscore.getScore(i - 1));
+			} else {
+				scoreTable.append(i + ":    " + highscore.getScore(i - 1)
+						+ "\n");
+			}
+		}
+		scoreTable.setFont(font);
+		scoreTable.setOpaque(true);
+		scoreTable.setEditable(false);
+		// scoreTable.setAlignmentX(Component.CENTER_ALIGNMENT);
+		scoreTablePanel.add(scoreTable);
+		this.add(scoreTablePanel);
+
+		this.add(Box.createRigidArea(new Dimension(0, 0)));
 
 		JButton backButton = new JButton(new ImageIcon(imgBackButton));
 		backButton.setAlignmentX(Component.CENTER_ALIGNMENT);

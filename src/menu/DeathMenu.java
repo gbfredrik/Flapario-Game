@@ -1,7 +1,10 @@
 package menu;
 
+import gameRendering.RenderArea;
+
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -11,6 +14,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.MusicHandler;
@@ -25,13 +29,28 @@ public class DeathMenu extends JPanel {
 	private BufferedImage imgPlayButtonRollover;
 	private BufferedImage imgSplashBackground;
 
-	public DeathMenu(MenuHandler menuHandler, MusicHandler musicHandler) {
+	public DeathMenu(MenuHandler menuHandler, MusicHandler musicHandler,
+			Font font, RenderArea renderArea) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 		getImages();
 
-		this.add(Box.createRigidArea(new Dimension(0, 238)));
+		add(Box.createRigidArea(new Dimension(0, 25)));
+
+		JLabel titleText = new JLabel("GAME OVER!", JLabel.CENTER);
+		titleText.setFont(font);
+		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(titleText);
+
+		add(Box.createRigidArea(new Dimension(0, 25)));
+
+		JLabel scoreText = new JLabel("SCORE: " + renderArea.getPlayerScore(),
+				JLabel.CENTER);
+		scoreText.setFont(font);
+		scoreText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(scoreText);
+
+		this.add(Box.createRigidArea(new Dimension(0, 75)));
 
 		JButton playButton = new JButton();
 		playButton.setIcon(new ImageIcon(imgPlayButton));

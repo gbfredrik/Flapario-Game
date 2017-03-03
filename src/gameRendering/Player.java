@@ -32,16 +32,17 @@ public class Player extends Sprite {
 		playerRunning[x] = spriteImage;
 	}
 
-	public void addJumpingSprites(BufferedImage jumpSpriteImage, BufferedImage doubleJumpSpriteImage) {
+	public void addJumpingSprites(BufferedImage jumpSpriteImage,
+			BufferedImage doubleJumpSpriteImage) {
 		playerJump = jumpSpriteImage;
 		playerDoubleJump = doubleJumpSpriteImage;
 	}
 
 	public void tryJump() {
-//		System.out.println("----------");
-//		System.out.println("onGround: " + onGround);
-//		System.out.println("jumpPressed: " + jumpPressed);
-//		System.out.println("doubleJump: " + doubleJump);
+		// System.out.println("----------");
+		// System.out.println("onGround: " + onGround);
+		// System.out.println("jumpPressed: " + jumpPressed);
+		// System.out.println("doubleJump: " + doubleJump);
 		if (!jumpPressed && onGround) {
 			System.out.println("Jump!");
 			musicHandler.playClipFX("Jump");
@@ -58,7 +59,6 @@ public class Player extends Sprite {
 		} else {
 			System.out.println("Not jumping.");
 		}
-//		System.out.println("----------");
 	}
 
 	public void doJump() {
@@ -113,18 +113,18 @@ public class Player extends Sprite {
 	}
 
 	public void updateSprites() {
-//		System.out.println("Changing sprite image");
-		
+		// System.out.println("Changing sprite image");
+
 		if (doubleJump) {
-//			System.out.println("Doublejump");
+			// System.out.println("Doublejump");
 			setImage(playerDoubleJump);
 			activeRunning = 0;
 		} else if (!onGround && !doubleJump) {
-//			System.out.println("Jump");
+			// System.out.println("Jump");
 			setImage(playerJump);
 			activeRunning = 0;
 		} else {
-//			System.out.println("Running");
+			// System.out.println("Running");
 			if (iterationsSinceStep == 3) {
 				if (activeRunning == playerRunning.length - 1) {
 					activeRunning = 0;

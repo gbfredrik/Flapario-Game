@@ -1,7 +1,9 @@
 package gameRendering;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 // import java.awt.Rectangle;
@@ -13,7 +15,9 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.Box;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.MusicHandler;
@@ -25,6 +29,7 @@ public class RenderArea extends JPanel {
 	private JFrame frame;
 	private MenuHandler menuHandler;
 	private MusicHandler musicHandler;
+	private Font font;
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
@@ -40,7 +45,7 @@ public class RenderArea extends JPanel {
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight, MenuHandler menuHandler,
-			MusicHandler musicHandler) {
+			MusicHandler musicHandler, Font font) {
 
 		// Initialize variables
 		platforms = new Sprite[3][5];
@@ -50,6 +55,7 @@ public class RenderArea extends JPanel {
 		this.frame = frame;
 		this.menuHandler = menuHandler;
 		this.musicHandler = musicHandler;
+		this.font = font;
 
 		this.gameHeight = simulatedHeight;
 		scaleFactor = (float) actualHeight / gameHeight;
@@ -349,20 +355,33 @@ public class RenderArea extends JPanel {
 					}
 				}
 				if (!player.getIsAlive()) {
-					musicHandler.stopAll();
-					musicHandler.playClipFX("GameOver");
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					musicHandler.playSongClip("ChibiNinja");
-					menuHandler.onPressShow("deathMenu", false);
+					deathScene();
 				}
 			}
 		});
 		thread.start();
+	}
+
+	private void deathScene() {
+		musicHandler.stopAll();
+		musicHandler.playClipFX("GameOver");
+
+		add(Box.createRigidArea(new Dimension(0, 60)));
+		JLabel titleText = new JLabel("GAME OVER!", JLabel.CENTER);
+		titleText.setFont(font);
+		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(titleText);
+		revalidate(); // Ser till att texten ritas ut
+		player.setScore(1);
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		musicHandler.playSongClip("ChibiNinja");
+		menuHandler.onPressShow("deathMenu", false);
 	}
 
 	private void updateX() {
@@ -379,5 +398,9 @@ public class RenderArea extends JPanel {
 			System.out.println("Removed platform @left. @id"
 					+ removeSprite.getId());
 		}
+	}
+
+	public int getPlayerScore() {
+		return player.getScore();
 	}
 }

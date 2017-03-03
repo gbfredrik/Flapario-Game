@@ -7,7 +7,7 @@ import java.util.Collections;
 public class Highscore implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final int listSize = 10;
+	private final int listSize = 5;
 	private ArrayList<Integer> highscores = new ArrayList<Integer>();
 
 	public Highscore() {
@@ -35,5 +35,9 @@ public class Highscore implements Serializable {
 		for (int i = 0; i < listSize; i++) {
 			System.out.println(highscores.get(i));
 		}
+	}
+
+	public int getScore(int index) {
+		return highscores.get(index);
 	}
 }
