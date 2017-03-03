@@ -145,18 +145,16 @@ public class RenderArea extends JPanel {
 		for (Sprite sprite : movingSprites) {
 			if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
 				spriteID = sprite.getId();
-				// if (200 <= spriteID && spriteID <= 299) {//
-				// PROBLEEEEEEEEEEEEEM
-				// System.out.println("Intersects! " + spriteID);
-				player.setOnGround(true);
-				player.resetJumpsOnGround();
-				intersected = true;
-				wasPlatform = true;
-				break;
-				// } else {
-				// System.out.println("Was not platform.");
-				// wasPlatform = false;
-				// }
+				if (200 <= spriteID && spriteID <= 299) {//
+					player.setOnGround(true);
+					player.resetJumpsOnGround();
+					intersected = true;
+					wasPlatform = true;
+					break;
+				} else {
+					// System.out.println("Was not platform.");
+					// wasPlatform = false;
+				}
 			}
 		}
 		if (!intersected) {
