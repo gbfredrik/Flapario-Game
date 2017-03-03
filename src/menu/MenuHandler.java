@@ -87,6 +87,10 @@ public class MenuHandler extends JPanel {
 			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
 			// System.out.println("Startar loop!");
+		} else if (cardName.equals("highscoreMenu")) {
+			highscoreMenu.refresh();
+		} else if (cardName.equals("deathMenu")) {
+			deathMenu.refresh();
 		}
 		cards.show(cardMenu, cardName);
 	}

@@ -30,17 +30,18 @@ import main.MusicHandler;
 public class HighscoreMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private Highscore highscore = new Highscore();
 	private MenuHandler menuHandler;
 	private BufferedImage imgBackButton;
 	private BufferedImage imgBackButtonRollover;
+	
+	private JPanel scoreTablePanel;
+	private JTextArea scoreTable;
 
 	public HighscoreMenu(MenuHandler menuHandler, MusicHandler musicHandler,
 			Font font) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		readFileHighscore();
 		getImages();
 
 		this.add(Box.createRigidArea(new Dimension(0, 25)));
@@ -52,17 +53,11 @@ public class HighscoreMenu extends JPanel {
 
 		this.add(Box.createRigidArea(new Dimension(0, 0)));
 
-		JPanel scoreTablePanel = new JPanel(new GridBagLayout());
+		scoreTablePanel = new JPanel(new GridBagLayout());
 
-		JTextArea scoreTable = new JTextArea();
-		for (int i = 1; i <= highscore.getSize(); i++) {
-			if (i == highscore.getSize()) {
-				scoreTable.append(i + ":    " + highscore.getScore(i - 1));
-			} else {
-				scoreTable.append(i + ":    " + highscore.getScore(i - 1)
-						+ "\n");
-			}
-		}
+		scoreTable = new JTextArea();
+		refresh();
+		
 		scoreTable.setFont(font);
 		scoreTable.setOpaque(true);
 		scoreTable.setEditable(false);
@@ -90,32 +85,15 @@ public class HighscoreMenu extends JPanel {
 	protected void buttonPressed(String cardName, boolean clickSound) {
 		menuHandler.onPressShow(cardName, clickSound);
 	}
-
-	private void readFileHighscore() {
-		File saveFile = new File("save.flapario");
-		if (saveFile.exists() && !saveFile.isDirectory()) {
-			try {
-				ObjectInputStream in = new ObjectInputStream(
-						new FileInputStream(saveFile));
-				highscore = (Highscore) in.readObject();
-				in.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		} else {
-			try {
-				ObjectOutputStream newSaveFile = new ObjectOutputStream(
-						new FileOutputStream(saveFile));
-				newSaveFile.writeObject(highscore);
-				newSaveFile.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+	
+	public void refresh() {
+		scoreTable.setText("");
+		for (int i = 1; i <= Highscore.getSize(); i++) {
+			if (i == Highscore.getSize()) {
+				scoreTable.append(i + ":    " + Highscore.getScore(i - 1));
+			} else {
+				scoreTable.append(i + ":    " + Highscore.getScore(i - 1)
+						+ "\n");
 			}
 		}
 	}

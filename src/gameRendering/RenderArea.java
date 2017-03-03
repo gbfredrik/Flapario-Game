@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import main.Highscore;
 import main.MusicHandler;
 import menu.MenuHandler;
 
@@ -365,6 +366,8 @@ public class RenderArea extends JPanel {
 	private void deathScene() {
 		musicHandler.stopAll();
 		musicHandler.playClipFX("GameOver");
+		
+		Highscore.addHighScore(5);
 
 		add(Box.createRigidArea(new Dimension(0, 60)));
 		JLabel titleText = new JLabel("GAME OVER!", JLabel.CENTER);
@@ -398,9 +401,5 @@ public class RenderArea extends JPanel {
 			System.out.println("Removed platform @left. @id"
 					+ removeSprite.getId());
 		}
-	}
-
-	public int getPlayerScore() {
-		return player.getScore();
 	}
 }

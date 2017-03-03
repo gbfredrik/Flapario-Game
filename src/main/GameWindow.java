@@ -15,6 +15,10 @@ public class GameWindow {
 	}
 
 	private void createGame() {
+		
+		// Load highscores
+		Highscore.loadHighScores();
+		
 		// Create window
 		frame = new JFrame("Flapario");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

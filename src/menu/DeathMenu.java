@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import main.Highscore;
 import main.MusicHandler;
 
 public class DeathMenu extends JPanel {
@@ -28,6 +29,8 @@ public class DeathMenu extends JPanel {
 	private BufferedImage imgPlayButton;
 	private BufferedImage imgPlayButtonRollover;
 	private BufferedImage imgSplashBackground;
+	
+	private JLabel scoreText;
 
 	public DeathMenu(MenuHandler menuHandler, MusicHandler musicHandler,
 			Font font, RenderArea renderArea) {
@@ -44,7 +47,7 @@ public class DeathMenu extends JPanel {
 
 		add(Box.createRigidArea(new Dimension(0, 25)));
 
-		JLabel scoreText = new JLabel("SCORE: " + renderArea.getPlayerScore(),
+		scoreText = new JLabel("SCORE: " + Highscore.getLatestScore(),
 				JLabel.CENTER);
 		scoreText.setFont(font);
 		scoreText.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -81,6 +84,10 @@ public class DeathMenu extends JPanel {
 			}
 		});
 		add(backButton);
+	}
+	
+	public void refresh() {
+		scoreText.setText("SCORE: " + Highscore.getLatestScore());
 	}
 
 	protected void buttonPressed(String cardName, boolean clickSound) {
