@@ -29,9 +29,13 @@ public final class Highscore {
 
 		public void addScore(int score) {
 			latestScore = score;
+			System.out.println(highscores);
 			highscores.add(score);
+			System.out.println(highscores);
 			sortScores();
-			highscores.remove(listSize - 1);
+			System.out.println(highscores);
+			highscores.remove(listSize);
+			System.out.println(highscores);
 		}
 
 		public void sortScores() {
@@ -102,7 +106,6 @@ public final class Highscore {
 
 	public static void addHighScore(int score) {
 		highscoreData.addScore(score);
-		printHighscores();
 	}
 
 	public static int getSize() {
