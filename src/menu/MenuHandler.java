@@ -69,7 +69,7 @@ public class MenuHandler extends JPanel {
 		this.setVisible(true);
 	}
 
-	private void playMusic() { // FUNGERAR EJ
+	private void playMusic() {
 		musicHandler.playSongClip("ChibiNinja"); // Constant loop
 	}
 
@@ -86,7 +86,6 @@ public class MenuHandler extends JPanel {
 					musicHandler, boxyBoldFont);
 			cardMenu.add(renderArea, "gameSession");
 			renderArea.startLoop();
-			// System.out.println("Startar loop!");
 		} else if (cardName.equals("highscoreMenu")) {
 			highscoreMenu.refresh();
 		} else if (cardName.equals("deathMenu")) {

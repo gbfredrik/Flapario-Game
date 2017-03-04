@@ -31,9 +31,8 @@ public class MainMenu extends JPanel {
 	private BufferedImage imgExitButtonRollover;
 	private BufferedImage imgSplashBackground;
 
-	// private Scene1 scene1;
-
-	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler, Font font) {
+	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler,
+			Font font) {
 		this.menuHandler = menuHandler;
 		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -45,7 +44,7 @@ public class MainMenu extends JPanel {
 		titleText.setFont(font);
 		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(titleText);
-		
+
 		this.add(Box.createRigidArea(new Dimension(0, 50)));
 
 		JButton playButton = new JButton();// new JButton(new

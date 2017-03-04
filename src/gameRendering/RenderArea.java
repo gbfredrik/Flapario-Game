@@ -6,12 +6,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-// import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-// import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -145,34 +143,26 @@ public class RenderArea extends JPanel {
 
 	private void checkCollision() {
 		int spriteID;
-		// if (movingSprites != null) {
-
-		boolean intersected = false;
-		boolean wasPlatform = false;
-		for (Sprite sprite : movingSprites) {
-			if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
-				spriteID = sprite.getId();
-				if (200 <= spriteID && spriteID <= 299) {//
-					player.setOnGround(true);
-					player.resetJumpsOnGround();
-					intersected = true;
-					wasPlatform = true;
-					break;
-				} else {
-					// System.out.println("Was not platform.");
-					// wasPlatform = false;
+		if (movingSprites != null) {
+			boolean intersected = false;
+			for (Sprite sprite : movingSprites) {
+				if (player.getCollisionbox().intersects(
+						sprite.getCollisionbox())) {
+					spriteID = sprite.getId();
+					if (200 <= spriteID && spriteID <= 299) {//
+						player.setOnGround(true);
+						player.resetJumpsOnGround();
+						intersected = true;
+						break;
+					} else {
+					}
 				}
 			}
+			if (!intersected) {
+				player.setOnGround(false);
+			} else {
+			}
 		}
-		if (!intersected) {
-			// System.out.println("Did not intersect.");
-			// System.out.println(player.getX());
-			// System.out.println(player.getY());
-			player.setOnGround(false);
-		} else {
-			// System.out.println("Intersected!");
-		}
-		// }
 	}
 
 	public void clear() {
@@ -366,17 +356,16 @@ public class RenderArea extends JPanel {
 	private void deathScene() {
 		musicHandler.stopAll();
 		musicHandler.playClipFX("GameOver");
-		
-		Highscore.addHighScore(5);
+		player.setScore(1);
 
+		Highscore.addHighScore(player.getScore());
+		Highscore.saveHighscores();
 		add(Box.createRigidArea(new Dimension(0, 60)));
 		JLabel titleText = new JLabel("GAME OVER!", JLabel.CENTER);
 		titleText.setFont(font);
 		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(titleText);
 		revalidate(); // Ser till att texten ritas ut
-		player.setScore(1);
-
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {

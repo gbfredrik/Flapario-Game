@@ -7,13 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -33,7 +26,7 @@ public class HighscoreMenu extends JPanel {
 	private MenuHandler menuHandler;
 	private BufferedImage imgBackButton;
 	private BufferedImage imgBackButtonRollover;
-	
+
 	private JPanel scoreTablePanel;
 	private JTextArea scoreTable;
 
@@ -54,13 +47,12 @@ public class HighscoreMenu extends JPanel {
 		this.add(Box.createRigidArea(new Dimension(0, 0)));
 
 		scoreTablePanel = new JPanel(new GridBagLayout());
-
 		scoreTable = new JTextArea();
 		refresh();
-		
 		scoreTable.setFont(font);
-		scoreTable.setOpaque(true);
+		scoreTable.setOpaque(false);
 		scoreTable.setEditable(false);
+		scoreTable.setHighlighter(null);
 		// scoreTable.setAlignmentX(Component.CENTER_ALIGNMENT);
 		scoreTablePanel.add(scoreTable);
 		this.add(scoreTablePanel);
@@ -85,7 +77,7 @@ public class HighscoreMenu extends JPanel {
 	protected void buttonPressed(String cardName, boolean clickSound) {
 		menuHandler.onPressShow(cardName, clickSound);
 	}
-	
+
 	public void refresh() {
 		scoreTable.setText("");
 		for (int i = 1; i <= Highscore.getSize(); i++) {

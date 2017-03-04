@@ -14,6 +14,7 @@ import java.util.Collections;
 public final class Highscore {
 
 	private static class HighscoreData implements Serializable {
+		private static final long serialVersionUID = 1L;
 
 		private final int listSize = 5;
 		private ArrayList<Integer> highscores;
@@ -51,8 +52,6 @@ public final class Highscore {
 		}
 	}
 
-	private static final long serialVersionUID = 1L;
-
 	private static HighscoreData highscoreData;
 
 	private Highscore() { // This class cannot be instantiated.
@@ -60,14 +59,14 @@ public final class Highscore {
 
 	// Load saved highscores from file. Do this once when the game starts.
 	public static void loadHighScores() {
-		
 		System.out.println("Loading highscores from file.");
 		highscoreData = new HighscoreData();
 
 		File saveFile = new File("save.flapario");
 		if (saveFile.exists() && !saveFile.isDirectory()) {
 			try {
-				ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveFile));
+				ObjectInputStream in = new ObjectInputStream(
+						new FileInputStream(saveFile));
 				highscoreData = (HighscoreData) in.readObject();
 				in.close();
 			} catch (FileNotFoundException e) {
@@ -78,22 +77,23 @@ public final class Highscore {
 				e.printStackTrace();
 			}
 		} else {
-			try {
-				ObjectOutputStream newSaveFile = new ObjectOutputStream(new FileOutputStream(saveFile));
-				newSaveFile.writeObject(highscoreData);
-				newSaveFile.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			saveHighscores();
 		}
-		
 	}
-	
-	public static void saveHighScores() {
-		// TODO: Save highscoreData to file
-		System.out.println("Saving highscores to file.");
+
+	public static void saveHighscores() {
+		File saveFile = new File("save.flapario");
+		try {
+			ObjectOutputStream newSaveFile = new ObjectOutputStream(
+					new FileOutputStream(saveFile));
+			newSaveFile.writeObject(highscoreData);
+			newSaveFile.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Saved highscores to file.");
 	}
 
 	public static void clearHighscores() {
