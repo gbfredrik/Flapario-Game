@@ -39,17 +39,19 @@ public class RenderArea extends JPanel {
 	private Sprite backgroundImage;
 	private Sprite[][] platforms;
 
+	private ArrayList<Coin> coins;
+
 	private boolean genNew;
 	private int nextPlatform = 0;
 
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
-			int simulatedHeight, MenuHandler menuHandler,
+	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler,
 			MusicHandler musicHandler, Font font) {
 
 		// Initialize variables
 		platforms = new Sprite[3][5];
 		allSprites = new ArrayList<Sprite>();
 		movingSprites = new ArrayList<Sprite>();
+		coins = new ArrayList<Coin>();
 
 		this.frame = frame;
 		this.menuHandler = menuHandler;
@@ -61,8 +63,7 @@ public class RenderArea extends JPanel {
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		player = new Player(menuHandler.getSprite(300).getImage(), 300,
-				musicHandler);
+		player = new Player(menuHandler.getSprite(300).getImage(), 300, musicHandler);
 		player.setPosition(-getGameWidth() / 3, getGameHeight() / 4);
 
 		initSprites();
@@ -98,23 +99,16 @@ public class RenderArea extends JPanel {
 	private void initSprites() {
 		allSprites.add(player);
 		for (int x = 0; x < 8; x++) {
-			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(),
-					x);
+			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(), x);
 			System.out.println("Added: x = " + x);
 		}
-		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
-				menuHandler.getSprite(309).getImage());
+		player.addJumpingSprites(menuHandler.getSprite(308).getImage(), menuHandler.getSprite(309).getImage());
 		for (int x = 0; x < platforms.length; x++) {
-			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x)
-					.getImage(), 200 + 10 * x);
-			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x)
-					.getImage(), 201 + 10 * x);
-			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x)
-					.getImage(), 202 + 10 * x);
-			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x)
-					.getImage(), 203 + 10 * x);
-			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x)
-					.getImage(), 204 + 10 * x);
+			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x).getImage(), 200 + 10 * x);
+			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x).getImage(), 201 + 10 * x);
+			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x).getImage(), 202 + 10 * x);
+			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x).getImage(), 203 + 10 * x);
+			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x).getImage(), 204 + 10 * x);
 		}
 		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
 	}
@@ -146,8 +140,7 @@ public class RenderArea extends JPanel {
 		if (movingSprites != null) {
 			boolean intersected = false;
 			for (Sprite sprite : movingSprites) {
-				if (player.getCollisionbox().intersects(
-						sprite.getCollisionbox())) {
+				if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
 					if (200 <= spriteID && spriteID <= 299) {//
 						player.setOnGround(true);
@@ -199,11 +192,9 @@ public class RenderArea extends JPanel {
 			y = -y + gameHeight / 2;
 
 			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor
-					- spriteWidth * scaleFactor / 2), Math.round(y
-					* scaleFactor - spriteHeight * scaleFactor / 2), Math
-					.round(spriteWidth * scaleFactor), Math.round(spriteHeight
-					* scaleFactor), null);
+			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
+					Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
+					Math.round(spriteHeight * scaleFactor), null);
 			// drawCollision(g, sprite);
 		}
 	}
@@ -230,21 +221,16 @@ public class RenderArea extends JPanel {
 
 	private void drawBackground(Graphics g) {
 		// Draw sprite
-		g.drawImage(
-				backgroundImage.getImage(),
-				Math.round((gameWidth / 2) * scaleFactor
-						- (backgroundImage.getWidth() * scaleFactor / 2)),
-				Math.round((gameHeight / 2) * scaleFactor
-						- (backgroundImage.getHeight() * scaleFactor / 2)),
+		g.drawImage(backgroundImage.getImage(),
+				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
+				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
 				Math.round(backgroundImage.getWidth() * scaleFactor),
 				Math.round(backgroundImage.getHeight() * scaleFactor), null);
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height
-				/ gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width
-				/ scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
 		repaint();
 	}
 
@@ -261,8 +247,7 @@ public class RenderArea extends JPanel {
 	}
 
 	private int randomizePlatformY() {
-		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5,
-				2 * getGameHeight() / 5);
+		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5, 2 * getGameHeight() / 5);
 	}
 
 	private int getRightmostX() {
@@ -285,33 +270,43 @@ public class RenderArea extends JPanel {
 
 	private void addBasePlatforms() {
 		int x = randomizePlatformColor();
-		addMovingSprite(
-				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				0, -getGameHeight() / 2 + 32);
+		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), 0, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-		addMovingSprite(
-				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				getRightmostX() + getHalfPlatformWidth(platforms[x][4])
-						+ getGameWidth() / 8, -getGameHeight() / 2 + 32);
+		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+				getRightmostX() + getHalfPlatformWidth(platforms[x][4]) + getGameWidth() / 8,
+				-getGameHeight() / 2 + 32);
 	}
 
 	private void addPlatforms() {
 		if (genNew) {
-			nextPlatform = ThreadLocalRandom.current().nextInt(
-					getGameWidth() / 9, getGameWidth() / 4);
+			nextPlatform = ThreadLocalRandom.current().nextInt(getGameWidth() / 9, getGameWidth() / 4);
 			System.out.println("NEW PLATFORM!");
 			genNew = false;
 		}
 		if ((getGameWidth() - getRightmostX()) >= nextPlatform && !genNew) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
-			addMovingSprite(new Sprite(platforms[color][length].getImage(),
-					platforms[color][length].getId()), getGameWidth()
-					+ getHalfPlatformWidth(platforms[color][length]),
-					randomizePlatformY());
+			int x = getGameWidth() + getHalfPlatformWidth(platforms[color][length]);
+			int y = randomizePlatformY();
+			addMovingSprite(new Sprite(platforms[color][length].getImage(), platforms[color][length].getId()), x, y);
+
+			addCoin(x, y + 32);
+
 			genNew = true;
 		}
 
+	}
+
+	private void addCoin(int x, int y) {
+
+		Coin coin = new Coin(menuHandler.getSprite(600).getImage(), (600), x, y);
+
+		for (int i = 0; i < coin.getAnimationLenght(); i++) {
+			coin.addSprites(menuHandler.getSprite(600 + i).getImage(), i);
+		}
+		
+		coins.add(coin);
+		addMovingSprite(coin);
 	}
 
 	public void startLoop() {
@@ -338,6 +333,11 @@ public class RenderArea extends JPanel {
 					addPlatforms();
 					player.updateSprites();
 					player.doJump();
+
+					for (Coin coin : coins) {
+						coin.updateSprites();
+					}
+
 					updateX();
 					checkCollision();
 					repaint();
@@ -385,10 +385,14 @@ public class RenderArea extends JPanel {
 			}
 		}
 		if (removeSprite != null) {
+			
+			if(removeSprite instanceof Coin) {
+				coins.remove(removeSprite);
+			}
+			
 			movingSprites.remove(removeSprite);
 			allSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id"
-					+ removeSprite.getId());
+			System.out.println("Removed platform @left. @id" + removeSprite.getId());
 		}
 	}
 }

@@ -18,8 +18,10 @@ public class Spritesheet {
 	private ArrayList<Sprite> platformSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> npcSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> backgroundSprites = new ArrayList<Sprite>();
-	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>();
+	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>(); 
 
+	private ArrayList<Sprite> coinSprites = new ArrayList<Sprite>();
+	
 	public Spritesheet(String pathSpritesheet, String pathAnimationSheet) {
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
@@ -138,6 +140,13 @@ public class Spritesheet {
 				7 * spriteSize), 410); // Splashscreen
 
 		// Partiklar, 500-599
+		
+		// Coins 600-699
+		for (int i = 0; i < 10; i++) {
+			createSprite(animationSheet.getSubimage(spriteSize*i, spriteSize*3, spriteSize, spriteSize),
+					(600+i));
+		}
+		
 
 	}
 
@@ -155,6 +164,8 @@ public class Spritesheet {
 			backgroundSprites.add(sprite);
 		} else if (500 <= id && id <= 599) {
 			particleSprites.add(sprite);
+		} else if (600 <= id && id <= 699) {
+			coinSprites.add(sprite);
 		} else {
 			System.err.println("@adding: No such sprite list. @ID: " + id);
 			System.err.flush();
@@ -174,7 +185,10 @@ public class Spritesheet {
 			return backgroundSprites;
 		} else if (500 <= id && id <= 599) {
 			return particleSprites;
-		} else {
+		} else if (600 <= id && id <= 699) {
+			return coinSprites;
+		} 
+		else {
 			System.err.println("@getting1: No such sprite list. @ID: " + id);
 			System.err.flush();
 			return null;
