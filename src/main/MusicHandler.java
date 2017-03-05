@@ -106,8 +106,8 @@ public class MusicHandler {
 	public void playSongClip(String ID) {
 		Clip clip;
 		clip = getClip(ID);
-//		clip.loop(Clip.LOOP_CONTINUOUSLY);
-//		clip.start();
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		clip.start();
 		// clip.;
 	}
 

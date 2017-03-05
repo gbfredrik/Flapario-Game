@@ -86,7 +86,7 @@ public class Player extends Sprite {
 		return factor;
 	}
 
-	public void setScore(int point) {
+	public void addScore(int point) {
 		this.score += point;
 	}
 

@@ -9,7 +9,7 @@ public class Coin extends Sprite {
 	private int index;
 	private int deltaIterations;
 	
-	boolean taken = false;
+	private boolean taken = false;
 
 	public Coin(BufferedImage image, int id, int x, int y) {
 		super(image, id);

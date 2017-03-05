@@ -147,7 +147,12 @@ public class RenderArea extends JPanel {
 						player.resetJumpsOnGround();
 						intersected = true;
 						break;
-					} else {
+					} else if (sprite instanceof Coin) {
+						if (!((Coin) sprite).isTaken()) {
+							((Coin) sprite).setTaken(true);
+							player.addScore(1);
+							musicHandler.playClipFX("PickCoin");
+						}
 					}
 				}
 			}
@@ -182,6 +187,12 @@ public class RenderArea extends JPanel {
 				System.err.println("Sprite is null!");
 				continue;
 			}
+			if (sprite instanceof Coin) {
+				if (((Coin) sprite).isTaken()) {
+					continue;
+				}
+			}
+			
 			// Get sprite dimensions and location
 			spriteWidth = sprite.getWidth();
 			spriteHeight = sprite.getHeight();
@@ -356,7 +367,6 @@ public class RenderArea extends JPanel {
 	private void deathScene() {
 		musicHandler.stopAll();
 		musicHandler.playClipFX("GameOver");
-		player.setScore(1);
 
 		Highscore.addHighScore(player.getScore());
 		Highscore.saveHighscores();
