@@ -138,15 +138,22 @@ public class Spritesheet {
 				400); // Default game background
 		createSprite(spritesheet.getSubimage(160, 144, 9 * spriteSize,
 				7 * spriteSize), 410); // Splashscreen
+		// Moln
+		createSprite(spritesheet.getSubimage(spriteSize*5, spriteSize*2, spriteSize, spriteSize),
+				(420));
+		createSprite(spritesheet.getSubimage(spriteSize*6, spriteSize*2, spriteSize, spriteSize),
+				(421));
+		createSprite(spritesheet.getSubimage(spriteSize*7, spriteSize*2, spriteSize*2, spriteSize),
+				(422));
 
 		// Partiklar, 500-599
+		
 		
 		// Coins 600-699
 		for (int i = 0; i < 10; i++) {
 			createSprite(animationSheet.getSubimage(spriteSize*i, spriteSize*3, spriteSize, spriteSize),
 					(600+i));
 		}
-		
 
 	}
 
@@ -165,6 +172,8 @@ public class Spritesheet {
 		} else if (500 <= id && id <= 599) {
 			particleSprites.add(sprite);
 		} else if (600 <= id && id <= 699) {
+			coinSprites.add(sprite);
+		} else if (700 <= id && id <= 799) {
 			coinSprites.add(sprite);
 		} else {
 			System.err.println("@adding: No such sprite list. @ID: " + id);

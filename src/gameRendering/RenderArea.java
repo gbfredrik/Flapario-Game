@@ -36,7 +36,8 @@ public class RenderArea extends JPanel {
 	private Player player;
 	private ArrayList<Sprite> allSprites;
 	private ArrayList<Sprite> movingSprites;
-	private Sprite backgroundImage;
+	//private Sprite backgroundImage;
+	private Sprite[] clouds;
 	private Sprite[][] platforms;
 
 	private ArrayList<Coin> coins;
@@ -47,6 +48,8 @@ public class RenderArea extends JPanel {
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler,
 			MusicHandler musicHandler, Font font) {
 
+		setBackground(new Color(153,204,255));
+		
 		// Initialize variables
 		platforms = new Sprite[3][5];
 		allSprites = new ArrayList<Sprite>();
@@ -110,7 +113,15 @@ public class RenderArea extends JPanel {
 			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x).getImage(), 203 + 10 * x);
 			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x).getImage(), 204 + 10 * x);
 		}
-		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
+//		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
+		
+		clouds = new Sprite[3];
+		for (int i = 0; i < clouds.length; i++) {
+			clouds[i] = new Sprite(menuHandler.getSprite(420 + i).getImage(), 420 + i);
+		}
+		clouds[0].setPosition(gameWidth/2 - 32, gameHeight/2 - 16);
+		clouds[1].setPosition(gameWidth/2 - 56, gameHeight/2 - 20);
+		clouds[2].setPosition(gameWidth/2 - 96, gameHeight/2 - 18);
 	}
 
 	public void addMovingSprite(Sprite sprite) {
@@ -179,9 +190,9 @@ public class RenderArea extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		int x, y, spriteWidth, spriteHeight;
 
 		drawBackground(g);
+		
 		for (Sprite sprite : allSprites) {
 			if (sprite == null) {
 				System.err.println("Sprite is null!");
@@ -193,21 +204,28 @@ public class RenderArea extends JPanel {
 				}
 			}
 			
-			// Get sprite dimensions and location
-			spriteWidth = sprite.getWidth();
-			spriteHeight = sprite.getHeight();
-			x = sprite.getX();
-			y = sprite.getY();
-			// Change coordinate system
-			x = x + gameWidth / 2;
-			y = -y + gameHeight / 2;
-
-			// Draw sprite
-			g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
-					Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
-					Math.round(spriteHeight * scaleFactor), null);
+			drawSprite(g, sprite);
 			// drawCollision(g, sprite);
 		}
+	}
+	
+	private void drawSprite(Graphics g, Sprite sprite) {
+		
+		int x, y, spriteWidth, spriteHeight;
+		
+		// Get sprite dimensions and location
+		spriteWidth = sprite.getWidth();
+		spriteHeight = sprite.getHeight();
+		x = sprite.getX();
+		y = sprite.getY();
+		// Change coordinate system
+		x = x + gameWidth / 2;
+		y = -y + gameHeight / 2;
+
+		// Draw sprite
+		g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
+				Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
+				Math.round(spriteHeight * scaleFactor), null);
 	}
 
 	private void drawCollision(Graphics g, Sprite sprite) {
@@ -232,11 +250,17 @@ public class RenderArea extends JPanel {
 
 	private void drawBackground(Graphics g) {
 		// Draw sprite
-		g.drawImage(backgroundImage.getImage(),
-				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
-				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
-				Math.round(backgroundImage.getWidth() * scaleFactor),
-				Math.round(backgroundImage.getHeight() * scaleFactor), null);
+//		g.drawImage(backgroundImage.getImage(),
+//				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
+//				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
+//				Math.round(backgroundImage.getWidth() * scaleFactor),
+//				Math.round(backgroundImage.getHeight() * scaleFactor), null);
+		
+		System.out.println("Drawing clouds");
+		for (Sprite cloud : clouds) {
+			drawSprite(g, cloud);
+		}
+		
 	}
 
 	public void rescale() {
