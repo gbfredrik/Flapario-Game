@@ -9,6 +9,19 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Läser in varje använd sprite från två större spritesheets, ett för
+ * animationer och spelarkaraktärer, samt ett för spelets plattformar, texter,
+ * plattformar, m.m. Därefter splittas varje spritesheet till de olika mindre
+ * bilderna och dessa lagras i nya sprite-objekt i kategoriserade listor.
+ * Anledningen till detta tillvägagångssätt är att begränsa antalet gånger som
+ * spelet beöhver läsa in bilder från datorn. Slutligen finns en metod som
+ * används för att skala upp knapparnas ikoner.
+ * 
+ * 
+ * @author frebo147
+ *
+ */
 public class Spritesheet {
 	private static BufferedImage spritesheet;
 	private static BufferedImage animationSheet;
@@ -18,10 +31,10 @@ public class Spritesheet {
 	private ArrayList<Sprite> platformSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> npcSprites = new ArrayList<Sprite>();
 	private ArrayList<Sprite> backgroundSprites = new ArrayList<Sprite>();
-	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>(); 
+	private ArrayList<Sprite> particleSprites = new ArrayList<Sprite>();
 
 	private ArrayList<Sprite> coinSprites = new ArrayList<Sprite>();
-	
+
 	public Spritesheet(String pathSpritesheet, String pathAnimationSheet) {
 		try {
 			spritesheet = ImageIO.read(new File(pathSpritesheet));
@@ -66,7 +79,6 @@ public class Spritesheet {
 		createSprite(
 				spritesheet.getSubimage(176, 32, 2 * spriteSize, spriteSize),
 				200); // Size 2
-		System.out.println("added");
 		createSprite(
 				spritesheet.getSubimage(208, 32, 3 * spriteSize, spriteSize),
 				201); // Size 3
@@ -139,22 +151,19 @@ public class Spritesheet {
 		createSprite(spritesheet.getSubimage(160, 144, 9 * spriteSize,
 				7 * spriteSize), 410); // Splashscreen
 		// Moln
-		createSprite(spritesheet.getSubimage(spriteSize*5, spriteSize*2, spriteSize, spriteSize),
-				(420));
-		createSprite(spritesheet.getSubimage(spriteSize*6, spriteSize*2, spriteSize, spriteSize),
-				(421));
-		createSprite(spritesheet.getSubimage(spriteSize*7, spriteSize*2, spriteSize*2, spriteSize),
-				(422));
-
+		createSprite(spritesheet.getSubimage(spriteSize * 5, spriteSize * 2,
+				spriteSize, spriteSize), (420));
+		createSprite(spritesheet.getSubimage(spriteSize * 6, spriteSize * 2,
+				spriteSize, spriteSize), (421));
+		createSprite(spritesheet.getSubimage(spriteSize * 7, spriteSize * 2,
+				spriteSize * 2, spriteSize), (422));
 		// Partiklar, 500-599
-		
-		
+
 		// Coins 600-699
 		for (int i = 0; i < 10; i++) {
-			createSprite(animationSheet.getSubimage(spriteSize*i, spriteSize*3, spriteSize, spriteSize),
-					(600+i));
+			createSprite(animationSheet.getSubimage(spriteSize * i,
+					spriteSize * 3, spriteSize, spriteSize), (600 + i));
 		}
-
 	}
 
 	private void createSprite(BufferedImage spriteImage, int id) {
@@ -177,8 +186,7 @@ public class Spritesheet {
 			return particleSprites;
 		} else if (600 <= id && id <= 699) {
 			return coinSprites;
-		} 
-		else {
+		} else {
 			System.err.println("No such sprite list. @ID: " + id);
 			System.err.flush();
 			return null;
@@ -188,14 +196,13 @@ public class Spritesheet {
 	public Sprite getSprite(int id) {
 		ArrayList<Sprite> tempGetFromList;
 		tempGetFromList = getSpriteList(id);
-
 		for (Sprite sp : tempGetFromList) {
 			if (sp.getId() == id) {
 				// System.out.println("getID = " + sp.getId() + ". id = " + id);
 				return sp;
 			}
 		}
-		System.err.println("@getting2: No such sprite. @ID: " + id);
+		System.err.println("@getting: No such sprite. @ID: " + id);
 		System.err.flush();
 		return null;
 	}

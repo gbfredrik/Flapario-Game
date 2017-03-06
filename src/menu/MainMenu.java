@@ -18,8 +18,14 @@ import javax.swing.JPanel;
 
 import main.MusicHandler;
 
-//import sceneAreas.Scene1;
-
+/**
+ * Denna panel-klass innehåller huvudmenyns komponenter med play-, highscore-
+ * och exitknapp. Dessa tre knappar metoder i menuHandler vid knapptryck. OBS:
+ * RolloverIcon fungerar ej i dagsläget.
+ * 
+ * @author frebo147
+ *
+ */
 public class MainMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -30,27 +36,24 @@ public class MainMenu extends JPanel {
 	private BufferedImage imgHighscoreButtonRollover;
 	private BufferedImage imgExitButton;
 	private BufferedImage imgExitButtonRollover;
-	private BufferedImage imgSplashBackground;
 
 	public MainMenu(MenuHandler menuHandler, MusicHandler musicHandler,
 			Font font) {
 		this.menuHandler = menuHandler;
-		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
 		setBackground(new Color(153, 204, 255));
 
-		this.add(Box.createRigidArea(new Dimension(0, 25)));
-
+		add(Box.createRigidArea(new Dimension(0, 25)));
+		
 		JLabel titleText = new JLabel("WELCOME TO FLAPARIO!", JLabel.CENTER);
 		titleText.setFont(font);
 		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(titleText);
+		add(titleText);
 
-		this.add(Box.createRigidArea(new Dimension(0, 50)));
-
-		JButton playButton = new JButton();// new JButton(new
-											// ImageIcon(imgStartButton));
+		add(Box.createRigidArea(new Dimension(0, 50)));
+		
+		JButton playButton = new JButton();
 		playButton.setIcon(new ImageIcon(imgPlayButton));
 		playButton.setAlignmentX(CENTER_ALIGNMENT);
 		playButton.setRolloverEnabled(true);
@@ -64,7 +67,8 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(playButton);
-		this.add(Box.createRigidArea(new Dimension(0, 15)));
+		
+		add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton highscoreButton = new JButton(new ImageIcon(imgHighscoreButton));
 		highscoreButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -79,7 +83,7 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(highscoreButton);
-		this.add(Box.createRigidArea(new Dimension(0, 15)));
+		add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton exitButton = new JButton(new ImageIcon(imgExitButton));
 		exitButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -103,7 +107,6 @@ public class MainMenu extends JPanel {
 		imgHighscoreButtonRollover = menuHandler.getSprite(4).getImage();
 		imgExitButton = menuHandler.getSprite(7).getImage();
 		imgExitButtonRollover = menuHandler.getSprite(8).getImage();
-		imgSplashBackground = menuHandler.getSprite(400).getImage();
 	}
 
 	protected void buttonPressed(String cardName, boolean clickSound) {

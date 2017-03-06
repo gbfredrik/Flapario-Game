@@ -4,9 +4,17 @@ import java.awt.image.BufferedImage;
 
 import main.MusicHandler;
 
+/**
+ * Denna klass sköter all logik som härrör till spelaren. Om spelaren tryckt på
+ * sapce kommer metoder här i att anropas, vilket sedan avgör om hoppet är
+ * tillåtet och därefter utför hoppet. Det finns även en metod för byte av
+ * spelarens bild beroende på om den hoppar eller springer. Slutligen lagrar
+ * spelarklassen spelarens poäng under den nuvarande sessionen.
+ * 
+ * @author frebo147
+ *
+ */
 public class Player extends Sprite {
-	// HANTERAR player-sprite, dess rörelser samt poäng
-
 	// private Sprite playerActiveSprite;
 	private BufferedImage[] playerRunning = new BufferedImage[8];
 	private BufferedImage playerJump, playerDoubleJump;
@@ -21,6 +29,7 @@ public class Player extends Sprite {
 	private int jumpHeightRemaining;
 	private int heightFallen;
 	private boolean isAlive = true;
+	private boolean flappyActive = false;
 	private MusicHandler musicHandler;
 
 	public Player(BufferedImage image, int id, MusicHandler musicHandler) {
@@ -48,8 +57,6 @@ public class Player extends Sprite {
 			doubleJump = true;
 			musicHandler.playClipFX("Jump");
 			jumpHeightRemaining += jumpMaxHeight;
-		} else {
-			// System.out.println("Not jumping.");
 		}
 	}
 
@@ -105,18 +112,13 @@ public class Player extends Sprite {
 	}
 
 	public void updateSprites() {
-		// System.out.println("Changing sprite image");
-
 		if (doubleJump) {
-			// System.out.println("Doublejump");
 			setImage(playerDoubleJump);
 			activeRunning = 0;
 		} else if (!onGround && !doubleJump) {
-			// System.out.println("Jump");
 			setImage(playerJump);
 			activeRunning = 0;
 		} else {
-			// System.out.println("Running");
 			if (iterationsSinceStep == 3) {
 				if (activeRunning == playerRunning.length - 1) {
 					activeRunning = 0;

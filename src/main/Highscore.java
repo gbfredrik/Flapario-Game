@@ -59,7 +59,7 @@ public final class Highscore {
 
 	// Load saved highscores from file. Do this once when the game starts.
 	public static void loadHighScores() {
-		System.out.println("Loading highscores from file.");
+		// System.out.println("Loading highscores from file.");
 		highscoreData = new HighscoreData();
 
 		File saveFile = new File("save.flapario");
@@ -93,7 +93,7 @@ public final class Highscore {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Saved highscores to file.");
+		// System.out.println("Saved highscores to file.");
 	}
 
 	public static void clearHighscores() {
@@ -110,12 +110,6 @@ public final class Highscore {
 
 	public static int getScore(int index) {
 		return highscoreData.getScore(index);
-	}
-
-	public static void printHighscores() {
-		for (int i = 0; i < highscoreData.getSize(); i++) {
-			System.out.println(highscoreData.getScore(i));
-		}
 	}
 
 	public static int getLatestScore() {

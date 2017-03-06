@@ -3,36 +3,23 @@ package gameRendering;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class Sprite implements Cloneable {
+/**
+ * En klass som innehåller bild, id och koordinater för varje sprite. Sköter
+ * även spritens collisionbox med en rektangel runt bildobjektet.
+ * 
+ * @author frebo147
+ *
+ */
+public class Sprite {
 	private BufferedImage image;
 	private Rectangle collisionbox;
 	private int x, y = 0;
 	private int id = 0;
 
-	private SpriteType spriteType;
-
-	@Override
-	public Object clone() {
-		try {
-			return super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new Error("Uhh...");
-		}
-	}
-
 	public Sprite(BufferedImage image, int id) {
 		this.image = image;
 		this.id = id;
-		this.spriteType = SpriteType.DEFAULT;
 		createCollisionbox();
-	}
-
-	public void setSpriteType(SpriteType spriteType) {
-		this.spriteType = spriteType;
-	}
-
-	public SpriteType getSpriteType() {
-		return this.spriteType;
 	}
 
 	public int getId() {
@@ -85,9 +72,6 @@ public class Sprite implements Cloneable {
 	public void updateCollisionBox() {
 		collisionbox.setLocation(getX() - image.getWidth() / 2,
 				getY() + image.getHeight() / 2);
-		// System.out.println("Updating collisionbox. " + id);
-		// System.out.println(getX());
-		// System.out.println(getY());
 	}
 
 	public BufferedImage getImage() {
@@ -98,5 +82,4 @@ public class Sprite implements Cloneable {
 		this.image = rescaledImage;
 		// updateCollisionBox();
 	}
-
 }

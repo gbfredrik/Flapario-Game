@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.Box;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,6 +23,20 @@ import main.Highscore;
 import main.MusicHandler;
 import menu.MenuHandler;
 
+/**
+ * Denna klass renderar all grafik under en spelomgång. Då spelets spritesheet
+ * är målat till 16*16 per tile så kommer denna klass att behöva skala upp
+ * önskade bilder genom en överskrivning av metoden paintComponent. Klassen
+ * innehåller loop-metoden som i tur och ordning utför alal spelets processer
+ * och i konstruktorn definieras en lyssnare som testar att utföra ett hopp. Det
+ * finnes även kod för utskrivningen av spelarens poäng i toppen av
+ * spelfönstret. När spelaren dör spelas ett "game over"-ljud och spelmusiken
+ * pausas tillfälligt, och spelarens poäng registreras och sparas lokalt på
+ * datorn.
+ * 
+ * @author frebo147
+ *
+ */
 public class RenderArea extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -77,7 +89,7 @@ public class RenderArea extends JPanel {
 		player.setPosition(-getGameWidth() / 3, getGameHeight() / 4);
 
 		initSprites();
-		
+
 		scoreLabel.setIcon(new ImageIcon(coinIconImage));
 		scoreLabel.setFont(font);
 		// Add keylistener
@@ -112,7 +124,6 @@ public class RenderArea extends JPanel {
 		for (int x = 0; x < 8; x++) {
 			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(),
 					x);
-			System.out.println("Added: x = " + x);
 		}
 		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
 				menuHandler.getSprite(309).getImage());
@@ -128,9 +139,6 @@ public class RenderArea extends JPanel {
 			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x)
 					.getImage(), 204 + 10 * x);
 		}
-		// backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(),
-		// 400);
-
 		clouds = new Sprite[3];
 		for (int i = 0; i < clouds.length; i++) {
 			clouds[i] = new Sprite(menuHandler.getSprite(420 + i).getImage(),
@@ -261,7 +269,7 @@ public class RenderArea extends JPanel {
 	}
 
 	private long sleepTime(int x) {
-		return (20 - (long) (0.001 * x + 1));
+		return (20 - (long) (0.002 * x + 1));
 	}
 
 	private int randomizePlatformColor() {
@@ -338,10 +346,9 @@ public class RenderArea extends JPanel {
 		coins.add(coin);
 		addMovingSprite(coin);
 	}
-	
+
 	private void printPlayerScore() {
 		scoreLabel.setText(Integer.toString(player.getScore()));
-		// scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.add(scoreLabel);
 		revalidate();
 	}
@@ -379,7 +386,7 @@ public class RenderArea extends JPanel {
 					updateX();
 					checkCollision();
 					repaint();
-					if (x <= 18000) { // Förhindrar negativ sleep. Max 19000?
+					if (x <= 9000) { // Förhindrar negativ sleep. Max 19000?
 						x++;
 					}
 				}
@@ -425,11 +432,8 @@ public class RenderArea extends JPanel {
 			if (removeSprite instanceof Coin) {
 				coins.remove(removeSprite);
 			}
-
 			movingSprites.remove(removeSprite);
 			allSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id"
-					+ removeSprite.getId());
 		}
 	}
 }

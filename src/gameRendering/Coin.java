@@ -2,6 +2,14 @@ package gameRendering;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Klassen coin hanterar den lilla logik som rör mynten på spelbanan. Den
+ * innehåller metoder för om myntet är taget eller ej, samt uppdatering av dess
+ * bildens rotering.
+ * 
+ * @author frebo147
+ *
+ */
 public class Coin extends Sprite {
 
 	private BufferedImage[] coins = new BufferedImage[10];

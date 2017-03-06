@@ -29,7 +29,6 @@ public class DeathMenu extends JPanel {
 	private BufferedImage imgBackButtonRollover;
 	private BufferedImage imgPlayButton;
 	private BufferedImage imgPlayButtonRollover;
-	private BufferedImage imgSplashBackground;
 
 	private JLabel scoreText;
 
@@ -101,6 +100,5 @@ public class DeathMenu extends JPanel {
 		imgPlayButtonRollover = menuHandler.getSprite(2).getImage();
 		imgBackButton = menuHandler.getSprite(5).getImage();
 		imgBackButtonRollover = menuHandler.getSprite(6).getImage();
-		imgSplashBackground = menuHandler.getSprite(400).getImage();
 	}
 }
