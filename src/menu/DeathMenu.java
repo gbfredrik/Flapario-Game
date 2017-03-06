@@ -2,6 +2,7 @@ package menu;
 
 import gameRendering.RenderArea;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -29,7 +30,7 @@ public class DeathMenu extends JPanel {
 	private BufferedImage imgPlayButton;
 	private BufferedImage imgPlayButtonRollover;
 	private BufferedImage imgSplashBackground;
-	
+
 	private JLabel scoreText;
 
 	public DeathMenu(MenuHandler menuHandler, MusicHandler musicHandler,
@@ -37,6 +38,7 @@ public class DeathMenu extends JPanel {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
+		setBackground(new Color(153, 204, 255));
 
 		add(Box.createRigidArea(new Dimension(0, 25)));
 
@@ -85,7 +87,7 @@ public class DeathMenu extends JPanel {
 		});
 		add(backButton);
 	}
-	
+
 	public void refresh() {
 		scoreText.setText("SCORE: " + Highscore.getLatestScore());
 	}

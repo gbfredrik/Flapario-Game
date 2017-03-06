@@ -1,5 +1,6 @@
 package menu;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -34,8 +35,8 @@ public class HighscoreMenu extends JPanel {
 			Font font) {
 		this.menuHandler = menuHandler;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 		getImages();
+		setBackground(new Color(153, 204, 255));
 
 		this.add(Box.createRigidArea(new Dimension(0, 25)));
 
@@ -47,6 +48,7 @@ public class HighscoreMenu extends JPanel {
 		this.add(Box.createRigidArea(new Dimension(0, 0)));
 
 		scoreTablePanel = new JPanel(new GridBagLayout());
+		scoreTablePanel.setBackground(new Color(153, 204, 255));
 		scoreTable = new JTextArea();
 		refresh();
 		scoreTable.setFont(font);

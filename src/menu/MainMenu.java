@@ -1,5 +1,6 @@
 package menu;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -37,6 +38,7 @@ public class MainMenu extends JPanel {
 		// this.scene1 = scene1;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		getImages();
+		setBackground(new Color(153, 204, 255));
 
 		this.add(Box.createRigidArea(new Dimension(0, 25)));
 
