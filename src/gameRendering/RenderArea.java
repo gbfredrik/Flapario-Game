@@ -286,14 +286,14 @@ public class RenderArea extends JPanel {
 	}
 
 	private int getRightmostX() {
-		int spriteID, rightmostX = 0, tempX = 0;
+		int spriteID, rightmostX = -getGameWidth()/2, tempX = 0;
 		for (Sprite sprite : movingSprites) {
 			spriteID = sprite.getId();
 			if (200 <= spriteID && spriteID <= 299) {
 				tempX = sprite.getX() + getHalfPlatformWidth(sprite);
-//				if (tempX > rightmostX) {
+				if (tempX > rightmostX) {
 					rightmostX = tempX;
-//				}
+				}
 			}
 		}
 		return rightmostX;
