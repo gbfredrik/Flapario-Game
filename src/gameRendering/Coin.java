@@ -8,14 +8,14 @@ public class Coin extends Sprite {
 
 	private int index;
 	private int deltaIterations;
-	
+
 	private boolean taken = false;
 
 	public Coin(BufferedImage image, int id, int x, int y) {
 		super(image, id);
 		setPosition(x, y);
 	}
-	
+
 	public boolean isTaken() {
 		return taken;
 	}
@@ -23,8 +23,8 @@ public class Coin extends Sprite {
 	public void setTaken(boolean taken) {
 		this.taken = taken;
 	}
-	
-	public int getAnimationLenght() {
+
+	public int getAnimationLength() {
 		return coins.length;
 	}
 

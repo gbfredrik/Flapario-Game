@@ -102,26 +102,6 @@ public class MenuHandler extends JPanel {
 		return height;
 	}
 
-	public BufferedImage darkenImage(BufferedImage img, int redShift,
-			int greenShift, int blueShift) {
-		Color newColor;
-		int newRed, newGreen, newBlue;
-		for (int i = 0; i < img.getWidth(); i++) {
-			for (int j = 0; j < img.getHeight(); j++) {
-				newColor = new Color(img.getRGB(i, j));
-				newRed = (newColor.getRed() - redShift < 0) ? 0 : newColor
-						.getRed() - redShift;
-				newGreen = (newColor.getGreen() - greenShift < 0) ? 0
-						: newColor.getGreen() - greenShift;
-				newBlue = (newColor.getBlue() - blueShift < 0) ? 0 : newColor
-						.getBlue() - blueShift;
-				newColor = new Color(newRed, newGreen, newBlue);
-				img.setRGB(i, j, newColor.getRGB());
-			}
-		}
-		return img;
-	}
-
 	// TODO: Flytta
 	public Sprite getSprite(int id) {
 		return spritesheet.getSprite(id);

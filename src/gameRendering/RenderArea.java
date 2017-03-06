@@ -10,10 +10,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,20 +39,23 @@ public class RenderArea extends JPanel {
 	private Player player;
 	private ArrayList<Sprite> allSprites;
 	private ArrayList<Sprite> movingSprites;
-	//private Sprite backgroundImage;
+	// private Sprite backgroundImage;
 	private Sprite[] clouds;
 	private Sprite[][] platforms;
 
 	private ArrayList<Coin> coins;
+	private BufferedImage coinIconImage;
+	private JLabel scoreLabel = new JLabel();
 
 	private boolean genNew;
 	private int nextPlatform = 0;
 
-	public RenderArea(JFrame frame, int actualWidth, int actualHeight, int simulatedHeight, MenuHandler menuHandler,
+	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
+			int simulatedHeight, MenuHandler menuHandler,
 			MusicHandler musicHandler, Font font) {
 
-		setBackground(new Color(153,204,255));
-		
+		setBackground(new Color(153, 204, 255));
+
 		// Initialize variables
 		platforms = new Sprite[3][5];
 		allSprites = new ArrayList<Sprite>();
@@ -66,18 +72,20 @@ public class RenderArea extends JPanel {
 		this.gameWidth = Math.round(actualWidth / scaleFactor);
 		this.setPreferredSize(new Dimension(actualWidth, actualHeight));
 
-		player = new Player(menuHandler.getSprite(300).getImage(), 300, musicHandler);
+		player = new Player(menuHandler.getSprite(300).getImage(), 300,
+				musicHandler);
 		player.setPosition(-getGameWidth() / 3, getGameHeight() / 4);
 
 		initSprites();
-
+		
+		scoreLabel.setIcon(new ImageIcon(coinIconImage));
+		scoreLabel.setFont(font);
 		// Add keylistener
 		this.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_SPACE) {
-					System.out.println("Jump pressed!");
 					player.tryJump();
 				}
 			}
@@ -102,26 +110,36 @@ public class RenderArea extends JPanel {
 	private void initSprites() {
 		allSprites.add(player);
 		for (int x = 0; x < 8; x++) {
-			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(), x);
+			player.addRunningSprites(menuHandler.getSprite(300 + x).getImage(),
+					x);
 			System.out.println("Added: x = " + x);
 		}
-		player.addJumpingSprites(menuHandler.getSprite(308).getImage(), menuHandler.getSprite(309).getImage());
+		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
+				menuHandler.getSprite(309).getImage());
 		for (int x = 0; x < platforms.length; x++) {
-			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x).getImage(), 200 + 10 * x);
-			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x).getImage(), 201 + 10 * x);
-			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x).getImage(), 202 + 10 * x);
-			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x).getImage(), 203 + 10 * x);
-			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x).getImage(), 204 + 10 * x);
+			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x)
+					.getImage(), 200 + 10 * x);
+			platforms[x][1] = new Sprite(menuHandler.getSprite(201 + 10 * x)
+					.getImage(), 201 + 10 * x);
+			platforms[x][2] = new Sprite(menuHandler.getSprite(202 + 10 * x)
+					.getImage(), 202 + 10 * x);
+			platforms[x][3] = new Sprite(menuHandler.getSprite(203 + 10 * x)
+					.getImage(), 203 + 10 * x);
+			platforms[x][4] = new Sprite(menuHandler.getSprite(204 + 10 * x)
+					.getImage(), 204 + 10 * x);
 		}
-//		backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(), 400);
-		
+		// backgroundImage = new Sprite(menuHandler.getSprite(400).getImage(),
+		// 400);
+
 		clouds = new Sprite[3];
 		for (int i = 0; i < clouds.length; i++) {
-			clouds[i] = new Sprite(menuHandler.getSprite(420 + i).getImage(), 420 + i);
+			clouds[i] = new Sprite(menuHandler.getSprite(420 + i).getImage(),
+					420 + i);
 		}
-		clouds[0].setPosition(gameWidth/2 - 32, gameHeight/2 - 16);
-		clouds[1].setPosition(gameWidth/2 - 56, gameHeight/2 - 20);
-		clouds[2].setPosition(gameWidth/2 - 96, gameHeight/2 - 18);
+		clouds[0].setPosition(gameWidth / 2 - 32, gameHeight / 2 - 16);
+		clouds[1].setPosition(gameWidth / 2 - 56, gameHeight / 2 - 20);
+		clouds[2].setPosition(gameWidth / 2 - 96, gameHeight / 2 - 18);
+		coinIconImage = menuHandler.getSprite(600).getImage();
 	}
 
 	public void addMovingSprite(Sprite sprite) {
@@ -151,7 +169,8 @@ public class RenderArea extends JPanel {
 		if (movingSprites != null) {
 			boolean intersected = false;
 			for (Sprite sprite : movingSprites) {
-				if (player.getCollisionbox().intersects(sprite.getCollisionbox())) {
+				if (player.getCollisionbox().intersects(
+						sprite.getCollisionbox())) {
 					spriteID = sprite.getId();
 					if (200 <= spriteID && spriteID <= 299) {//
 						player.setOnGround(true);
@@ -192,7 +211,6 @@ public class RenderArea extends JPanel {
 		super.paintComponent(g);
 
 		drawBackground(g);
-		
 		for (Sprite sprite : allSprites) {
 			if (sprite == null) {
 				System.err.println("Sprite is null!");
@@ -203,16 +221,13 @@ public class RenderArea extends JPanel {
 					continue;
 				}
 			}
-			
 			drawSprite(g, sprite);
-			// drawCollision(g, sprite);
 		}
 	}
-	
+
 	private void drawSprite(Graphics g, Sprite sprite) {
-		
 		int x, y, spriteWidth, spriteHeight;
-		
+
 		// Get sprite dimensions and location
 		spriteWidth = sprite.getWidth();
 		spriteHeight = sprite.getHeight();
@@ -223,49 +238,25 @@ public class RenderArea extends JPanel {
 		y = -y + gameHeight / 2;
 
 		// Draw sprite
-		g.drawImage(sprite.getImage(), Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
-				Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2), Math.round(spriteWidth * scaleFactor),
+		g.drawImage(sprite.getImage(),
+				Math.round(x * scaleFactor - spriteWidth * scaleFactor / 2),
+				Math.round(y * scaleFactor - spriteHeight * scaleFactor / 2),
+				Math.round(spriteWidth * scaleFactor),
 				Math.round(spriteHeight * scaleFactor), null);
 	}
 
-	private void drawCollision(Graphics g, Sprite sprite) {
-		g.setColor(Color.GREEN);
-
-		// Draw collisionbox
-		// g.drawRect(Math.round((sprite.collisionbox.x + gameWidth / 2) *
-		// scaleFactor),
-		// Math.round((-sprite.collisionbox.y + gameHeight / 2) * scaleFactor),
-		// Math.round(sprite.collisionbox.width * scaleFactor),
-		// Math.round(sprite.collisionbox.height * scaleFactor));
-
-		Graphics2D g2 = (Graphics2D) g;
-		Sprite tempSprite = (Sprite) sprite.clone();
-		// OBS: Detta klonar inte trots att jag skrivit clone();
-		// tempSprite.getCollisionbox().setLocation((int)
-		// Math.round(tempSprite.getCollisionbox().getX() + gameWidth / 2),
-		// (int) Math.round((-tempSprite.getCollisionbox().getY()) + gameHeight
-		// / 2));
-		g2.draw(tempSprite.getCollisionbox());
-	}
-
 	private void drawBackground(Graphics g) {
-		// Draw sprite
-//		g.drawImage(backgroundImage.getImage(),
-//				Math.round((gameWidth / 2) * scaleFactor - (backgroundImage.getWidth() * scaleFactor / 2)),
-//				Math.round((gameHeight / 2) * scaleFactor - (backgroundImage.getHeight() * scaleFactor / 2)),
-//				Math.round(backgroundImage.getWidth() * scaleFactor),
-//				Math.round(backgroundImage.getHeight() * scaleFactor), null);
-		
-		System.out.println("Drawing clouds");
 		for (Sprite cloud : clouds) {
 			drawSprite(g, cloud);
 		}
-		
+
 	}
 
 	public void rescale() {
-		scaleFactor = (float) frame.getContentPane().getBounds().height / gameHeight;
-		gameWidth = Math.round(frame.getContentPane().getBounds().width / scaleFactor);
+		scaleFactor = (float) frame.getContentPane().getBounds().height
+				/ gameHeight;
+		gameWidth = Math.round(frame.getContentPane().getBounds().width
+				/ scaleFactor);
 		repaint();
 	}
 
@@ -282,7 +273,8 @@ public class RenderArea extends JPanel {
 	}
 
 	private int randomizePlatformY() {
-		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5, 2 * getGameHeight() / 5);
+		return ThreadLocalRandom.current().nextInt(-2 * getGameHeight() / 5,
+				2 * getGameHeight() / 5);
 	}
 
 	private int getRightmostX() {
@@ -305,25 +297,30 @@ public class RenderArea extends JPanel {
 
 	private void addBasePlatforms() {
 		int x = randomizePlatformColor();
-		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()), 0, -getGameHeight() / 2 + 32);
+		addMovingSprite(
+				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+				0, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-		addMovingSprite(new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				getRightmostX() + getHalfPlatformWidth(platforms[x][4]) + getGameWidth() / 8,
-				-getGameHeight() / 2 + 32);
+		addMovingSprite(
+				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+				getRightmostX() + getHalfPlatformWidth(platforms[x][4])
+						+ getGameWidth() / 8, -getGameHeight() / 2 + 32);
 	}
 
 	private void addPlatforms() {
 		if (genNew) {
-			nextPlatform = ThreadLocalRandom.current().nextInt(getGameWidth() / 9, getGameWidth() / 4);
-			System.out.println("NEW PLATFORM!");
+			nextPlatform = ThreadLocalRandom.current().nextInt(
+					getGameWidth() / 9, getGameWidth() / 4);
 			genNew = false;
 		}
 		if ((getGameWidth() - getRightmostX()) >= nextPlatform && !genNew) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
-			int x = getGameWidth() + getHalfPlatformWidth(platforms[color][length]);
+			int x = getGameWidth()
+					+ getHalfPlatformWidth(platforms[color][length]);
 			int y = randomizePlatformY();
-			addMovingSprite(new Sprite(platforms[color][length].getImage(), platforms[color][length].getId()), x, y);
+			addMovingSprite(new Sprite(platforms[color][length].getImage(),
+					platforms[color][length].getId()), x, y);
 
 			addCoin(x, y + 32);
 
@@ -333,15 +330,20 @@ public class RenderArea extends JPanel {
 	}
 
 	private void addCoin(int x, int y) {
-
 		Coin coin = new Coin(menuHandler.getSprite(600).getImage(), (600), x, y);
-
-		for (int i = 0; i < coin.getAnimationLenght(); i++) {
+		for (int i = 0; i < coin.getAnimationLength(); i++) {
 			coin.addSprites(menuHandler.getSprite(600 + i).getImage(), i);
-		}
-		
+		} // Stort slöseri med resurser?
+
 		coins.add(coin);
 		addMovingSprite(coin);
+	}
+	
+	private void printPlayerScore() {
+		scoreLabel.setText(Integer.toString(player.getScore()));
+		// scoreLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.add(scoreLabel);
+		revalidate();
 	}
 
 	public void startLoop() {
@@ -372,6 +374,7 @@ public class RenderArea extends JPanel {
 					for (Coin coin : coins) {
 						coin.updateSprites();
 					}
+					printPlayerScore();
 
 					updateX();
 					checkCollision();
@@ -389,6 +392,7 @@ public class RenderArea extends JPanel {
 	}
 
 	private void deathScene() {
+		this.remove(scoreLabel);
 		musicHandler.stopAll();
 		musicHandler.playClipFX("GameOver");
 
@@ -403,7 +407,6 @@ public class RenderArea extends JPanel {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		musicHandler.playSongClip("ChibiNinja");
@@ -419,14 +422,14 @@ public class RenderArea extends JPanel {
 			}
 		}
 		if (removeSprite != null) {
-			
-			if(removeSprite instanceof Coin) {
+			if (removeSprite instanceof Coin) {
 				coins.remove(removeSprite);
 			}
-			
+
 			movingSprites.remove(removeSprite);
 			allSprites.remove(removeSprite);
-			System.out.println("Removed platform @left. @id" + removeSprite.getId());
+			System.out.println("Removed platform @left. @id"
+					+ removeSprite.getId());
 		}
 	}
 }

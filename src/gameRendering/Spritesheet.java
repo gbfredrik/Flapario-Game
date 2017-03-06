@@ -159,26 +159,7 @@ public class Spritesheet {
 
 	private void createSprite(BufferedImage spriteImage, int id) {
 		Sprite sprite = new Sprite(spriteImage, id);
-		if (0 <= id && id <= 99) {
-			buttonSprites.add(sprite);
-		} else if (100 <= id && id <= 199) {
-			textSprites.add(sprite);
-		} else if (200 <= id && id <= 299) {
-			platformSprites.add(sprite);
-		} else if (300 <= id && id <= 399) {
-			npcSprites.add(sprite);
-		} else if (400 <= id && id <= 499) {
-			backgroundSprites.add(sprite);
-		} else if (500 <= id && id <= 599) {
-			particleSprites.add(sprite);
-		} else if (600 <= id && id <= 699) {
-			coinSprites.add(sprite);
-		} else if (700 <= id && id <= 799) {
-			coinSprites.add(sprite);
-		} else {
-			System.err.println("@adding: No such sprite list. @ID: " + id);
-			System.err.flush();
-		}
+		getSpriteList(id).add(sprite);
 	}
 
 	public ArrayList<Sprite> getSpriteList(int id) {
@@ -198,7 +179,7 @@ public class Spritesheet {
 			return coinSprites;
 		} 
 		else {
-			System.err.println("@getting1: No such sprite list. @ID: " + id);
+			System.err.println("No such sprite list. @ID: " + id);
 			System.err.flush();
 			return null;
 		}

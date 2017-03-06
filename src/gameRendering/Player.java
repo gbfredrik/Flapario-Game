@@ -39,25 +39,17 @@ public class Player extends Sprite {
 	}
 
 	public void tryJump() {
-		// System.out.println("----------");
-		// System.out.println("onGround: " + onGround);
-		// System.out.println("jumpPressed: " + jumpPressed);
-		// System.out.println("doubleJump: " + doubleJump);
 		if (!jumpPressed && onGround) {
-			System.out.println("Jump!");
 			musicHandler.playClipFX("Jump");
 			jumpPressed = true;
 			doubleJump = false;
 			jumpHeightRemaining += jumpMaxHeight;
 		} else if (!onGround && !doubleJump) {
-			/* && jumpHeightRemaining < (jumpMaxHeight - 25) */
-			// Villkor eller ej?
-			System.out.println("Double jump!\n");
 			doubleJump = true;
 			musicHandler.playClipFX("Jump");
 			jumpHeightRemaining += jumpMaxHeight;
 		} else {
-			System.out.println("Not jumping.");
+			// System.out.println("Not jumping.");
 		}
 	}
 
