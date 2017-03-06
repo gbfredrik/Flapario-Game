@@ -291,9 +291,9 @@ public class RenderArea extends JPanel {
 			spriteID = sprite.getId();
 			if (200 <= spriteID && spriteID <= 299) {
 				tempX = sprite.getX() + getHalfPlatformWidth(sprite);
-				if (tempX > rightmostX) {
+//				if (tempX > rightmostX) {
 					rightmostX = tempX;
-				}
+//				}
 			}
 		}
 		return rightmostX;
@@ -307,25 +307,25 @@ public class RenderArea extends JPanel {
 		int x = randomizePlatformColor();
 		addMovingSprite(
 				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				0, -getGameHeight() / 2 + 32);
+				-getGameWidth() / 3, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-		addMovingSprite(
-				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-				getRightmostX() + getHalfPlatformWidth(platforms[x][4])
-						+ getGameWidth() / 8, -getGameHeight() / 2 + 32);
+//		addMovingSprite(
+//				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+//				getRightmostX() + getHalfPlatformWidth(platforms[x][4])
+//						+ 16, -getGameHeight() / 2 + 32);
 	}
 
 	private void addPlatforms() {
 		if (genNew) {
 			nextPlatform = ThreadLocalRandom.current().nextInt(
-					getGameWidth() / 9, getGameWidth() / 4);
+					16, 16*5);
 			genNew = false;
 		}
 		if ((getGameWidth() - getRightmostX()) >= nextPlatform && !genNew) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
-			int x = getGameWidth()
-					+ getHalfPlatformWidth(platforms[color][length]);
+			int x = getRightmostX()
+					+ getHalfPlatformWidth(platforms[color][length]) + nextPlatform;
 			int y = randomizePlatformY();
 			addMovingSprite(new Sprite(platforms[color][length].getImage(),
 					platforms[color][length].getId()), x, y);
