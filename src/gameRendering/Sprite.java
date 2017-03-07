@@ -51,8 +51,6 @@ public class Sprite {
 	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-		System.out.println("x = " + x);
-		System.out.println("y = " + y);
 		updateCollisionBox();
 	}
 

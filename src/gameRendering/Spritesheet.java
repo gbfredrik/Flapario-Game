@@ -143,7 +143,10 @@ public class Spritesheet {
 				animationSheet.getSubimage(16, 16, spriteSize, spriteSize), 308);
 		createSprite(
 				animationSheet.getSubimage(32, 16, spriteSize, spriteSize), 309);
-
+		for (int i = 0; i < 4; i++) {
+			createSprite(animationSheet.getSubimage(16 * i, 80, spriteSize,
+					spriteSize), 310 + i);
+		}
 		// Bakgrunder, 400-499
 		createSprite(
 				spritesheet.getSubimage(0, 144, 9 * spriteSize, 7 * spriteSize),
@@ -157,6 +160,7 @@ public class Spritesheet {
 				spriteSize, spriteSize), (421));
 		createSprite(spritesheet.getSubimage(spriteSize * 7, spriteSize * 2,
 				spriteSize * 2, spriteSize), (422));
+
 		// Partiklar, 500-599
 
 		// Coins 600-699

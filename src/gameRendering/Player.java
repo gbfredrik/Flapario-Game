@@ -16,9 +16,11 @@ import main.MusicHandler;
  */
 public class Player extends Sprite {
 	// private Sprite playerActiveSprite;
+	private BufferedImage[] playerFlappy = new BufferedImage[4];
 	private BufferedImage[] playerRunning = new BufferedImage[8];
 	private BufferedImage playerJump, playerDoubleJump;
 	private int activeRunning = 0;
+	private int activeFlappy = 0;
 	private int iterationsSinceStep = 0;
 
 	private int score = 0;
@@ -47,8 +49,14 @@ public class Player extends Sprite {
 		playerDoubleJump = doubleJumpSpriteImage;
 	}
 
+	public void addFlappySprites(BufferedImage flappySpriteImage, int x) {
+		playerFlappy[x] = flappySpriteImage;
+	}
+
 	public void tryJump() {
-		if (!jumpPressed && onGround) {
+		if (flappyActive) {
+			jumpHeightRemaining += jumpMaxHeight / 2;
+		} else if (!jumpPressed && onGround) {
 			musicHandler.playClipFX("Jump");
 			jumpPressed = true;
 			doubleJump = false;
@@ -111,8 +119,29 @@ public class Player extends Sprite {
 		return isAlive;
 	}
 
+	public void setFlappyActive(boolean flappyActive) {
+		this.flappyActive = flappyActive;
+	}
+
+	public boolean getFlappyActive() {
+		return flappyActive;
+	}
+
 	public void updateSprites() {
-		if (doubleJump) {
+		if (flappyActive) {
+			if (iterationsSinceStep == 3) {
+				if (activeFlappy == playerFlappy.length - 1) {
+					activeFlappy = 0;
+					setImage(playerFlappy[0]);
+				} else {
+					activeFlappy++;
+					setImage(playerFlappy[activeFlappy]);
+				}
+				iterationsSinceStep = 0;
+			} else {
+				iterationsSinceStep++;
+			}
+		} else if (doubleJump) {
 			setImage(playerDoubleJump);
 			activeRunning = 0;
 		} else if (!onGround && !doubleJump) {

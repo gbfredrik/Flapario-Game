@@ -47,12 +47,11 @@ public class RenderArea extends JPanel {
 	private float scaleFactor;
 	private int gameHeight;
 	private int gameWidth;
-	protected boolean run = true;
 	private Player player;
 	private ArrayList<Sprite> allSprites;
 	private ArrayList<Sprite> movingSprites;
-	// private Sprite backgroundImage;
 	private Sprite[] clouds;
+	private Sprite flappy;
 	private Sprite[][] platforms;
 
 	private ArrayList<Coin> coins;
@@ -61,6 +60,8 @@ public class RenderArea extends JPanel {
 
 	private boolean genNew;
 	private int nextPlatform = 0;
+	private int flappyDuration = 0;
+	private final int flappyId = 310;
 
 	public RenderArea(JFrame frame, int actualWidth, int actualHeight,
 			int simulatedHeight, MenuHandler menuHandler,
@@ -127,6 +128,11 @@ public class RenderArea extends JPanel {
 		}
 		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
 				menuHandler.getSprite(309).getImage());
+		for (int x = 0; x < 4; x++) {
+			player.addFlappySprites(menuHandler.getSprite(flappyId + x).getImage(),
+					x);
+		}
+
 		for (int x = 0; x < platforms.length; x++) {
 			platforms[x][0] = new Sprite(menuHandler.getSprite(200 + 10 * x)
 					.getImage(), 200 + 10 * x);
@@ -174,6 +180,7 @@ public class RenderArea extends JPanel {
 
 	private void checkCollision() {
 		int spriteID;
+		boolean removeFlappy = false;
 		if (movingSprites != null) {
 			boolean intersected = false;
 			for (Sprite sprite : movingSprites) {
@@ -184,21 +191,38 @@ public class RenderArea extends JPanel {
 						player.setOnGround(true);
 						player.resetJumpsOnGround();
 						intersected = true;
-						break;
-					} else if (sprite instanceof Coin) {
+						// break;
+					}
+					if (sprite instanceof Coin) {
 						if (!((Coin) sprite).isTaken()) {
 							((Coin) sprite).setTaken(true);
 							player.addScore(1);
 							musicHandler.playClipFX("PickCoin");
 						}
+					} else if (sprite.getId() == flappyId) {
+						player.setFlappyActive(true);
+						flappyDuration = 0;
+						musicHandler.playClipFX("PickCoin");
+						musicHandler.playClipFX("PickCoin");
+						musicHandler.playClipFX("PickCoin");
+						removeFlappy = true;
 					}
 				}
 			}
 			if (!intersected) {
 				player.setOnGround(false);
-			} else {
+			}
+			if (removeFlappy) {
+				removeSprite(flappy);
+				flappy = null;
+				System.out.println("Removed flappy!");
 			}
 		}
+	}
+
+	private void removeSprite(Sprite sprite) {
+		movingSprites.remove(flappy);
+		allSprites.remove(flappy);
 	}
 
 	public void clear() {
@@ -220,6 +244,7 @@ public class RenderArea extends JPanel {
 
 		drawBackground(g);
 		for (Sprite sprite : allSprites) {
+			// Får ConcurrentModificationException av oidentifierad anledning.
 			if (sprite == null) {
 				System.err.println("Sprite is null!");
 				continue;
@@ -257,7 +282,6 @@ public class RenderArea extends JPanel {
 		for (Sprite cloud : clouds) {
 			drawSprite(g, cloud);
 		}
-
 	}
 
 	public void rescale() {
@@ -269,7 +293,7 @@ public class RenderArea extends JPanel {
 	}
 
 	private long sleepTime(int x) {
-		return (20 - (long) (0.002 * x + 1));
+		return (20 - (long) (0.001 * x + 1));
 	}
 
 	private int randomizePlatformColor() {
@@ -286,7 +310,7 @@ public class RenderArea extends JPanel {
 	}
 
 	private int getRightmostX() {
-		int spriteID, rightmostX = -getGameWidth()/2, tempX = 0;
+		int spriteID, rightmostX = -getGameWidth() / 2, tempX = 0;
 		for (Sprite sprite : movingSprites) {
 			spriteID = sprite.getId();
 			if (200 <= spriteID && spriteID <= 299) {
@@ -309,42 +333,65 @@ public class RenderArea extends JPanel {
 				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
 				-getGameWidth() / 3, -getGameHeight() / 2 + 32);
 		x = randomizePlatformColor();
-//		addMovingSprite(
-//				new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
-//				getRightmostX() + getHalfPlatformWidth(platforms[x][4])
-//						+ 16, -getGameHeight() / 2 + 32);
+		// addMovingSprite(
+		// new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
+		// getRightmostX() + getHalfPlatformWidth(platforms[x][4])
+		// + 16, -getGameHeight() / 2 + 32);
+	}
+
+	private int randomFlappyNumber() {
+		return ThreadLocalRandom.current().nextInt(1, 2 + 1);
 	}
 
 	private void addPlatforms() {
 		if (genNew) {
-			nextPlatform = ThreadLocalRandom.current().nextInt(
-					16, 16*5);
+			nextPlatform = ThreadLocalRandom.current().nextInt(16, 16 * 5);
 			genNew = false;
 		}
 		if ((getGameWidth() - getRightmostX()) >= nextPlatform && !genNew) {
 			int color = randomizePlatformColor();
 			int length = randomizePlatformLength();
 			int x = getRightmostX()
-					+ getHalfPlatformWidth(platforms[color][length]) + nextPlatform;
+					+ getHalfPlatformWidth(platforms[color][length])
+					+ nextPlatform;
 			int y = randomizePlatformY();
 			addMovingSprite(new Sprite(platforms[color][length].getImage(),
 					platforms[color][length].getId()), x, y);
 
-			addCoin(x, y + 32);
-
+			if (randomFlappyNumber() == 1 && flappy == null) {
+				addFlappy(x, y + 16);
+			} else {
+				addCoin(x, y + 16);
+			}
+			deactivateFlappy();
 			genNew = true;
 		}
 
 	}
 
 	private void addCoin(int x, int y) {
-		Coin coin = new Coin(menuHandler.getSprite(600).getImage(), (600), x, y);
+		Coin coin = new Coin(menuHandler.getSprite(600).getImage(), 600, x, y);
 		for (int i = 0; i < coin.getAnimationLength(); i++) {
 			coin.addSprites(menuHandler.getSprite(600 + i).getImage(), i);
 		} // Stort slöseri med resurser?
 
 		coins.add(coin);
 		addMovingSprite(coin);
+	}
+
+	private void addFlappy(int x, int y) {
+		flappy = new Sprite(menuHandler.getSprite(flappyId).getImage(), flappyId);
+		addMovingSprite(flappy, x, y);
+		System.out.println("Added flappy!");
+	}
+
+	private void deactivateFlappy() {
+		if (flappyDuration == 10) {
+			player.setFlappyActive(false);
+			flappyDuration = 0;
+		} else {
+			flappyDuration++;
+		}
 	}
 
 	private void printPlayerScore() {
@@ -354,7 +401,6 @@ public class RenderArea extends JPanel {
 	}
 
 	public void startLoop() {
-		run = true;
 		setFocusable(true);
 		requestFocusInWindow();
 		rescale();
@@ -386,7 +432,8 @@ public class RenderArea extends JPanel {
 					updateX();
 					checkCollision();
 					repaint();
-					if (x <= 9000) { // Förhindrar negativ sleep. Max 19000?
+					if (x <= 8000) {
+						// Förhindrar negativ sleep och extrema hastigheter.
 						x++;
 					}
 				}
@@ -432,8 +479,11 @@ public class RenderArea extends JPanel {
 			if (removeSprite instanceof Coin) {
 				coins.remove(removeSprite);
 			}
-			movingSprites.remove(removeSprite);
-			allSprites.remove(removeSprite);
+			if (removeSprite.getId() == flappyId) {
+				flappy = null;
+				System.out.println("Tog bort!");
+			}
+			removeSprite(removeSprite);
 		}
 	}
 }
