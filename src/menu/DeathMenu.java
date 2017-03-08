@@ -21,6 +21,13 @@ import javax.swing.JPanel;
 import main.Highscore;
 import main.MusicHandler;
 
+/**
+ * Denna klass utgör den panel som visas upp vid spelarens död. Den visar
+ * spelarens score, och en play- & bakåt-knapp.
+ * 
+ * @author frebo147
+ *
+ */
 public class DeathMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 

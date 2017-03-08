@@ -15,6 +15,15 @@ import gameRendering.Spritesheet;
 import main.FontHandler;
 import main.MusicHandler;
 
+/**
+ * Denna klass hanterar en CardLayout som ansvarar för att växla mellan de olika
+ * panelerna vid knapptryck eller anrop från annan klass. Metoden för panelbyte
+ * spelar även upp ett knappljud om detta önskas i anropet. I denna lagras även
+ * objekten för spritesheet-, musik- och fonthantering.
+ * 
+ * @author frebo147
+ *
+ */
 public class MenuHandler extends JPanel {
 	private static final long serialVersionUID = 1L;
 

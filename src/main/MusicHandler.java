@@ -8,6 +8,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 
+/**
+ * Denna klass hanterar allt ljud med uppspelning och paus, samt inläsning av ljudfiler från
+ * dator.
+ * @author frebo147
+ *
+ */
 public class MusicHandler {
 	private String pathChibiNinja = "./src/assets/sounds/Songs/Chibi_Ninja.wav";
 	private String pathPickCoin = "./src/assets/sounds/FX/Pick_Coin.wav";
@@ -15,17 +21,14 @@ public class MusicHandler {
 	private String pathGameOver = "./src/assets/sounds/FX/Game_Over.wav";
 	private String pathButtonClick = "./src/assets/sounds/FX/Button_Click.wav";
 	private String pathJump = "./src/assets/sounds/FX/Jump.wav";
-
 	private String mainSong = "ChibiNinja";
 
-	// private Clip chibiNinja, pickCoin, powerUp, gameOver, buttonClick;
+	private ArrayList<Audio> AudioList = new ArrayList<Audio>();
 
 	private class Audio {
 		Clip clip;
 		String ID;
 	}
-
-	ArrayList<Audio> AudioList = new ArrayList<Audio>();
 
 	public MusicHandler() {
 		loadAudio(pathChibiNinja, "ChibiNinja");
@@ -66,7 +69,6 @@ public class MusicHandler {
 	}
 
 	public void playClip(String ID) {
-
 		getClip(ID).start();
 	}
 

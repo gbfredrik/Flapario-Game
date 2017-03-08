@@ -11,6 +11,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Denna klass är icke instansierbar (typ statisk), och hanterar sparande samt
+ * inläsning av befintliga highscores från dator. Efter varje spelsession
+ * anropas metoder i denna klass för att lagra och sortera spelarens poäng.
+ * 
+ * @author frebo147
+ *
+ */
 public final class Highscore {
 
 	private static class HighscoreData implements Serializable {

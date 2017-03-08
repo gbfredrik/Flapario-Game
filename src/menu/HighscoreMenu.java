@@ -21,6 +21,14 @@ import javax.swing.JTextArea;
 import main.Highscore;
 import main.MusicHandler;
 
+/**
+ * Denna klass utgör menyn som skriver ut de 5 bästa highscores som spelaren
+ * uppnått. Dessa sorteras och hanteras av ett Highscore-objekt. Det finns
+ * endast en bakåtknapp för navigering.
+ * 
+ * @author frebo147
+ *
+ */
 public class HighscoreMenu extends JPanel {
 	private static final long serialVersionUID = 1L;
 

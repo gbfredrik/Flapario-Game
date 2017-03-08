@@ -202,9 +202,7 @@ public class RenderArea extends JPanel {
 					} else if (sprite.getId() == flappyId) {
 						player.setFlappyActive(true);
 						flappyDuration = 0;
-						musicHandler.playClipFX("PickCoin");
-						musicHandler.playClipFX("PickCoin");
-						musicHandler.playClipFX("PickCoin");
+						musicHandler.playClipFX("PowerUp");
 						removeFlappy = true;
 					}
 				}
@@ -215,7 +213,6 @@ public class RenderArea extends JPanel {
 			if (removeFlappy) {
 				removeSprite(flappy);
 				flappy = null;
-				System.out.println("Removed flappy!");
 			}
 		}
 	}
@@ -383,7 +380,6 @@ public class RenderArea extends JPanel {
 		flappy = new Sprite(menuHandler.getSprite(flappyId).getImage(),
 				flappyId);
 		addMovingSprite(flappy, x, y);
-		System.out.println("Added flappy! " + x + " " + y);
 	}
 
 	private void deactivateFlappy() {
@@ -482,7 +478,6 @@ public class RenderArea extends JPanel {
 			}
 			if (removeSprite.getId() == flappyId) {
 				flappy = null;
-				System.out.println("Tog bort!");
 			}
 
 			removeSprite(removeSprite);
