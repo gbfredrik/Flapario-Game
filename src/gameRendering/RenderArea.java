@@ -129,8 +129,8 @@ public class RenderArea extends JPanel {
 		player.addJumpingSprites(menuHandler.getSprite(308).getImage(),
 				menuHandler.getSprite(309).getImage());
 		for (int x = 0; x < 4; x++) {
-			player.addFlappySprites(menuHandler.getSprite(flappyId + x).getImage(),
-					x);
+			player.addFlappySprites(menuHandler.getSprite(flappyId + x)
+					.getImage(), x);
 		}
 
 		for (int x = 0; x < platforms.length; x++) {
@@ -214,7 +214,7 @@ public class RenderArea extends JPanel {
 			}
 			if (removeFlappy) {
 				removeSprite(flappy);
-//				flappy = null;
+				flappy = null;
 				System.out.println("Removed flappy!");
 			}
 		}
@@ -309,6 +309,10 @@ public class RenderArea extends JPanel {
 				2 * getGameHeight() / 5);
 	}
 
+	private int randomFlappyNumber() {
+		return ThreadLocalRandom.current().nextInt(1, 15 + 1);
+	}
+
 	private int getRightmostX() {
 		int spriteID, rightmostX = -getGameWidth() / 2, tempX = 0;
 		for (Sprite sprite : movingSprites) {
@@ -337,10 +341,6 @@ public class RenderArea extends JPanel {
 		// new Sprite(platforms[x][4].getImage(), platforms[x][4].getId()),
 		// getRightmostX() + getHalfPlatformWidth(platforms[x][4])
 		// + 16, -getGameHeight() / 2 + 32);
-	}
-
-	private int randomFlappyNumber() {
-		return ThreadLocalRandom.current().nextInt(1, 2 + 1);
 	}
 
 	private void addPlatforms() {
@@ -380,7 +380,8 @@ public class RenderArea extends JPanel {
 	}
 
 	private void addFlappy(int x, int y) {
-		flappy = new Sprite(menuHandler.getSprite(flappyId).getImage(), flappyId);
+		flappy = new Sprite(menuHandler.getSprite(flappyId).getImage(),
+				flappyId);
 		addMovingSprite(flappy, x, y);
 		System.out.println("Added flappy! " + x + " " + y);
 	}
@@ -480,7 +481,7 @@ public class RenderArea extends JPanel {
 				coins.remove(removeSprite);
 			}
 			if (removeSprite.getId() == flappyId) {
-//				flappy = null;
+				flappy = null;
 				System.out.println("Tog bort!");
 			}
 			removeSprite(removeSprite);
