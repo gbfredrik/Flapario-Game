@@ -480,12 +480,12 @@ public class RenderArea extends JPanel {
 			if (removeSprite instanceof Coin) {
 				coins.remove(removeSprite);
 			}
-			removeSprite(removeSprite);
-
 			if (removeSprite.getId() == flappyId) {
 				flappy = null;
 				System.out.println("Tog bort!");
 			}
+
+			removeSprite(removeSprite);
 		}
 	}
 }

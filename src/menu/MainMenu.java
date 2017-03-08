@@ -45,14 +45,14 @@ public class MainMenu extends JPanel {
 		setBackground(new Color(153, 204, 255));
 
 		add(Box.createRigidArea(new Dimension(0, 25)));
-		
+
 		JLabel titleText = new JLabel("WELCOME TO FLAPARIO!", JLabel.CENTER);
 		titleText.setFont(font);
 		titleText.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(titleText);
 
 		add(Box.createRigidArea(new Dimension(0, 50)));
-		
+
 		JButton playButton = new JButton();
 		playButton.setIcon(new ImageIcon(imgPlayButton));
 		playButton.setAlignmentX(CENTER_ALIGNMENT);
@@ -67,7 +67,7 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(playButton);
-		
+
 		add(Box.createRigidArea(new Dimension(0, 15)));
 
 		JButton highscoreButton = new JButton(new ImageIcon(imgHighscoreButton));
