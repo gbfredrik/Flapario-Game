@@ -214,15 +214,15 @@ public class RenderArea extends JPanel {
 			}
 			if (removeFlappy) {
 				removeSprite(flappy);
-				flappy = null;
+//				flappy = null;
 				System.out.println("Removed flappy!");
 			}
 		}
 	}
 
 	private void removeSprite(Sprite sprite) {
-		movingSprites.remove(flappy);
-		allSprites.remove(flappy);
+		movingSprites.remove(sprite);
+		allSprites.remove(sprite);
 	}
 
 	public void clear() {
@@ -382,7 +382,7 @@ public class RenderArea extends JPanel {
 	private void addFlappy(int x, int y) {
 		flappy = new Sprite(menuHandler.getSprite(flappyId).getImage(), flappyId);
 		addMovingSprite(flappy, x, y);
-		System.out.println("Added flappy!");
+		System.out.println("Added flappy! " + x + " " + y);
 	}
 
 	private void deactivateFlappy() {
@@ -432,7 +432,7 @@ public class RenderArea extends JPanel {
 					updateX();
 					checkCollision();
 					repaint();
-					if (x <= 8000) {
+					if (x <= 6700) {
 						// Förhindrar negativ sleep och extrema hastigheter.
 						x++;
 					}
@@ -480,7 +480,7 @@ public class RenderArea extends JPanel {
 				coins.remove(removeSprite);
 			}
 			if (removeSprite.getId() == flappyId) {
-				flappy = null;
+//				flappy = null;
 				System.out.println("Tog bort!");
 			}
 			removeSprite(removeSprite);
