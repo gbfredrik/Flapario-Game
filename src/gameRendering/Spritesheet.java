@@ -22,6 +22,10 @@ import javax.imageio.ImageIO;
  * @author frebo147
  *
  */
+
+//Kommentar: Snyggt att ni gjort en klass som ansvarar för alla Sprites.
+//Det kan annars bli rörigt om man har många sprites som i ert fall, bra jobbat!
+
 public class Spritesheet {
 	private static BufferedImage spritesheet;
 	private static BufferedImage animationSheet;

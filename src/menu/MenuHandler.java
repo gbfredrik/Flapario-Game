@@ -24,6 +24,11 @@ import main.MusicHandler;
  * @author frebo147
  *
  */
+
+//Kommentar: Bra att ni skapat klasser som är ansvariga för vissa delar av spelet.
+//Detta gäller även för FontHandler och MusicHandler. Dock ska man ALDRIG ha variabler
+//som protected om det inte kan motiveras väl! Detta behöver ni dock inte komplettera!
+
 public class MenuHandler extends JPanel {
 	private static final long serialVersionUID = 1L;
 

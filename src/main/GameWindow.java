@@ -10,6 +10,10 @@ import menu.*;
  * @author frebo147
  *
  */
+
+//Kommentar: Bra ansvarsfördelning för fönsterklassen. Kanske hade vi kunnat gjort så
+//att klassen ÄR ett fönster istället för att den HAR ett fönster?
+
 public class GameWindow {
 
 	private JFrame frame;
